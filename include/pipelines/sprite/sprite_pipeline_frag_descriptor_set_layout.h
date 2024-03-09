@@ -1,0 +1,8 @@
+#ifndef APP_PIPELINES_SPRITE_FRAG_DESC_SET_LAYOUT_H
+#define APP_PIPELINES_SPRITE_FRAG_DESC_SET_LAYOUT_H
+
+#include <vulkan/vulkan.h>
+
+VkDescriptorSetLayout createSpritePipelineFragmentShaderDescriptorSetLayout(VkDevice device);
+
+#endif //APP_PIPELINES_SPRITE_FRAG_DESC_SET_LAYOUT_H

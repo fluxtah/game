@@ -1,0 +1,21 @@
+#ifndef APP_PIPELINES_BASIC_CONFIG_H
+#define APP_PIPELINES_BASIC_CONFIG_H
+#include "include/application_context.h"
+#include "include/vulkan/descriptor.h"
+#include "include/vulkan/shaders.h"
+#include "include/vulkan/commandbuffer.h"
+#include "include/vulkan/framebuffer.h"
+#include "include/pipelines/pipeline_config.h"
+#include "include/pipelines/basic/basic_pipeline_layout.h"
+#include "include/pipelines/basic/basic_pipeline.h"
+#include "include/pipelines/basic/basic_pipeline_renderpass.h"
+#include "include/pipelines/basic/basic_pipeline_descriptor_pool.h"
+#include "include/pipelines/basic/basic_pipeline_vertex_descriptor_set_layout.h"
+#include "include/pipelines/basic/basic_pipeline_frag_descriptor_set_layout.h"
+
+PipelineConfig *createBasicShaderPipelineConfig(
+        VulkanDeviceContext *context,
+        VkCommandPool commandPool,
+        VulkanSwapchainContext *vulkanSwapchainContext,
+        VkRenderPass renderPass);
+#endif //APP_PIPELINES_BASIC_CONFIG_H

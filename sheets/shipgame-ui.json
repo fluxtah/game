@@ -1,0 +1,14 @@
+{
+  "textureWidth": 1024,
+  "textureHeight": 1024,
+  "sprites": [
+    {
+      "id": "sprite1",
+      "char": "a",
+      "x": 0,
+      "y": 0,
+      "width": 128,
+      "height": 128
+    }
+  ]
+}

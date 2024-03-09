@@ -1,0 +1,27 @@
+{
+  "textureWidth": 2048,
+  "textureHeight": 2048,
+  "sprites": [
+    {
+      "id": "shield",
+      "x": 0,
+      "y": 0,
+      "width": 536,
+      "height": 48
+    },
+    {
+      "id": "hull",
+      "x": 0,
+      "y": 48,
+      "width": 536,
+      "height": 48
+    },
+    {
+      "id": "power",
+      "x": 0,
+      "y": 96,
+      "width": 536,
+      "height": 48
+    }
+  ]
+}

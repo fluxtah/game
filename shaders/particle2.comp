@@ -1,0 +1,89 @@
+#version 450
+
+layout(local_size_x = 32) in;
+
+struct Particle {
+    vec4 position;
+    vec4 initialWorldPos;
+    vec4 velocity;
+    vec4 scale;
+    vec4 color;
+    float lifeTime;
+    float spawnTime;
+    float padding1;// 4 bytes - added for alignment
+    float padding2;// 4 bytes - added for alignment
+};
+
+layout(std430, binding = 0) buffer ParticleBuffer {
+    Particle particles[];
+};
+
+layout(push_constant) uniform PushConstants {
+    vec4 emitterPos;
+    float deltaTime;
+    int reset;// 0 = false, 1 = true
+} pushConstants;
+
+layout(binding = 1) uniform EmitterParamsUBO {
+    vec4 gravity;
+    vec4 spawnVelocityFrom;
+    vec4 spawnVelocityTo;
+    vec4 spawnPositionFrom;
+    vec4 spawnPositionTo;
+    float spawnRate;
+    float lifeTime;
+} params;
+
+// Simple random number generator
+float rand(vec2 co){
+    return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+Particle resetParticle(uint id, Particle p) {
+    p.position = mix(params.spawnPositionFrom, params.spawnPositionTo, rand(vec2(id, 1.0f)));
+    p.velocity = mix(params.spawnVelocityFrom, params.spawnVelocityTo, rand(vec2(id, 0.0f)));
+
+    float randScale = 10.0f + (rand(vec2(id, 5.0f)) * 20);
+    p.scale = vec4(randScale, randScale, randScale, .0f);
+
+    // random gray color
+    float randColor = 0.2f + (rand(vec2(id, 4.0f)) * 1.2f);
+    p.color = vec4(randColor, randColor, randColor, 1.0f);
+
+    p.lifeTime = params.lifeTime;
+    p.spawnTime = id * params.spawnRate;
+    p.initialWorldPos = pushConstants.emitterPos;
+
+    return p;
+}
+
+void main() {
+    uint id = gl_GlobalInvocationID.x;// Get the current particle ID
+    if (id >= particles.length()) return;
+    Particle p = particles[id];
+
+    // Check if the particle needs to be reset
+    if (p.lifeTime <= 0.0 || pushConstants.reset == 1) {
+        p = resetParticle(id, p);
+        particles[id] = p;// Write back updated particle
+        return;
+    }
+
+    // Handle spawn time delay
+    if (p.spawnTime >= 0.0) {
+        p.spawnTime -= pushConstants.deltaTime;// Decrease spawnTime
+    } else if (p.lifeTime >= 0.0) {
+        // Update the particle if active
+        p.velocity += params.gravity * pushConstants.deltaTime;// Apply gravity
+        p.position += p.velocity * pushConstants.deltaTime;// Update position
+        p.lifeTime -= pushConstants.deltaTime;// Decrease lifeTime
+    }
+
+    //    // Adjust the particle color based on its life time, particles should start with fire colors: white -> yellow -> red then end in gray for smoke
+    //    float lifeFactor = 1.0f - (p.lifeTime / 0.8f);
+    //    p.color = vec4(1.0f, 0.5f + lifeFactor * 0.5f, lifeFactor, 1.0f);
+
+    particles[id] = p;// Write back updated particle
+}
+
+

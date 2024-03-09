@@ -1,0 +1,69 @@
+#version 450
+
+layout(local_size_x = 32) in;
+
+struct Particle {
+    vec4 position;
+    vec4 initialWorldPos;
+    vec4 velocity;
+    vec4 scale;
+    vec4 color;
+    float lifeTime;
+    float spawnTime;
+};
+
+layout(std430, binding = 0) buffer ParticleBuffer {
+    Particle particles[];
+};
+
+layout(push_constant) uniform PushConstants {
+    vec4 emitterPos;
+    float deltaTime;
+    int reset; // 0 = false, 1 = true
+} pushConstants;
+
+// Simple random number generator
+float rand(vec2 co){
+    return fract(sin(dot(co.xy , vec2(12.9898,78.233))) * 43758.5453);
+}
+
+const vec4 gravity = vec4(0.0, -5.81, 0.0, 0.0f); // Gravity vector
+
+Particle resetParticle(uint id, Particle p) {
+    p.position = vec4(
+    rand(vec2(id, 0.0)) * 10.0 - 5,
+    rand(vec2(id, 1.0)) * 10.0 - 5,
+    rand(vec2(id, 2.0)) * 10.0 - 5,
+    1.0f); // Random direction
+
+    p.velocity = vec4(
+    rand(vec2(id, 0.0)) * 16.0 - 8.0,
+    rand(vec2(id, 1.0)) * 16.0 - 8.0,
+    rand(vec2(id, 2.0)) * 16.0 - 8.0,
+    1.0f); // Random direction
+    float randScale = 10.0f + (rand(vec2(id, pushConstants.deltaTime)) * 12);
+    p.scale = vec4(randScale, randScale, randScale, 1.0f); // Random scale
+    p.lifeTime = 1.6; // Reset lifeTime
+    return p;
+}
+
+void main() {
+    uint id = gl_GlobalInvocationID.x; // Get the current particle ID
+    if (id >= particles.length()) return;
+    Particle p = particles[id];
+
+    // Initialize or reinitialize the particle
+    if (p.lifeTime <= 0.0 || pushConstants.reset == 1) {
+        p = resetParticle(id, p);
+    } else {
+        // Update the particle
+        p.velocity += gravity * pushConstants.deltaTime; // Apply gravity
+        p.position += p.velocity * pushConstants.deltaTime; // Update position
+        p.lifeTime -= pushConstants.deltaTime; // Decrease lifeTime
+        float randScale = 10.0f + p.lifeTime * 7;
+        p.scale = vec4(randScale, randScale, randScale, 1.0f); // Scale particle
+    }
+
+    particles[id] = p; // Write back updated particle
+}
+
