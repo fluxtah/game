@@ -17,6 +17,11 @@ find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(OpenAL REQUIRED)
 
+# Set the output directory for the build executables and libraries
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 add_subdirectory(modules/networking)
 add_subdirectory(modules/physics)
 
