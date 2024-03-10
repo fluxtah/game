@@ -53,4 +53,4 @@ target_link_libraries(
         physics
 )
 
-include(${CMAKE_SOURCE_DIR}/CopyAssets.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/CopyAssets.cmake)
