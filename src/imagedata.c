@@ -27,6 +27,7 @@ void readImageDataByPath(const char *filePath, ImageData *imageData) {
         stbi_image_free(loadedImage);
     } else {
         printf("Failed to load image resources from the file path");
+        printf("Path: %s", filePath);
         exit(1);
     }
 }
