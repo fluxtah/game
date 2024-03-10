@@ -18,6 +18,7 @@ void readImageDataByPath(const char *filePath, ImageData *imageData) {
             memcpy(imageData->image_data, loadedImage, imageData->image_size);
         } else {
             printf("Failed to allocate image resources memory for the file");
+            printf("Path: %s", filePath);
             stbi_image_free(loadedImage);
             exit(1);
         }
