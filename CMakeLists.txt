@@ -16,7 +16,6 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(OpenAL REQUIRED)
-find_package(cglm REQUIRED)
 
 add_subdirectory(modules/networking)
 add_subdirectory(modules/physics)
