@@ -18,12 +18,16 @@ target_include_directories(networking PRIVATE
         ${CMAKE_SOURCE_DIR}/libs/steamworks/public/steam
         "${CMAKE_SOURCE_DIR}/kotlin-sdk/cinterop")
 
-# Correct path for macOS
-set(STEAMWORKS_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/libs/steamworks/redistributable_bin/osx")
+if(APPLE)
+    set(STEAMWORKS_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/libs/steamworks/redistributable_bin/osx")
+elseif(WIN32)
+    set(STEAMWORKS_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/libs/steamworks/redistributable_bin/win64") # Adjust if you're targeting 32-bit
+endif()
 
-find_library(STEAMWORKS_LIBRARY NAMES steam_api PATHS ${STEAMWORKS_LIBRARY_PATH} NO_DEFAULT_PATH)
+find_library(STEAMWORKS_LIBRARY NAMES steam_api steam_api64 PATHS ${STEAMWORKS_LIBRARY_PATH} NO_DEFAULT_PATH)
 if(NOT STEAMWORKS_LIBRARY)
     message(FATAL_ERROR "Steamworks library not found")
 endif()
 
 target_link_libraries(networking ${STEAMWORKS_LIBRARY})
+
