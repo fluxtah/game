@@ -5,6 +5,7 @@ set(SOUNDS_DIR "${ASSETS_DIR}/sounds")
 set(MODELS_DIR "${ASSETS_DIR}/models")
 set(SHEETS_DIR "${ASSETS_DIR}/sheets")
 set(SHADERS_DIR "${ASSETS_DIR}/shaders")
+set(TEXTURES_DIR "${ASSETS_DIR}/textures")
 
 # Define the destination directories in the build directory
 set(ASSETS_DEST_DIR "${CMAKE_BINARY_DIR}/assets")
@@ -13,6 +14,7 @@ set(SOUNDS_DEST_DIR "${ASSETS_DEST_DIR}/sounds")
 set(MODELS_DEST_DIR "${ASSETS_DEST_DIR}/models")
 set(SHEETS_DEST_DIR "${ASSETS_DEST_DIR}/sheets")
 set(SHADERS_DEST_DIR "${ASSETS_DEST_DIR}/shaders")
+set(TEXTURES_DEST_DIR "${ASSETS_DEST_DIR}/textures")
 
 # Custom target for compiling shaders
 add_custom_target(compile_shaders
@@ -37,6 +39,7 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${SOUNDS_DIR} ${SOUNDS_DEST_DIR}
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${MODELS_DIR} ${MODELS_DEST_DIR}
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${SHEETS_DIR} ${SHEETS_DEST_DIR}
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${TEXTURES_DIR} ${TEXTURES_DEST_DIR}
         COMMENT "Copying sounds, models, and sheets to build directory"
 )
 
