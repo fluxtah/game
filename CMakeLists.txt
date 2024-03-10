@@ -13,6 +13,18 @@ endif()
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
+# Kotlin Native build step
+set(GRADLEW_EXEC "./gradlew")
+if(WIN32)
+    set(GRADLEW_EXEC "gradlew.bat")
+endif()
+
+add_custom_target(kotlin_build ALL
+        COMMAND ${GRADLEW_EXEC} -p "${PROJECT_SOURCE_DIR}/kotlin-sdk" build
+        WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}/kotlin-sdk"
+        COMMENT "Building Kotlin Native project with Gradle Wrapper"
+)
+
 find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED)
 find_package(OpenAL REQUIRED)
@@ -29,7 +41,10 @@ file(GLOB_RECURSE PROJECT_SOURCES "${PROJECT_SOURCE_DIR}/src/*.c")
 file(GLOB_RECURSE PROJECT_HEADERS "${PROJECT_SOURCE_DIR}/include/*.h")
 file(GLOB_RECURSE SINGLE_FILE_LIBS "${PROJECT_SOURCE_DIR}/libs/include/*.h")
 file(GLOB_RECURSE SINGLE_FILE_LIBS_SRC "${PROJECT_SOURCE_DIR}/libs/src/*.c")
+
 add_executable(Game ${SINGLE_FILE_LIBS} ${SINGLE_FILE_LIBS_SRC} ${PROJECT_SOURCES} ${PROJECT_HEADERS})
+
+add_dependencies(Game kotlin_build)
 
 target_include_directories(Game PRIVATE
         ${PROJECT_SOURCE_DIR}/include
