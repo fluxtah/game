@@ -13,14 +13,14 @@ PipelineConfig *createDebugPipelineConfig(
     pipelineConfig->vertexShaderDescriptorSetLayout = NULL;
     pipelineConfig->fragmentShaderDescriptorSetLayout = NULL;
 
-    VkShaderModule vertexShaderModule = createShaderModule(context->device, "shaders/debug.vert.spv");
+    VkShaderModule vertexShaderModule = createShaderModule(context->device, "assets/shaders/debug.vert.spv");
     if (vertexShaderModule == VK_NULL_HANDLE) {
         LOG_ERROR("Failed to create vertex shader module for debug shader pipeline");
         destroyPipelineConfig(context,pipelineConfig);
         return NULL;
     }
 
-    VkShaderModule fragmentShaderModule = createShaderModule(context->device, "shaders/debug.frag.spv");
+    VkShaderModule fragmentShaderModule = createShaderModule(context->device, "assets/shaders/debug.frag.spv");
     if (fragmentShaderModule == VK_NULL_HANDLE) {
         LOG_ERROR("Failed to create fragment shader module for debug shader pipeline");
         destroyPipelineConfig(context,pipelineConfig);

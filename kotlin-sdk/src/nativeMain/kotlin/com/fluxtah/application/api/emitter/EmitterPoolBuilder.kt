@@ -1,6 +1,7 @@
 package com.fluxtah.application.api.emitter
 
 import com.fluxtah.application.api.ApplicationContext
+import com.fluxtah.application.api.file.toAssetsPath
 import com.fluxtah.application.api.interop.c_createEmitter
 import com.fluxtah.application.api.interop.model.CreateEmitterInfo
 import com.fluxtah.application.api.scene.EmitterInfo
@@ -186,11 +187,11 @@ class EmitterPoolBuilder(private val scene: Scene, private val id: String) {
     private fun createEmitterInfo(): EmitterInfo {
         val cEmitter = memScoped {
             val info = cValue<CreateEmitterInfo> {
-                modelFileName = modelPath?.cstr?.ptr
-                textureFileName = texturePath?.cstr?.ptr
-                computeShaderFileName = computeShaderPath?.cstr?.ptr
-                vertexShaderFileName = vertexShaderPath?.cstr?.ptr
-                fragmentShaderFileName = fragmentShaderPath?.cstr?.ptr
+                modelFileName = modelPath?.toAssetsPath()?.cstr?.ptr
+                textureFileName = texturePath?.toAssetsPath()?.cstr?.ptr
+                computeShaderFileName = computeShaderPath?.toAssetsPath()?.cstr?.ptr
+                vertexShaderFileName = vertexShaderPath?.toAssetsPath()?.cstr?.ptr
+                fragmentShaderFileName = fragmentShaderPath?.toAssetsPath()?.cstr?.ptr
 
                 maxParticles = this@EmitterPoolBuilder.maxParticles
                 particleBatchSize = this@EmitterPoolBuilder.particleBatchSize

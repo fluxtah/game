@@ -42,14 +42,14 @@ PipelineConfig *createBasicShaderPipelineConfig(
         return NULL;
     }
 
-    VkShaderModule vertexShaderModule = createShaderModule(context->device, "shaders/basic.vert.spv");
+    VkShaderModule vertexShaderModule = createShaderModule(context->device, "assets/shaders/basic.vert.spv");
     if (vertexShaderModule == VK_NULL_HANDLE) {
         LOG_ERROR("Failed to create vertex shader module for basic shader pipeline");
         destroyPipelineConfig(context, pipelineConfig);
         return NULL;
     }
 
-    VkShaderModule fragmentShaderModule = createShaderModule(context->device, "shaders/basic.frag.spv");
+    VkShaderModule fragmentShaderModule = createShaderModule(context->device, "assets/shaders/basic.frag.spv");
     if (fragmentShaderModule == VK_NULL_HANDLE) {
         LOG_ERROR("Failed to create fragment shader module for basic shader pipeline");
         destroyPipelineConfig(context, pipelineConfig);

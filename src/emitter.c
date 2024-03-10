@@ -85,17 +85,17 @@ Emitter *createEmitter(ApplicationContext *context, CreateEmitterInfo *info) {
     emitter->spawnVelocityTo[2] = info->particleSpawnVelocityToZ;
     emitter->spawnVelocityTo[3] = 0.0f;
 
-    const char *shaderPath = "shaders/particle.comp.spv"; // default
+    const char *shaderPath = "assets/shaders/particle.comp.spv"; // default
     if (info->computeShaderFileName != NULL) {
         shaderPath = info->computeShaderFileName;
     }
 
-    const char *vertexShaderPath = "shaders/particle.vert.spv"; // default
+    const char *vertexShaderPath = "assets/shaders/particle.vert.spv"; // default
     if (info->vertexShaderFileName != NULL) {
         vertexShaderPath = info->vertexShaderFileName;
     }
 
-    const char *fragmentShaderPath = "shaders/particle.frag.spv"; // default
+    const char *fragmentShaderPath = "assets/shaders/particle.frag.spv"; // default
     if (info->fragmentShaderFileName != NULL) {
         fragmentShaderPath = info->fragmentShaderFileName;
     }

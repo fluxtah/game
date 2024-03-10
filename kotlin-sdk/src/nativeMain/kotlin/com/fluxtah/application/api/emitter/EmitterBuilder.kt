@@ -1,6 +1,7 @@
 package com.fluxtah.application.api.emitter
 
 import com.fluxtah.application.api.ApplicationContext
+import com.fluxtah.application.api.file.toAssetsPath
 import com.fluxtah.application.api.interop.c_createEmitter
 import com.fluxtah.application.api.interop.model.CreateEmitterInfo
 import com.fluxtah.application.api.scene.EmitterInfo
@@ -47,7 +48,7 @@ class EmitterBuilder(private val scene: Scene, private val id: String) {
     private var particleSpawnVelocityToX: Float = 0.0f
     private var particleSpawnVelocityToY: Float = 10.0f
     private var particleSpawnVelocityToZ: Float = 0.0f
-    
+
     private var computeShaderPath: String? = null
     private var vertexShaderPath: String? = null
     private var fragmentShaderPath: String? = null
@@ -104,7 +105,14 @@ class EmitterBuilder(private val scene: Scene, private val id: String) {
         particleGravityZ = z
     }
 
-    fun particleSpawnPosition(fromX: Float = 0f, fromY: Float = 0f, fromZ: Float = 0f, toX: Float = 0f, toY: Float = 0f, toZ: Float = 0f) {
+    fun particleSpawnPosition(
+        fromX: Float = 0f,
+        fromY: Float = 0f,
+        fromZ: Float = 0f,
+        toX: Float = 0f,
+        toY: Float = 0f,
+        toZ: Float = 0f
+    ) {
         particleSpawnPositionFromX = fromX
         particleSpawnPositionFromY = fromY
         particleSpawnPositionFromZ = fromZ
@@ -122,7 +130,14 @@ class EmitterBuilder(private val scene: Scene, private val id: String) {
         particleSpawnPositionToZ = z
     }
 
-    fun particleSpawnVelocity(fromX: Float = 0f, fromY: Float = 0f, fromZ: Float = 0f, toX: Float = 0f, toY: Float = 0f, toZ: Float = 0f) {
+    fun particleSpawnVelocity(
+        fromX: Float = 0f,
+        fromY: Float = 0f,
+        fromZ: Float = 0f,
+        toX: Float = 0f,
+        toY: Float = 0f,
+        toZ: Float = 0f
+    ) {
         particleSpawnVelocityFromX = fromX
         particleSpawnVelocityFromY = fromY
         particleSpawnVelocityFromZ = fromZ
@@ -163,11 +178,11 @@ class EmitterBuilder(private val scene: Scene, private val id: String) {
 
         val cEmitter = memScoped {
             val info = cValue<CreateEmitterInfo> {
-                modelFileName = modelPath?.cstr?.ptr
-                textureFileName = texturePath?.cstr?.ptr
-                computeShaderFileName = computeShaderPath?.cstr?.ptr
-                vertexShaderFileName = vertexShaderPath?.cstr?.ptr
-                fragmentShaderFileName = fragmentShaderPath?.cstr?.ptr
+                modelFileName = modelPath?.toAssetsPath()?.cstr?.ptr
+                textureFileName = texturePath?.toAssetsPath()?.cstr?.ptr
+                computeShaderFileName = computeShaderPath?.toAssetsPath()?.cstr?.ptr
+                vertexShaderFileName = vertexShaderPath?.toAssetsPath()?.cstr?.ptr
+                fragmentShaderFileName = fragmentShaderPath?.toAssetsPath()?.cstr?.ptr
 
                 maxParticles = this@EmitterBuilder.maxParticles
                 particleBatchSize = this@EmitterBuilder.particleBatchSize

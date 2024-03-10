@@ -1,5 +1,6 @@
 package com.fluxtah.application.api
 
+import com.fluxtah.application.api.file.toAssetsPath
 import com.fluxtah.application.api.interop.c_loadSound
 import com.fluxtah.application.api.interop.model.CreateSoundInfo
 import com.fluxtah.application.api.scene.SceneDsl
@@ -44,7 +45,7 @@ class SoundPoolBuilder(private val id: String, private val soundPath: String) {
         val info = cValue<CreateSoundInfo> {
             loop = if (this@SoundPoolBuilder.loop) 1 else 0
         }
-        val cSound = memScoped { c_loadSound!!.invoke(soundPath.cstr.ptr, info.ptr) }
+        val cSound = memScoped { c_loadSound!!.invoke(soundPath.toAssetsPath().cstr.ptr, info.ptr) }
         return Sound(id, cSound)
     }
 }

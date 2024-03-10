@@ -1,6 +1,7 @@
 package com.fluxtah.application.api.sprite
 
 import com.fluxtah.application.api.ApplicationContext
+import com.fluxtah.application.api.file.toAssetsPath
 import com.fluxtah.application.api.interop.c_createSpriteSheet
 import com.fluxtah.application.api.interop.model.CreateSpriteSheetInfo
 import com.fluxtah.application.api.scene.Scene
@@ -19,8 +20,8 @@ class SpriteSheetBuilder(
     fun build(): SpriteSheet {
         val cSpriteSheet = memScoped {
             val info = cValue<CreateSpriteSheetInfo> {
-                jsonFileName = this@SpriteSheetBuilder.jsonFileName.cstr.ptr
-                textureFileName = this@SpriteSheetBuilder.textureFileName.cstr.ptr
+                jsonFileName = this@SpriteSheetBuilder.jsonFileName.toAssetsPath().cstr.ptr
+                textureFileName = this@SpriteSheetBuilder.textureFileName.toAssetsPath().cstr.ptr
             }
             c_createSpriteSheet!!.invoke(ApplicationContext.vulcanContext!!, info.ptr)
         }

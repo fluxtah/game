@@ -1,6 +1,7 @@
 package com.fluxtah.application.api.entity
 
 import com.fluxtah.application.api.ApplicationContext
+import com.fluxtah.application.api.file.toAssetsPath
 import com.fluxtah.application.api.interop.c_attachKotlinEntity
 import com.fluxtah.application.api.interop.c_createEntity
 import com.fluxtah.application.api.interop.model.CreateEntityInfo
@@ -111,7 +112,7 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
 
         val cEntity = memScoped {
             val info = cValue<CreateEntityInfo> {
-                modelFileName = modelPath.cstr.ptr
+                modelFileName = modelPath.toAssetsPath().cstr.ptr
                 positionX = this@EntityBuilder.positionX
                 positionY = this@EntityBuilder.positionY
                 positionZ = this@EntityBuilder.positionZ

@@ -76,14 +76,14 @@ PipelineConfig *createSpriteShaderPipelineConfig(
         return NULL;
     }
 
-    VkShaderModule vertexShaderModule = createShaderModule(context->device, "shaders/sprite.vert.spv");
+    VkShaderModule vertexShaderModule = createShaderModule(context->device, "assets/shaders/sprite.vert.spv");
     if (vertexShaderModule == VK_NULL_HANDLE) {
         LOG_ERROR("Failed to create vertex shader module for SPRITE shader pipeline");
         destroyPipelineConfig(context, pipelineConfig);
         return NULL;
     }
 
-    VkShaderModule fragmentShaderModule = createShaderModule(context->device, "shaders/sprite.frag.spv");
+    VkShaderModule fragmentShaderModule = createShaderModule(context->device, "assets/shaders/sprite.frag.spv");
     if (fragmentShaderModule == VK_NULL_HANDLE) {
         LOG_ERROR("Failed to create fragment shader module for SPRITE shader pipeline");
         destroyPipelineConfig(context, pipelineConfig);
