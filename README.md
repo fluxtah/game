@@ -26,6 +26,14 @@ For Windows and Linux, you can use the package manager of your choice to install
 For Vulkan SDK, please visit the official website [Vulkan SDK](https://vulkan.lunarg.com/)  to download and install the SDK for your platform.
 
 ## Building Instructions
+The kotlin sdk must be built before building the engine as it builds a dynamic library that the engine depends on.
+
+### Building the Game (Kotlin)
+Navigate to the Kotlin SDK directory and build the game using Gradle:
+```bash
+cd kotlin-sdk
+./gradlew build
+```
 
 ### Building the Engine (C)
 1. Create a build directory and navigate into it:
@@ -38,15 +46,6 @@ For Vulkan SDK, please visit the official website [Vulkan SDK](https://vulkan.lu
     cmake ..
     make
     ```
-
-### Building the Game (Kotlin)
-Navigate to the Kotlin SDK directory and build the game using Gradle:
-```bash
-cd kotlin-sdk
-./gradlew build
-```
-
-You may need to build the kotlin sdk first before building the engine as it builds a dynamic library that the engine depends on.
 
 ### Compiling Shaders
 Compile your Vulkan shader programs using `glslangValidator`, e.g.:
