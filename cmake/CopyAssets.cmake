@@ -19,7 +19,7 @@ set(TEXTURES_DEST_DIR "${ASSETS_DEST_DIR}/textures")
 # Custom target for compiling shaders
 add_custom_target(compile_shaders
         COMMAND sh ${CMAKE_SOURCE_DIR}/compile_shaders.sh
-        WORKING_DIRECTORY ${SHADERS_DIR}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
         COMMENT "Compiling shaders..."
 )
 

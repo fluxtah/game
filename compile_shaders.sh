@@ -10,6 +10,10 @@ for SHADER in $(find $SHADER_DIR -type f \( -iname \*.frag -o -iname \*.comp -o 
 
     # Command to compile the shader to SPIR-V
     glslangValidator -V "$SHADER" -o "$OUTPUT"
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to compile $SHADER"
+        exit 1
+    fi
 
     # Optional: Echo progress
     echo "Compiled $SHADER to $OUTPUT"
