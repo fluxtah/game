@@ -26,13 +26,6 @@ add_custom_target(compile_shaders
 # Ensure Game depends on compile_shaders to make sure it compiles before building the Game
 add_dependencies(Game compile_shaders)
 
-# Copy assets directories to the build directory after building the project
-add_custom_command(
-        TARGET Game POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSETS_DIR} ${ASSETS_DEST_DIR}
-        COMMENT "Copying assets to build directory"
-)
-
 # Copy specific folders within assets
 add_custom_command(
         TARGET Game POST_BUILD

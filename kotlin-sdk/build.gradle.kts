@@ -48,17 +48,4 @@ kotlin {
         gradleVersion = "8.1.1"
         distributionType = Wrapper.DistributionType.BIN
     }
-
-    val launchGame = tasks.register("launchGame", Exec::class) {
-        // Set the working directory if necessary, or use '..' to navigate to the upper directory
-        workingDir = file("../")
-
-        // Command to launch the application
-        commandLine("./Game") // Replace with the actual command to run your game
-    }
-
-// Ensure that this task is run after the build
-    tasks.named("build") {
-        finalizedBy(launchGame)
-    }
 }
