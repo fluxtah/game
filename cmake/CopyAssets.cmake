@@ -1,6 +1,3 @@
-# Assume your project executable is named "Game"
-add_executable(Game ${SOURCE_FILES})
-
 # Define the directories
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 set(LIBS_DIR "${ASSETS_DIR}/libs")
