@@ -8,8 +8,8 @@ void destroyDebugTextOverlay(ApplicationContext *context, DebugTextOverlay *over
 
 DebugTextOverlay *createDebugTextOverlay(ApplicationContext *context) {
     CreateSpriteSheetInfo info = {
-            .jsonFileName = "sheets/courier-new.json",
-            .textureFileName = "sheets/courier-new.png"
+            .jsonFileName = "assets/sheets/courier-new.json",
+            .textureFileName = "assets/sheets/courier-new.png"
     };
 
     DebugTextOverlay *overlay = malloc(sizeof(DebugTextOverlay));
