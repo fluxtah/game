@@ -52,3 +52,5 @@ target_link_libraries(
         networking
         physics
 )
+
+include(${CMAKE_SOURCE_DIR}/CopyAssets.cmake)
