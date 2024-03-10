@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Directory containing shader files
-SHADER_DIR="./shaders"
+SHADER_DIR="./assets/shaders"
 
 # Compile each shader file found in the directory
 for SHADER in $(find $SHADER_DIR -type f \( -iname \*.frag -o -iname \*.comp -o -iname \*.vert \)); do
