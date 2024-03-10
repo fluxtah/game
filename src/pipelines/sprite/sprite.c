@@ -12,6 +12,7 @@ void updateSpriteElementAndStage(ApplicationContext *context, SpriteBatch *batch
 SpriteSheet *createSpriteSheet(ApplicationContext *context, CreateSpriteSheetInfo *info) {
     // Read the JSON file
     FILE *file = fopen(info->jsonFileName, "rb");
+    printf("Reading JSON file: %s\n", info->jsonFileName);
     if (file == NULL) return NULL;
 
     fseek(file, 0, SEEK_END);
