@@ -57,7 +57,6 @@ class DebugTextOverlayComponent : SceneComponent() {
             return
         }
 
-        val playerShipData = playerShip.data<ShipData>()
         textBatch.elementAt(0).apply {
             updateSegment(0, "${playerShip.positionX}")
             updateSegment(1, "${playerShip.positionY}")
@@ -65,9 +64,9 @@ class DebugTextOverlayComponent : SceneComponent() {
         }
 
         textBatch.elementAt(1).apply {
-            updateSegment(0, "${playerShipData.velocity.x}")
-            updateSegment(1, "${playerShipData.velocity.y}")
-            updateSegment(2, "${playerShipData.velocity.z}")
+            updateSegment(0, "${playerShip.velocityX}")
+            updateSegment(1, "${playerShip.velocityY}")
+            updateSegment(2, "${playerShip.velocityZ}")
         }
 
         textBatch.elementAt(2).updateSegment(0, "$time")

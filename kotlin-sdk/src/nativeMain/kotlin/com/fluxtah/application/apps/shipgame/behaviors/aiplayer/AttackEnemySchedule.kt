@@ -75,8 +75,8 @@ class AttackEnemySchedule : AiSchedule() {
         } else {
             // Maintain current velocity if within combat range
             // Avoid abrupt changes by not toggling flags
-            shipActions.isMovingForward = shipData.velocity.z > 0
-            shipActions.isReversing = shipData.velocity.z < 0
+            shipActions.isMovingForward = entity.velocityZ > 0
+            shipActions.isReversing = entity.velocityZ < 0
             shipActions.isMovingRight = false
         }
 

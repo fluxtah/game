@@ -29,28 +29,28 @@ class ForwardMovementBehavior(
     override fun reset() {
         if (!::engineSound.isInitialized) return
         engineSound.stopIfPlaying()
-        data.velocity.z = 0.0f
+        entity.velocity.z = 0.0f
     }
 
     override fun update(time: Float) {
 
-        data.velocity.z = when {
+        entity.velocity.z = when {
             data.input.isMovingForward -> {
                 // Increase forward velocity
-                (data.velocity.z + acceleration * fixedTimeStep).coerceAtMost(maxForwardSpeed)
+                (entity.velocity.z + acceleration * fixedTimeStep).coerceAtMost(maxForwardSpeed)
             }
 
             data.input.isReversing -> {
                 // Decrease forward velocity for reverse movement
-                (data.velocity.z - (acceleration * reversingFactor) * fixedTimeStep).coerceAtLeast(maxReverseSpeed)
+                (entity.velocity.z - (acceleration * reversingFactor) * fixedTimeStep).coerceAtLeast(maxReverseSpeed)
             }
 
             else -> {
                 // Slow down to a halt if not moving forward or reversing
-                if (data.velocity.z > 0) {
-                    (data.velocity.z - acceleration * fixedTimeStep).coerceAtLeast(0.0f)
+                if (entity.velocity.z > 0) {
+                    (entity.velocity.z - acceleration * fixedTimeStep).coerceAtLeast(0.0f)
                 } else {
-                    (data.velocity.z + acceleration * fixedTimeStep).coerceAtMost(0.0f)
+                    (entity.velocity.z + acceleration * fixedTimeStep).coerceAtMost(0.0f)
                 }
             }
         }
@@ -58,7 +58,7 @@ class ForwardMovementBehavior(
         // Calculate new position based on forward velocity
         val newPosition = Vector3(entity.positionX, entity.positionY, entity.positionZ) + calculateForwardMovement(
             entity.rotationY,
-            data.velocity.z * fixedTimeStep
+            entity.velocity.z * fixedTimeStep
         )
 
         entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
@@ -70,7 +70,7 @@ class ForwardMovementBehavior(
     }
 
     override fun afterUpdate(time: Float, deltaTime: Float) {
-        engineSound.setPitch(abs(0.7f + (data.velocity.z / maxForwardSpeed) * 0.6f))
+        engineSound.setPitch(abs(0.7f + (entity.velocity.z / maxForwardSpeed) * 0.6f))
     }
 
     fun startEngine() {

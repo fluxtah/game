@@ -33,8 +33,7 @@ class ShipCollisionResponseBehavior : EntityBehavior() {
       // printf("(AFTER) Moved Entity to position: %f, %f, %f\n", entity.positionX, entity.positionY, entity.positionZ)
 
 
-        shipData.velocity.x = 0.0f
-        shipData.velocity.z = 0.0f
+        entity.setVelocity(x = 0.0f, z = 0.0f)
 
         if (info.normal.y > 0.0f) {
             thrustBehavior.state.velocityY *= -1.2f

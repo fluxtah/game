@@ -27,35 +27,37 @@ class LateralMovementBehavior(
     override fun reset() {
         if (!::movementSound.isInitialized) return
         movementSound.stopIfPlaying()
-        shipData.velocity.x = 0.0f
+        entity.setVelocity(x = 0.0f)
         entity.setRotation(z = 0.0f) // Reset lean angle when resetting behavior
     }
 
     override fun update(time: Float) {
-        shipData.velocity.x = when {
+        val velocityX = when {
             shipData.input.isMovingRight -> {
                 movementSound.playIfNotPlaying()
-                (shipData.velocity.x + lateralAcceleration * fixedTimeStep).coerceAtMost(maxLateralSpeed)
+                (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(maxLateralSpeed)
             }
 
             shipData.input.isMovingLeft -> {
                 movementSound.playIfNotPlaying()
-                (shipData.velocity.x - lateralAcceleration * fixedTimeStep).coerceAtLeast(-maxLateralSpeed)
+                (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(-maxLateralSpeed)
             }
 
             else -> {
                 movementSound.stopIfPlaying()
-                if (shipData.velocity.x > 0) {
-                    (shipData.velocity.x - lateralAcceleration * fixedTimeStep).coerceAtLeast(0.0f)
+                if (entity.velocityX > 0) {
+                    (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(0.0f)
                 } else {
-                    (shipData.velocity.x + lateralAcceleration * fixedTimeStep).coerceAtMost(0.0f)
+                    (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(0.0f)
                 }
             }
         }
 
+        entity.setVelocity(x = velocityX)
+
         val newPosition = Vector3(entity.positionX, entity.positionY, entity.positionZ) + calculateLateralMovement(
             entity.rotationY,
-            shipData.velocity.x * fixedTimeStep
+            entity.velocityX * fixedTimeStep
         )
 
         entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
@@ -70,13 +72,13 @@ class LateralMovementBehavior(
         val forwardDirection = Vector3(sin(yawRadians), 0f, cos(yawRadians))
         val leftDirection = Vector3(cos(yawRadians), 0f, -sin(yawRadians))
         val rightDirection = Vector3(-cos(yawRadians), 0f, sin(yawRadians))
-        val lateralDirection = if (shipData.velocity.x > 0) rightDirection else -leftDirection
+        val lateralDirection = if (entity.velocityX > 0) rightDirection else -leftDirection
         return lateralDirection * distance
     }
 
     private fun applyLeanEffect() {
         // Calculate lean angle based on lateral velocity, ensuring it does not exceed maxLeanAngle
-        val leanAngle = (shipData.velocity.x / maxLateralSpeed) * maxLeanAngle
+        val leanAngle = (entity.velocityX / maxLateralSpeed) * maxLeanAngle
         // Apply lean angle to entity's Z-axis rotation
         entity.setRotation(z = leanAngle)
     }

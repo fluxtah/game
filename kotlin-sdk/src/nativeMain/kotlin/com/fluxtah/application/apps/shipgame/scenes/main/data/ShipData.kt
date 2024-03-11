@@ -1,13 +1,10 @@
 package com.fluxtah.application.apps.shipgame.scenes.main.data
 
-import com.fluxtah.application.api.math.Vector3
-
 data class ShipData(
     var playerData: PlayerData = ANY_PLAYER,
     var shield: Float = MAX_SHIELD,
     var armor: Float = MAX_ARMOR,
     var energy: Float = MAX_ENERGY,
-    val velocity: Vector3 = Vector3(0f, 0f, 0f),
     val plasmaCannonEnergyCost: Float = 1.0f,
     val plasmaCannonFireDelay: Float = 0.3f,
     val input: ShipInput = ShipInput(),

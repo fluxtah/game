@@ -5,6 +5,7 @@ import com.fluxtah.application.api.interop.c_setEntityPosition
 import com.fluxtah.application.api.interop.c_setEntityRotation
 import com.fluxtah.application.api.interop.c_setEntityScale
 import com.fluxtah.application.api.interop.c_setEntitySkinIndex
+import com.fluxtah.application.api.math.Vector3
 import kotlinx.cinterop.ExperimentalForeignApi
 
 @OptIn(ExperimentalForeignApi::class)
@@ -21,12 +22,17 @@ class Entity(
     initialScaleX: Float = 1.0f,
     initialScaleY: Float = 1.0f,
     initialScaleZ: Float = 1.0f,
+    initialVelocityX: Float = 0.0f,
+    initialVelocityY: Float = 0.0f,
+    initialVelocityZ: Float = 0.0f,
     var active: Boolean = true,
     var visible: Boolean = true,
     var collisionGroup: Int = 0,
     var collisionMask: Int = 0,
     val behaviors: List<EntityBehavior>,
 ) {
+    val velocity: Vector3 = Vector3(0f, 0f, 0f)
+
     init {
         behaviors.forEach { it.entity = this }
     }
@@ -85,6 +91,24 @@ class Entity(
             return _scaleZ
         }
 
+    private var _velocityX: Float = initialVelocityX
+    val velocityX: Float
+        get() {
+            return _velocityX
+        }
+
+    private var _velocityY: Float = initialVelocityY
+    val velocityY: Float
+        get() {
+            return _velocityY
+        }
+
+    private var _velocityZ: Float = initialVelocityZ
+    val velocityZ: Float
+        get() {
+            return _velocityZ
+        }
+
     fun setPosition(x: Float? = null, y: Float? = null, z: Float? = null) {
         _positionX = x ?: _positionX
         _positionY = y ?: _positionY
@@ -104,6 +128,12 @@ class Entity(
         _scaleY = y ?: _scaleY
         _scaleZ = z ?: _scaleZ
         c_setEntityScale!!.invoke(handle, _scaleX, _scaleY, _scaleZ)
+    }
+
+    fun setVelocity(x: Float? = null, y: Float? = null, z: Float? = null) {
+        _velocityX = x ?: _velocityX
+        _velocityY = y ?: _velocityY
+        _velocityZ = z ?: _velocityZ
     }
 
     fun rotate(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
