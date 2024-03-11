@@ -32,8 +32,6 @@ class Entity(
     var collisionMask: Int = 0,
     val behaviors: List<EntityBehavior>,
 ) {
-    val velocity: Vector3 = Vector3(0f, 0f, 0f)
-
     init {
         behaviors.forEach { it.entity = this }
     }

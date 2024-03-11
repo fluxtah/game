@@ -5,8 +5,7 @@ import com.fluxtah.application.apps.shipgame.CollisionGroups
 import com.fluxtah.application.apps.shipgame.Id
 import com.fluxtah.application.apps.shipgame.ShipGame
 import com.fluxtah.application.apps.shipgame.behaviors.FirePlasmaCannonBehaviour
-import com.fluxtah.application.apps.shipgame.behaviors.ForwardMovementBehavior
-import com.fluxtah.application.apps.shipgame.behaviors.LateralMovementBehavior
+import com.fluxtah.application.apps.shipgame.behaviors.ShipMovementBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.PlacePowerNodeBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.ShipCollisionResponseBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.ShipDieBehavior
@@ -29,8 +28,7 @@ fun SceneBuilder.entityPoolPlayerShip() {
         behaviour { FirePlasmaCannonBehaviour() }
         behaviour { ThrustBehavior() }
         behaviour { YawBehavior() }
-        behaviour { ForwardMovementBehavior() }
-        behaviour { LateralMovementBehavior() }
+        behaviour { ShipMovementBehavior() }
         behaviour { ShipDieBehavior() }
         behaviour { ShipCollisionResponseBehavior() }
         behaviour { ShipEnergyBehaviour() }

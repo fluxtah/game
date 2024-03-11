@@ -5,7 +5,7 @@ import com.fluxtah.application.api.scene.SceneBuilder
 import com.fluxtah.application.apps.shipgame.scenes.main.data.GameData
 import com.fluxtah.application.apps.shipgame.scenes.main.data.GameSceneState
 import com.fluxtah.application.apps.shipgame.Id
-import com.fluxtah.application.apps.shipgame.behaviors.ForwardMovementBehavior
+import com.fluxtah.application.apps.shipgame.behaviors.ShipMovementBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.KillerCameraBehavior
 import com.fluxtah.application.apps.shipgame.components.map.MapComponent
 import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
@@ -38,7 +38,7 @@ fun SceneBuilder.sequencePlayerDeathRespawn() {
                 args.ship.resetBehaviors()
                 args.ship.visible = true
                 args.ship.active = true
-                args.ship.getBehaviorByType<ForwardMovementBehavior>().startEngine()
+                args.ship.getBehaviorByType<ShipMovementBehavior>().startEngine()
 
                 if (args.ship.data<ShipData>().playerData.isLocalPlayer()) {
                     scene.componentById<MapComponent>(Id.COMPONENT_MAP).originEntity = args.ship

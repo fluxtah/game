@@ -18,7 +18,7 @@ class ShipDieBehavior : EntityBehavior() {
             }
             entity.visible = false
             entity.active = false
-            entity.getBehaviorByType<ForwardMovementBehavior>().stopEngine()
+            entity.getBehaviorByType<ShipMovementBehavior>().stopEngine()
             scene.emitterFromPool(Id.EMITTER_EXPLOSION) {
                 it.setPosition(entity.positionX, entity.positionY, entity.positionZ)
                 val behavior = it.getBehaviorByType<ExplosionEmitterBehavior>()
