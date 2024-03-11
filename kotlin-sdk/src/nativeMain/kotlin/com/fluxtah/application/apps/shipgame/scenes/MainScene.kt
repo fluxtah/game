@@ -34,6 +34,7 @@ import com.fluxtah.application.apps.shipgame.scenes.main.sequences.sequencePlaye
 import com.fluxtah.application.apps.shipgame.scenes.main.sheets.spriteSheetCourierNew
 import com.fluxtah.application.apps.shipgame.scenes.main.sheets.spriteSheetGameUi
 import com.fluxtah.application.apps.shipgame.scenes.main.sounds.shipSounds
+import kotlin.math.sin
 
 fun Application.mainScene() {
     scene(Id.SCENE_MAIN) {
@@ -74,7 +75,7 @@ fun Application.mainScene() {
 //        entity("ring", "models/energy-ring/energy-ring.glb") {
 //            position(0f, -3.7f, 0f)
 //            scale(10f, 10f, 10f)
-//            skin(1)
+//            skin(0)
 //        }
 //        entity("ring2", "models/energy-ring/energy-ring.glb") {
 //            position(0f, -3.71f, 0f)
