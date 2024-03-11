@@ -25,6 +25,7 @@ class Entity(
     initialVelocityX: Float = 0.0f,
     initialVelocityY: Float = 0.0f,
     initialVelocityZ: Float = 0.0f,
+    initialMass: Float = 1.0f,
     var active: Boolean = true,
     var visible: Boolean = true,
     var collisionGroup: Int = 0,
@@ -109,6 +110,12 @@ class Entity(
             return _velocityZ
         }
 
+    private var _mass: Float = initialMass
+    val mass: Float
+        get() {
+            return _mass
+        }
+
     fun setPosition(x: Float? = null, y: Float? = null, z: Float? = null) {
         _positionX = x ?: _positionX
         _positionY = y ?: _positionY
@@ -134,6 +141,10 @@ class Entity(
         _velocityX = x ?: _velocityX
         _velocityY = y ?: _velocityY
         _velocityZ = z ?: _velocityZ
+    }
+
+    fun setMass(mass: Float) {
+        _mass = mass
     }
 
     fun rotate(x: Float = 0f, y: Float = 0f, z: Float = 0f) {

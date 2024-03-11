@@ -29,6 +29,10 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
     private var scaleX: Float = 1.0f
     private var scaleY: Float = 1.0f
     private var scaleZ: Float = 1.0f
+    private var velocityX: Float = 0.0f
+    private var velocityY: Float = 0.0f
+    private var velocityZ: Float = 0.0f
+    private var mass: Float = 1.0f
 
     private var data: () -> Any = {}
 
@@ -71,6 +75,16 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
         scaleX = x
         scaleY = y
         scaleZ = z
+    }
+
+    fun velocity(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
+        velocityX = x
+        velocityY = y
+        velocityZ = z
+    }
+
+    fun mass(mass: Float) {
+        this.mass = mass
     }
 
     fun useOrientedBoundingBox() {
@@ -122,6 +136,10 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
                 scaleX = this@EntityBuilder.scaleX
                 scaleY = this@EntityBuilder.scaleY
                 scaleZ = this@EntityBuilder.scaleX
+                velocityX = this@EntityBuilder.velocityX
+                velocityY = this@EntityBuilder.velocityY
+                velocityZ = this@EntityBuilder.velocityZ
+                mass = this@EntityBuilder.mass
                 useOrientedBoundingBox = this@EntityBuilder.orientatedBoundingBox
                 collisionGroup = this@EntityBuilder.collisionGroup
                 collisionMask = this@EntityBuilder.collisionMask
@@ -147,6 +165,10 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
             initialScaleX = scaleX,
             initialScaleY = scaleY,
             initialScaleZ = scaleZ,
+            initialVelocityX = velocityX,
+            initialVelocityY = velocityY,
+            initialVelocityZ = velocityZ,
+            initialMass = mass,
             active = startActive,
             visible = true,
             behaviors = behaviors,

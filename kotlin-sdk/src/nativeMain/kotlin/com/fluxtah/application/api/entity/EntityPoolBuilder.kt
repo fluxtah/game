@@ -20,6 +20,10 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
     private var scaleX: Float = 1.0f
     private var scaleY: Float = 1.0f
     private var scaleZ: Float = 1.0f
+    private var velocityX: Float = 0.0f
+    private var velocityY: Float = 0.0f
+    private var velocityZ: Float = 0.0f
+    private var mass: Float = 1.0f
 
     private var data: () -> Any = {}
 
@@ -66,6 +70,16 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
         scaleX = x
         scaleY = y
         scaleZ = z
+    }
+
+    fun velocity(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
+        velocityX = x
+        velocityY = y
+        velocityZ = z
+    }
+
+    fun mass(mass: Float) {
+         this.mass = mass
     }
 
     fun useOrientedBoundingBox() {
@@ -120,6 +134,10 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
                 scaleX = this@EntityPoolBuilder.scaleX
                 scaleY = this@EntityPoolBuilder.scaleY
                 scaleZ = this@EntityPoolBuilder.scaleX
+                velocityX = this@EntityPoolBuilder.velocityX
+                velocityY = this@EntityPoolBuilder.velocityY
+                velocityZ = this@EntityPoolBuilder.velocityZ
+                mass = this@EntityPoolBuilder.mass
                 useOrientedBoundingBox = this@EntityPoolBuilder.orientatedBoundingBox
                 collisionGroup = this@EntityPoolBuilder.collisionGroup
                 collisionMask = this@EntityPoolBuilder.collisionMask
@@ -145,6 +163,10 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
                 initialScaleX = scaleX,
                 initialScaleY = scaleY,
                 initialScaleZ = scaleZ,
+                initialVelocityX = velocityX,
+                initialVelocityY = velocityY,
+                initialVelocityZ = velocityZ,
+                initialMass = mass,
                 active = false,
                 behaviors = behaviors,
                 collisionGroup = collisionGroup,

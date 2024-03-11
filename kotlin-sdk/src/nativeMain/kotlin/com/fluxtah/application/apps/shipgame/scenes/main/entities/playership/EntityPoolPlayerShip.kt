@@ -20,6 +20,7 @@ import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
 fun SceneBuilder.entityPoolPlayerShip() {
     entityPool(Id.ENT_PLAYER_SHIP, "models/ship/ship.glb") {
         // useOrientedBoundingBox()
+        mass(200f)
         collisionGroup(CollisionGroups.GROUP_PLAYER)
         collisionMask(CollisionGroups.MASK_PLAYER)
         initialSize(ShipGame.PLAYERS_PER_TEAM * 2)
