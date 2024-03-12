@@ -14,6 +14,11 @@ Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info) {
     entity->rotation[0] = info->rotationX;
     entity->rotation[1] = info->rotationY;
     entity->rotation[2] = info->rotationZ;
+    entity->velocity[0] = info->velocityX;
+    entity->velocity[1] = info->velocityY;
+    entity->velocity[2] = info->velocityZ;
+    entity->mass = info->mass;
+
     entity->collisionGroup = info->collisionGroup;
     entity->collisionMask = info->collisionMask;
 
@@ -96,6 +101,16 @@ void setEntityScale(Entity *obj, float x, float y, float z) {
     obj->scale[0] = x;
     obj->scale[1] = y;
     obj->scale[2] = z;
+}
+
+void setEntityVelocity(Entity *entity, float x, float y, float z) {
+    entity->velocity[0] = x;
+    entity->velocity[1] = y;
+    entity->velocity[2] = z;
+}
+
+void setEntityMass(Entity *entity, float mass) {
+    entity->mass = mass;
 }
 
 void applyEntityChanges(Entity *entity) {
@@ -269,4 +284,54 @@ void setEntitySkinIndex(Entity *entity, int skinIndex) {
     entity->skinIndex = skinIndex;
 }
 
+float getEntityPositionX(Entity *entity) {
+    return entity->position[0];
+}
 
+float getEntityPositionY(Entity *entity) {
+    return entity->position[1];
+}
+
+float getEntityPositionZ(Entity *entity) {
+    return entity->position[2];
+}
+
+float getEntityRotationX(Entity *entity) {
+    return entity->rotation[0];
+}
+
+float getEntityRotationY(Entity *entity) {
+    return entity->rotation[1];
+}
+
+float getEntityRotationZ(Entity *entity) {
+    return entity->rotation[2];
+}
+
+float getEntityScaleX(Entity *entity) {
+    return entity->scale[0];
+}
+
+float getEntityScaleY(Entity *entity) {
+    return entity->scale[1];
+}
+
+float getEntityScaleZ(Entity *entity) {
+    return entity->scale[2];
+}
+
+float getEntityVelocityX(Entity *entity) {
+    return entity->velocity[0];
+}
+
+float getEntityVelocityY(Entity *entity) {
+    return entity->velocity[1];
+}
+
+float getEntityVelocityZ(Entity *entity) {
+    return entity->velocity[2];
+}
+
+float getEntityMass(Entity *entity) {
+    return entity->mass;
+}

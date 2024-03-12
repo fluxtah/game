@@ -64,6 +64,26 @@ void bindKotlinApi() {
     ktSetPositionEntityFunc(setEntityPosition);
     ktSetEntityRotationFunc(setEntityRotation);
     ktSetEntityScaleFunc(setEntityScale);
+    ktSetEntityVelocityFunc(setEntityVelocity);
+    ktSetEntityMassFunc(setEntityMass);
+
+    ktGetEntityPositionXFunc(getEntityPositionX);
+    ktGetEntityPositionYFunc(getEntityPositionY);
+    ktGetEntityPositionZFunc(getEntityPositionZ);
+
+    ktGetEntityRotationXFunc(getEntityRotationX);
+    ktGetEntityRotationYFunc(getEntityRotationY);
+    ktGetEntityRotationZFunc(getEntityRotationZ);
+
+    ktGetEntityScaleXFunc(getEntityScaleX);
+    ktGetEntityScaleYFunc(getEntityScaleY);
+    ktGetEntityScaleZFunc(getEntityScaleZ);
+
+    ktGetEntityVelocityXFunc(getEntityVelocityX);
+    ktGetEntityVelocityYFunc(getEntityVelocityY);
+    ktGetEntityVelocityZFunc(getEntityVelocityZ);
+    ktGetEntityMassFunc(getEntityMass);
+
     ktSetAttachKotlinEntityFunc(attachKotlinEntityInfo);
     ktGetEntityCollisionInfoFunc(getEntityCollisionInfo);
     ktSetEntitySkinIndexFunc(setEntitySkinIndex);
@@ -160,6 +180,26 @@ void bindKotlinApiHeadless() {
     ktSetPositionEntityFunc(setEntityPosition);
     ktSetEntityRotationFunc(setEntityRotation);
     ktSetEntityScaleFunc(setEntityScale);
+    ktSetEntityVelocityFunc(setEntityVelocity);
+    ktSetEntityMassFunc(setEntityMass);
+
+    ktGetEntityPositionXFunc(getEntityPositionX);
+    ktGetEntityPositionYFunc(getEntityPositionY);
+    ktGetEntityPositionZFunc(getEntityPositionZ);
+
+    ktGetEntityRotationXFunc(getEntityRotationX);
+    ktGetEntityRotationYFunc(getEntityRotationY);
+    ktGetEntityRotationZFunc(getEntityRotationZ);
+
+    ktGetEntityScaleXFunc(getEntityScaleX);
+    ktGetEntityScaleYFunc(getEntityScaleY);
+    ktGetEntityScaleZFunc(getEntityScaleZ);
+
+    ktGetEntityVelocityXFunc(getEntityVelocityX);
+    ktGetEntityVelocityYFunc(getEntityVelocityY);
+    ktGetEntityVelocityZFunc(getEntityVelocityZ);
+    ktGetEntityMassFunc(getEntityMass);
+
     ktSetAttachKotlinEntityFunc(attachKotlinEntityInfo);
     ktGetEntityCollisionInfoFunc(getEntityCollisionInfo);
     ktSetEntitySkinIndexFunc(setEntitySkinIndex);

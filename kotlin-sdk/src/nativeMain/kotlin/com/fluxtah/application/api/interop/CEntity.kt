@@ -129,6 +129,276 @@ fun ktSetEntityScaleFunc(callback: CPointer<CFunction<EntityScaleFunc>>) {
 }
 
 @OptIn(ExperimentalForeignApi::class)
+typealias EntityVelocityFunc = (CEntity, Float, Float, Float) -> Unit
+
+@OptIn(ExperimentalForeignApi::class)
+var c_setEntityVelocity: EntityVelocityFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktSetEntityVelocityFunc")
+fun ktSetEntityVelocityFunc(callback: CPointer<CFunction<EntityVelocityFunc>>) {
+    c_setEntityVelocity = { entity, x, y, z ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityVelocityFunc>>()(
+                entity, x, y, z
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityMassFunc = (CEntity, Float) -> Unit
+
+@OptIn(ExperimentalForeignApi::class)
+var c_setEntityMass: EntityMassFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktSetEntityMassFunc")
+fun ktSetEntityMassFunc(callback: CPointer<CFunction<EntityMassFunc>>) {
+    c_setEntityMass = { entity, mass ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityMassFunc>>()(
+                entity, mass
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetPositionXFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityPositionX: EntityGetPositionXFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityPositionXFunc")
+fun ktGetEntityPositionXFunc(callback: CPointer<CFunction<EntityGetPositionXFunc>>) {
+    c_getEntityPositionX = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetPositionXFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetPositionYFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityPositionY: EntityGetPositionYFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityPositionYFunc")
+fun ktGetEntityPositionYFunc(callback: CPointer<CFunction<EntityGetPositionYFunc>>) {
+    c_getEntityPositionY = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetPositionYFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetPositionZFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityPositionZ: EntityGetPositionZFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityPositionZFunc")
+fun ktGetEntityPositionZFunc(callback: CPointer<CFunction<EntityGetPositionZFunc>>) {
+    c_getEntityPositionZ = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetPositionZFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetRotationXFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityRotationX: EntityGetRotationXFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityRotationXFunc")
+fun ktGetEntityRotationXFunc(callback: CPointer<CFunction<EntityGetRotationXFunc>>) {
+    c_getEntityRotationX = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetRotationXFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetRotationYFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityRotationY: EntityGetRotationYFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityRotationYFunc")
+fun ktGetEntityRotationYFunc(callback: CPointer<CFunction<EntityGetRotationYFunc>>) {
+    c_getEntityRotationY = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetRotationYFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetRotationZFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityRotationZ: EntityGetRotationYFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityRotationZFunc")
+fun ktGetEntityRotationZFunc(callback: CPointer<CFunction<EntityGetRotationZFunc>>) {
+    c_getEntityRotationZ = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetRotationZFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetScaleXFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityScaleX: EntityGetScaleXFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityScaleXFunc")
+fun ktGetEntityScaleXFunc(callback: CPointer<CFunction<EntityGetScaleXFunc>>) {
+    c_getEntityScaleX = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetScaleXFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetScaleYFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityScaleY: EntityGetScaleYFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityScaleYFunc")
+fun ktGetEntityScaleYFunc(callback: CPointer<CFunction<EntityGetScaleYFunc>>) {
+    c_getEntityScaleY = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetScaleYFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetScaleZFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityScaleZ: EntityGetScaleYFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityScaleZFunc")
+fun ktGetEntityScaleZFunc(callback: CPointer<CFunction<EntityGetScaleZFunc>>) {
+    c_getEntityScaleZ = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetScaleZFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetVelocityXFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityVelocityX: EntityGetVelocityXFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityVelocityXFunc")
+fun ktGetEntityVelocityXFunc(callback: CPointer<CFunction<EntityGetVelocityXFunc>>) {
+    c_getEntityVelocityX = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetVelocityXFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetVelocityYFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityVelocityY: EntityGetVelocityYFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityVelocityYFunc")
+fun ktGetEntityVelocityYFunc(callback: CPointer<CFunction<EntityGetVelocityYFunc>>) {
+    c_getEntityVelocityY = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetVelocityYFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetVelocityZFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityVelocityZ: EntityGetVelocityYFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityVelocityZFunc")
+fun ktGetEntityVelocityZFunc(callback: CPointer<CFunction<EntityGetVelocityZFunc>>) {
+    c_getEntityVelocityZ = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetVelocityZFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetMassFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityMass: EntityGetMassFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityMassFunc")
+fun ktGetEntityMassFunc(callback: CPointer<CFunction<EntityGetMassFunc>>) {
+    c_getEntityMass = { entity ->
+        memScoped {
+            callback.reinterpret<CFunction<EntityGetMassFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
 typealias AttachKotlinEntityFunc = (CEntity, COpaquePointer) -> Unit
 
 @OptIn(ExperimentalForeignApi::class)

@@ -13,6 +13,8 @@ typedef struct Entity {
     vec3 scale;
     vec3 position;
     vec3 rotation;
+    vec3 velocity;
+    float mass;
 
     mat4 modelMatrix;
 
@@ -48,6 +50,10 @@ void setEntityRotation(Entity *entity, float x, float y, float z);
 
 void setEntityScale(Entity *obj, float x, float y, float z);
 
+void setEntityVelocity(Entity *entity, float x, float y, float z);
+
+void setEntityMass(Entity *entity, float mass);
+
 void applyEntityChanges(Entity *entity);
 
 void updateEntityAABBs(Entity *entity);
@@ -65,5 +71,31 @@ AABB getEntityAABB(Entity *entity);
 bool shouldEntitiesCollide(const Entity* entityA, const Entity* entityB);
 
 void setEntitySkinIndex(Entity *entity, int skinIndex);
+
+float getEntityPositionX(Entity *entity);
+
+float getEntityPositionY(Entity *entity);
+
+float getEntityPositionZ(Entity *entity);
+
+float getEntityRotationX(Entity *entity);
+
+float getEntityRotationY(Entity *entity);
+
+float getEntityRotationZ(Entity *entity);
+
+float getEntityScaleX(Entity *entity);
+
+float getEntityScaleY(Entity *entity);
+
+float getEntityScaleZ(Entity *entity);
+
+float getEntityVelocityX(Entity *entity);
+
+float getEntityVelocityY(Entity *entity);
+
+float getEntityVelocityZ(Entity *entity);
+
+float getEntityMass(Entity *entity);
 
 #endif //APP_ENTITY_H
