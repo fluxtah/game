@@ -2,7 +2,11 @@
 extern "C" {
 #endif
 
-void physicsInit();
+
+
+void *initPhysics(CreatePhysicsInfo *info);
+
+void destroyPhysics(void *context);
 
 #ifdef __cplusplus
 }

@@ -39,7 +39,6 @@ import kotlin.math.sin
 fun Application.mainScene() {
     scene(Id.SCENE_MAIN) {
         data { GameData() }
-
         lobbyUiComponent()
         gameUiComponent()
         gameOverUiComponent()

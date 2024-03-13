@@ -1,6 +1,7 @@
 #include "include/kotlin.h"
 #include "include/vulkan/setup.h"
 #include "include/emitter.h"
+#include "modules/physics/include/physics.h"
 
 void setActiveCamera(ApplicationContext *context, Camera *camera) {
     context->activeCamera = camera;
@@ -129,6 +130,10 @@ void bindKotlinApi() {
     ktSetAddSpriteElementToBatchFunc(addSpriteElementToBatch);
     ktSetUpdateSpriteElementIndexInBatchFunc(updateSpriteElementIndexInBatch);
     ktSetTransformSpriteElementInBatchFunc(transformSpriteElementInBatch);
+
+    // Physics
+    ktSetCreatePhysicsFunc(initPhysics);
+    ktSetDestroyPhysicsFunc(destroyPhysics);
 }
 
 
@@ -245,4 +250,8 @@ void bindKotlinApiHeadless() {
     ktSetAddSpriteElementToBatchFunc(addSpriteElementToBatch);
     ktSetUpdateSpriteElementIndexInBatchFunc(updateSpriteElementIndexInBatch);
     ktSetTransformSpriteElementInBatchFunc(transformSpriteElementInBatch);
+
+    // Physics
+    ktSetCreatePhysicsFunc(initPhysics);
+    ktSetDestroyPhysicsFunc(destroyPhysics);
 }

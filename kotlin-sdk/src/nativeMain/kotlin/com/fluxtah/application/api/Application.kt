@@ -5,6 +5,7 @@ import com.fluxtah.application.api.interop.c_destroyCamera
 import com.fluxtah.application.api.interop.c_destroyEmitter
 import com.fluxtah.application.api.interop.c_destroyEntity
 import com.fluxtah.application.api.interop.c_destroyLight
+import com.fluxtah.application.api.interop.c_destroyPhysics
 import com.fluxtah.application.api.interop.c_destroySound
 import com.fluxtah.application.api.interop.c_destroySpriteBatch
 import com.fluxtah.application.api.interop.c_destroySpriteSheet
@@ -13,6 +14,7 @@ import com.fluxtah.application.api.interop.c_isKeyPressed
 import com.fluxtah.application.api.interop.c_setEnableDebugBoundingVolumes
 import com.fluxtah.application.api.scene.BaseScene
 import com.fluxtah.application.api.scene.Scene
+import com.fluxtah.application.api.scene.SceneImpl
 import com.fluxtah.application.api.scene.activeSceneInfo
 import com.fluxtah.application.apps.shipgame.ShipGame
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -244,4 +246,8 @@ private fun BaseScene.destroy() {
         }
     }
     soundPools.clear()
+
+    if (this is SceneImpl) {
+        c_destroyPhysics!!.invoke(physicsHandle)
+    }
 }

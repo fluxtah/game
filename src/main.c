@@ -72,9 +72,6 @@ int main() {
     platformSetOnLobbyMatchListCallbackFunction(onPlatformLobbiesFetched);
     platformFetchLobbies();
 #endif
-
-    physicsInit();
-
     //
     //
     // Bind kotlin callbacks to C API functions

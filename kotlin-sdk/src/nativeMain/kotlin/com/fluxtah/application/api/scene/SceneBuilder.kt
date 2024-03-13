@@ -8,6 +8,8 @@ import com.fluxtah.application.api.emitter.EmitterPoolBuilder
 import com.fluxtah.application.api.entity.EntityBuilder
 import com.fluxtah.application.api.entity.EntityPoolBuilder
 import com.fluxtah.application.api.entity.KotlinCollisionResult
+import com.fluxtah.application.api.interop.c_createPhysics
+import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import com.fluxtah.application.api.sequence.Sequence
 import com.fluxtah.application.api.sequence.SequenceBuilder
 import com.fluxtah.application.api.sprite.SpriteBatch
@@ -17,6 +19,8 @@ import com.fluxtah.application.api.sprite.SpriteSheetBuilder
 import com.fluxtah.application.api.text.TextBatch
 import com.fluxtah.application.api.text.TextBatchBuilder
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.cValue
+import kotlinx.cinterop.memScoped
 
 @SceneDsl
 class SceneBuilder(val sceneId: String) {
@@ -170,7 +174,17 @@ class SceneBuilder(val sceneId: String) {
 
     @OptIn(ExperimentalForeignApi::class)
     fun build(): SceneInfo {
-        val scene = SceneImpl()
+        val physicsHandle = memScoped {
+            val info = cValue<CreatePhysicsInfo> {
+                gravityX = 0.0f
+                gravityY = 0.0f
+                gravityZ = 0.0f
+            }
+
+            c_createPhysics!!.invoke(info.ptr)
+        }
+
+        val scene = SceneImpl(physicsHandle)
         scene.data = data.invoke()
 
         components.forEach { (id, builder) ->

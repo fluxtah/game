@@ -215,4 +215,10 @@ typedef struct CCollisionResult {
     int numResults;
 } CCollisionResult;
 
+typedef struct CreatePhysicsInfo {
+    float gravityX;
+    float gravityY;
+    float gravityZ;
+} CreatePhysicsInfo;
+
 #endif // MODEL_H

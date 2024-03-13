@@ -1,30 +1,40 @@
 #include <iostream>
 #include <btBulletDynamicsCommon.h> // Include the Bullet Physics Header
+#include "../../../kotlin-sdk/cinterop/model.h"
 
 extern "C" {
-void physicsInit() {
-    std::cout << "Hello Physics!" << std::endl;
 
-    // Bullet Physics initialization
-    // Create the Bullet world
-    auto collisionConfiguration = new btDefaultCollisionConfiguration();
-    auto dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    auto overlappingPairCache = new btDbvtBroadphase();
-    auto solver = new btSequentialImpulseConstraintSolver;
-    auto dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+typedef struct PhysicsContext {
+    btDefaultCollisionConfiguration *collisionConfiguration;
+    btCollisionDispatcher *dispatcher;
+    btBroadphaseInterface *overlappingPairCache;
+    btSequentialImpulseConstraintSolver *solver;
+    btDiscreteDynamicsWorld *dynamicsWorld;
+} PhysicsContext;
+
+void *initPhysics(CreatePhysicsInfo *info) {
+    auto *context = new PhysicsContext();
+    context->collisionConfiguration = new btDefaultCollisionConfiguration();
+    context->dispatcher = new btCollisionDispatcher(context->collisionConfiguration);
+    context->overlappingPairCache = new btDbvtBroadphase();
+    context->solver = new btSequentialImpulseConstraintSolver;
+    context->dynamicsWorld = new btDiscreteDynamicsWorld(context->dispatcher, context->overlappingPairCache, context->solver, context->collisionConfiguration);
 
     // Set the gravity for our world
-    dynamicsWorld->setGravity(btVector3(0, -10, 0));
+    context->dynamicsWorld->setGravity(btVector3(info->gravityX, info->gravityY, info->gravityZ));
 
     std::cout << "Bullet Physics world created." << std::endl;
+    return context;
+}
 
-    // Cleanup in the reverse order of creation/initialization
-    delete dynamicsWorld;
-    delete solver;
-    delete overlappingPairCache;
-    delete dispatcher;
-    delete collisionConfiguration;
-
-    std::cout << "Bullet Physics world deleted." << std::endl;
+void destroyPhysics(void *context) {
+    auto *physicsContext = (PhysicsContext *) context;
+    delete physicsContext->dynamicsWorld;
+    delete physicsContext->solver;
+    delete physicsContext->overlappingPairCache;
+    delete physicsContext->dispatcher;
+    delete physicsContext->collisionConfiguration;
+    delete physicsContext;
+    std::cout << "Bullet Physics world destroyed." << std::endl;
 }
 }

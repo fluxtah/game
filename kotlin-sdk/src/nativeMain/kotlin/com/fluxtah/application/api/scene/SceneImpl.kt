@@ -6,6 +6,7 @@ import com.fluxtah.application.api.Sound
 import com.fluxtah.application.api.camera.Camera
 import com.fluxtah.application.api.emitter.Emitter
 import com.fluxtah.application.api.entity.Entity
+import com.fluxtah.application.api.interop.CPhysics
 import com.fluxtah.application.api.interop.c_setActiveCamera
 import com.fluxtah.application.api.sequence.Sequence
 import com.fluxtah.application.api.sprite.SpriteBatch
@@ -42,7 +43,8 @@ abstract class BaseScene : Scene {
 
 @Suppress("UNCHECKED_CAST")
 @OptIn(ExperimentalForeignApi::class)
-class SceneImpl : BaseScene() {
+class SceneImpl(val physicsHandle: CPhysics) : BaseScene() {
+
     override fun setActiveCamera(id: String) {
         activeCamera = cameras[id] ?: throw Exception("Camera with id $id does not exist")
         c_setActiveCamera!!.invoke(ApplicationContext.vulcanContext!!, activeCamera!!.handle)
