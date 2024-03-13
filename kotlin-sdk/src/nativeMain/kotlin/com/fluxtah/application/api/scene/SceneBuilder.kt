@@ -50,6 +50,16 @@ class SceneBuilder(val sceneId: String) {
     private var onSceneAfterUpdate: OnSceneAfterUpdate? = null
     private var onCollision: ((scene: Scene, result: KotlinCollisionResult) -> Unit)? = null
 
+    private var gravityX: Float = 0.0f
+    private var gravityY: Float = -9.81f
+    private var gravityZ: Float = 0.0f
+
+    fun gravity(x: Float, y: Float, z: Float) {
+        gravityX = x
+        gravityY = y
+        gravityZ = z
+    }
+
     fun <T : Any> data(block: () -> T) {
         data = block
     }
@@ -176,9 +186,9 @@ class SceneBuilder(val sceneId: String) {
     fun build(): SceneInfo {
         val physicsHandle = memScoped {
             val info = cValue<CreatePhysicsInfo> {
-                gravityX = 0.0f
-                gravityY = 0.0f
-                gravityZ = 0.0f
+                gravityX = this@SceneBuilder.gravityX
+                gravityY = this@SceneBuilder.gravityY
+                gravityZ = this@SceneBuilder.gravityZ
             }
 
             c_createPhysics!!.invoke(info.ptr)
