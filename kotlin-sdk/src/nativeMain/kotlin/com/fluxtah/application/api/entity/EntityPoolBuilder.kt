@@ -4,6 +4,7 @@ import com.fluxtah.application.api.*
 import com.fluxtah.application.api.file.toAssetsPath
 import com.fluxtah.application.api.interop.c_attachKotlinEntity
 import com.fluxtah.application.api.interop.c_createEntity
+import com.fluxtah.application.api.interop.c_initEntityPhysics
 import com.fluxtah.application.api.interop.model.CreateEntityInfo
 import com.fluxtah.application.api.scene.*
 import kotlinx.cinterop.*
@@ -24,6 +25,9 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
     private var velocityY: Float = 0.0f
     private var velocityZ: Float = 0.0f
     private var mass: Float = 1.0f
+
+    private var enablePhysics: Boolean = true
+    private var isKinematic: Boolean = false
 
     private var data: () -> Any = {}
 
@@ -48,6 +52,14 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
      */
     fun startActive() {
         startActive = true
+    }
+
+    fun physics(enabled: Boolean = true) {
+        enablePhysics = enabled
+    }
+
+    fun kinematic(enabled: Boolean = true) {
+        isKinematic = enabled
     }
 
     fun <T : Any> data(block: () -> T) {
@@ -79,7 +91,7 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
     }
 
     fun mass(mass: Float) {
-         this.mass = mass
+        this.mass = mass
     }
 
     fun useOrientedBoundingBox() {
@@ -149,18 +161,22 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
         val behaviors = behaviors.map { it().apply { this.scene = this@EntityPoolBuilder.scene } }
         val data = data()
 
-        return EntityInfo(
-            entity = Entity(
-                id = id,
-                handle = cEntity,
-                data = data,
-                active = false,
-                behaviors = behaviors,
-                collisionGroup = collisionGroup,
-                collisionMask = collisionMask
-            ),
+        val entity = Entity(
+            id = id,
+            handle = cEntity,
+            data = data,
+            active = startActive,
             behaviors = behaviors,
-        ).apply {
+            collisionGroup = collisionGroup,
+            collisionMask = collisionMask,
+            physicsEnabled = enablePhysics
+        )
+
+        if (enablePhysics) {
+            c_initEntityPhysics!!.invoke(cEntity, (scene as SceneImpl).physicsHandle, isKinematic)
+        }
+
+        return EntityInfo(entity = entity, behaviors = behaviors).apply {
             val ref = StableRef.create(this)
             c_attachKotlinEntity!!.invoke(cEntity, ref.asCPointer())
             stableRef = ref

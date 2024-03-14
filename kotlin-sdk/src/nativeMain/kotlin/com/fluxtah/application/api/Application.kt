@@ -11,6 +11,7 @@ import com.fluxtah.application.api.interop.c_destroySpriteBatch
 import com.fluxtah.application.api.interop.c_destroySpriteSheet
 import com.fluxtah.application.api.interop.c_destroyTextBatch
 import com.fluxtah.application.api.interop.c_isKeyPressed
+import com.fluxtah.application.api.interop.c_removeEntityPhysics
 import com.fluxtah.application.api.interop.c_setEnableDebugBoundingVolumes
 import com.fluxtah.application.api.scene.BaseScene
 import com.fluxtah.application.api.scene.Scene
@@ -212,12 +213,20 @@ private fun BaseScene.destroy() {
     cameras.clear()
 
     entities.forEach { entityInfo ->
+        if (entityInfo.value.entity.physicsEnabled) {
+            c_removeEntityPhysics!!.invoke(entityInfo.value.entity.handle, (this as SceneImpl).physicsHandle)
+        }
         c_destroyEntity!!.invoke(ApplicationContext.vulcanContext!!, entityInfo.value.entity.handle)
         entityInfo.value.stableRef!!.dispose()
     }
     entities.clear()
+
     entityPools.values.forEach { entityPoolInfo ->
         entityPoolInfo.entityPool.entities.forEach { entityInfo ->
+            if (entityInfo.entity.physicsEnabled) {
+                c_removeEntityPhysics!!.invoke(entityInfo.entity.handle, (this as SceneImpl).physicsHandle)
+            }
+
             c_destroyEntity!!.invoke(ApplicationContext.vulcanContext!!, entityInfo.entity.handle)
             entityInfo.stableRef!!.dispose()
         }

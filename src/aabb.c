@@ -6,4 +6,3 @@ bool aabbCollision(AABB *a, AABB *b) {
     if (a->min[2] > b->max[2] || a->max[2] < b->min[2]) return false;
     return true;
 }
-

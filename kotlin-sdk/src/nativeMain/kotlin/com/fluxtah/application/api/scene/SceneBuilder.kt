@@ -184,6 +184,9 @@ class SceneBuilder(val sceneId: String) {
 
     @OptIn(ExperimentalForeignApi::class)
     fun build(): SceneInfo {
+        //
+        // Create a physics world for the scene
+        //
         val physicsHandle = memScoped {
             val info = cValue<CreatePhysicsInfo> {
                 gravityX = this@SceneBuilder.gravityX

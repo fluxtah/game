@@ -3,8 +3,6 @@ package com.fluxtah.application.api.interop
 import com.fluxtah.application.api.interop.model.CCollisionInfo
 import com.fluxtah.application.api.interop.model.CreateEntityInfo
 import com.fluxtah.application.api.interop.model.EntityArray
-import com.fluxtah.application.api.scene.BaseScene
-import com.fluxtah.application.api.scene.Scene
 import com.fluxtah.application.api.scene.activeSceneInfo
 import kotlinx.cinterop.*
 import kotlin.experimental.ExperimentalNativeApi
@@ -447,6 +445,42 @@ fun ktSetEntitySkinIndexFunc(callback: CPointer<CFunction<SetEntitySkinIndexFunc
         memScoped {
             callback.reinterpret<CFunction<SetEntitySkinIndexFunc>>()(
                 entity, index
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias InitEntityPhysicsFunc = (CEntity, CPhysics, Boolean) -> Unit
+
+@OptIn(ExperimentalForeignApi::class)
+var c_initEntityPhysics: InitEntityPhysicsFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktSetInitEntityPhysicsFunc")
+fun ktSetInitEntityPhysicsFunc(callback: CPointer<CFunction<InitEntityPhysicsFunc>>) {
+    c_initEntityPhysics = { entity, physics, isKinematic ->
+        memScoped {
+            callback.reinterpret<CFunction<InitEntityPhysicsFunc>>()(
+                entity, physics, isKinematic
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias RemoveEntityPhysicsFunc = (CEntity, CPhysics) -> Unit
+
+@OptIn(ExperimentalForeignApi::class)
+var c_removeEntityPhysics: RemoveEntityPhysicsFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktSetRemoveEntityPhysicsFunc")
+fun ktSetRemoveEntityPhysicsFunc(callback: CPointer<CFunction<RemoveEntityPhysicsFunc>>) {
+    c_removeEntityPhysics = { entity, physics ->
+        memScoped {
+            callback.reinterpret<CFunction<RemoveEntityPhysicsFunc>>()(
+                entity, physics
             )
         }
     }

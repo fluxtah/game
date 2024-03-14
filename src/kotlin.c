@@ -134,6 +134,8 @@ void bindKotlinApi() {
     // Physics
     ktSetCreatePhysicsFunc(initPhysics);
     ktSetDestroyPhysicsFunc(destroyPhysics);
+    ktSetInitEntityPhysicsFunc(initEntityPhysics);
+    ktSetRemoveEntityPhysicsFunc(removeEntityPhysics);
 }
 
 

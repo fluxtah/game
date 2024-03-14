@@ -1,5 +1,6 @@
 #include "include/entity.h"
 #include "include/pipelines/ubo_transform.h"
+#include "modules/physics/include/physics.h"
 
 Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info) {
     Entity *entity = malloc(sizeof(Entity));
@@ -21,6 +22,7 @@ Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info) {
 
     entity->collisionGroup = info->collisionGroup;
     entity->collisionMask = info->collisionMask;
+    entity->physicsBody = NULL; // This will be attached later
 
     // Dynamically allocate a BufferMemory
     entity->transformUBO = (BufferMemory *) malloc(sizeof(BufferMemory));
@@ -85,6 +87,38 @@ Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info) {
     return entity;
 }
 
+void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
+    if (entity->physicsBody != NULL) {
+        LOG_ERROR("Entity already has a physics body, remove it first");
+        exit(EXIT_FAILURE);
+    }
+
+    entity->physicsBody = createPhysicsRigidBodyFromAABBs(
+            physicsContext,
+            entity,
+            entity->collisionGroup,
+            entity->collisionMask,
+            entity->aabbs,
+            entity->num_aabbs
+    );
+
+    if(isKinematic) {
+        makePhysicsRigidBodyKinematic(entity->physicsBody);
+    }
+
+    updatePhysicsRigidBodyTransform(
+            entity->physicsBody,
+            entity->position,
+            entity->rotation,
+            entity->velocity,
+            entity->mass);
+}
+
+void removeEntityPhysics(Entity *entity, void *physicsContext) {
+    deletePhysicsRigidBody(physicsContext, entity->physicsBody);
+    entity->physicsBody = NULL;
+}
+
 void setEntityPosition(Entity *obj, float x, float y, float z) {
     obj->position[0] = x;
     obj->position[1] = y;
@@ -125,10 +159,20 @@ void applyEntityChanges(Entity *entity) {
     // Then apply non-uniform scaling
     glm_scale(entity->modelMatrix, entity->scale);
 
-    if (entity->useOBB)
+    if (entity->useOBB) {
         updateEntityOBBs(entity);
-    else
+    } else {
         updateEntityAABBs(entity);
+    }
+
+//    if(entity->physicsBody != NULL) {
+//        updatePhysicsRigidBodyTransform(
+//                entity->physicsBody,
+//                entity->position,
+//                entity->rotation,
+//                entity->velocity,
+//                entity->mass);
+//    }
 }
 
 void updateEntityAABBs(Entity *entity) {
@@ -148,11 +192,11 @@ void updateEntityAABBs(Entity *entity) {
 }
 
 void updateEntityOBBs(Entity *entity) {
-    if(entity->num_aabbs == 0) {
+    if (entity->num_aabbs == 0) {
         printf("Entity %s, has no AABBs\n", entity->renderResources->filename);
         return;
     }
-    if(entity->num_obbs == 0) {
+    if (entity->num_obbs == 0) {
         printf("Entity %s, has no OBBs\n", entity->renderResources->filename);
         return;
     }
@@ -267,7 +311,7 @@ void destroyEntity(ApplicationContext *context, Entity *entity) {
     }
 }
 
-bool shouldEntitiesCollide(const Entity* entityA, const Entity* entityB) {
+bool shouldEntitiesCollide(const Entity *entityA, const Entity *entityB) {
     // Entities with a group or mask of zero are considered non-collidable
     if (entityA->collisionGroup == 0 || entityB->collisionGroup == 0) {
         return false; // One or both entities are not set to collide

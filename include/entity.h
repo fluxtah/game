@@ -38,6 +38,9 @@ typedef struct Entity {
     int skinIndex;
 
     void *kotlinEntityInfo;
+
+    // Physics body pointer
+    void *physicsBody;
 } Entity;
 
 RenderResourcesMap *renderResourcesMap;
@@ -68,7 +71,7 @@ CCollisionInfo getEntityCollisionInfo(Entity *entityA, Entity *entityB, int aabb
 
 AABB getEntityAABB(Entity *entity);
 
-bool shouldEntitiesCollide(const Entity* entityA, const Entity* entityB);
+bool shouldEntitiesCollide(const Entity *entityA, const Entity *entityB);
 
 void setEntitySkinIndex(Entity *entity, int skinIndex);
 
@@ -97,5 +100,9 @@ float getEntityVelocityY(Entity *entity);
 float getEntityVelocityZ(Entity *entity);
 
 float getEntityMass(Entity *entity);
+
+void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic);
+
+void removeEntityPhysics(Entity *entity, void *physicsContext);
 
 #endif //APP_ENTITY_H

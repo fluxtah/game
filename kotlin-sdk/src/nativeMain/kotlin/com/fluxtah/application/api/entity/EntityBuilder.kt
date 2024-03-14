@@ -4,6 +4,7 @@ import com.fluxtah.application.api.ApplicationContext
 import com.fluxtah.application.api.file.toAssetsPath
 import com.fluxtah.application.api.interop.c_attachKotlinEntity
 import com.fluxtah.application.api.interop.c_createEntity
+import com.fluxtah.application.api.interop.c_initEntityPhysics
 import com.fluxtah.application.api.interop.model.CreateEntityInfo
 import com.fluxtah.application.api.scene.EntityInfo
 import com.fluxtah.application.api.scene.OnSceneAfterEntityUpdate
@@ -11,6 +12,7 @@ import com.fluxtah.application.api.scene.OnSceneBeforeEntityUpdate
 import com.fluxtah.application.api.scene.OnSceneEntityUpdate
 import com.fluxtah.application.api.scene.Scene
 import com.fluxtah.application.api.scene.SceneDsl
+import com.fluxtah.application.api.scene.SceneImpl
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.StableRef
 import kotlinx.cinterop.cValue
@@ -33,6 +35,9 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
     private var velocityY: Float = 0.0f
     private var velocityZ: Float = 0.0f
     private var mass: Float = 1.0f
+
+    private var enablePhysics: Boolean = true
+    private var isKinematic: Boolean = false
 
     private var data: () -> Any = {}
 
@@ -57,6 +62,14 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
 
     fun startActive(active: Boolean = true) {
         startActive = active
+    }
+
+    fun physics(enabled: Boolean = true) {
+        enablePhysics = enabled
+    }
+
+    fun kinematic(enabled: Boolean = true) {
+        isKinematic = enabled
     }
 
     fun position(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
@@ -161,7 +174,12 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
             behaviors = behaviors,
             collisionGroup = collisionGroup,
             collisionMask = collisionMask,
+            physicsEnabled = enablePhysics
         )
+
+        if(enablePhysics) {
+            c_initEntityPhysics!!.invoke(cEntity, (scene as SceneImpl).physicsHandle, isKinematic)
+        }
 
         return EntityInfo(
             entity = entity,
