@@ -24,6 +24,13 @@ void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDeg
 
 void makePhysicsRigidBodyKinematic(void *body);
 
+void setOnRigidBodyUpdatedFunction(void *context,
+                                   void (*callback)(void *userPtr,
+                                                    float x, float y, float z,
+                                                    float rotX, float rotY, float rotZ));
+
+void stepPhysicsSimulation(void *context, float timeStep);
+
 void deletePhysicsRigidBody(void *context, void *body);
 #ifdef __cplusplus
 }

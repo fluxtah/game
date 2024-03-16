@@ -8,7 +8,9 @@ import com.fluxtah.application.api.emitter.EmitterPoolBuilder
 import com.fluxtah.application.api.entity.EntityBuilder
 import com.fluxtah.application.api.entity.EntityPoolBuilder
 import com.fluxtah.application.api.entity.KotlinCollisionResult
+import com.fluxtah.application.api.interop.RigidBodyCallback
 import com.fluxtah.application.api.interop.c_createPhysics
+import com.fluxtah.application.api.interop.c_setOnRigidBodyUpdated
 import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import com.fluxtah.application.api.sequence.Sequence
 import com.fluxtah.application.api.sequence.SequenceBuilder
@@ -18,9 +20,15 @@ import com.fluxtah.application.api.sprite.SpriteSheet
 import com.fluxtah.application.api.sprite.SpriteSheetBuilder
 import com.fluxtah.application.api.text.TextBatch
 import com.fluxtah.application.api.text.TextBatchBuilder
+import com.fluxtah.application.apps.shipgame.Id
+import com.fluxtah.application.apps.shipgame.scenes.main.data.PlayerData
+import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
+import kotlinx.cinterop.COpaquePointer
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.asStableRef
 import kotlinx.cinterop.cValue
 import kotlinx.cinterop.memScoped
+import kotlinx.cinterop.staticCFunction
 
 @SceneDsl
 class SceneBuilder(val sceneId: String) {
@@ -196,6 +204,24 @@ class SceneBuilder(val sceneId: String) {
 
             c_createPhysics!!.invoke(info.ptr)
         }
+
+        val onRigidBodyUpdate: RigidBodyCallback = staticCFunction { entityInfo: COpaquePointer,
+                                                                     x: Float, y: Float, z: Float,
+                                                                     rotX: Float, rotY: Float, rotZ: Float ->
+            val sourceEntityInfo = entityInfo.asStableRef<EntityInfo>().get()
+            // TODO update entities from physics
+//            if(sourceEntityInfo.entity.id == Id.ENT_PLAYER_SHIP && sourceEntityInfo.entity.data<ShipData>().playerData.isLocalPlayer()) {
+//                println("Position: ($x, $y, $z), Rotation: ($rotX, $rotY, $rotZ)")
+//            }
+//            if(!sourceEntityInfo.entity.isKinematic) {
+//                sourceEntityInfo.entity.apply {
+//                    setPosition(x, y, z)
+//                    setRotation(rotX, rotY, rotZ)
+//                }
+//            }
+        }
+
+        c_setOnRigidBodyUpdated!!.invoke(physicsHandle, onRigidBodyUpdate)
 
         val scene = SceneImpl(physicsHandle)
         scene.data = data.invoke()

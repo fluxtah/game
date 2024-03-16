@@ -32,7 +32,8 @@ class Entity(
     var collisionGroup: Int = 0,
     var collisionMask: Int = 0,
     val behaviors: List<EntityBehavior>,
-    val physicsEnabled: Boolean = false
+    val physicsEnabled: Boolean = false,
+    val isKinematic: Boolean = false
 ) {
     init {
         behaviors.forEach { it.entity = this }

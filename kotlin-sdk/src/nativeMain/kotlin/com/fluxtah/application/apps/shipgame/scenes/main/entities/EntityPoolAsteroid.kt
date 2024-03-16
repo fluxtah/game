@@ -10,6 +10,7 @@ import kotlin.random.Random
 fun SceneBuilder.entityPoolAsteroid() {
     entityPool(Id.ENT_ASTEROID, "models/asteroid.glb") {
         initialSize(10)
+      //  kinematic(true)
         collisionGroup(CollisionGroups.GROUP_DESTROYABLE)
         collisionMask(CollisionGroups.MASK_DESTROYABLE)
         startActive()

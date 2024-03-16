@@ -3,6 +3,7 @@ package com.fluxtah.application.api.interop
 import com.fluxtah.application.api.interop.model.CreateEmitterInfo
 import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import kotlinx.cinterop.CFunction
+import kotlinx.cinterop.COpaquePointer
 import kotlinx.cinterop.CPointed
 import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -43,3 +44,48 @@ fun ktSetDestroyPhysicsFunc(callback: CPointer<CFunction<DestroyPhysicsFunc>>) {
         callback.reinterpret<CFunction<DestroyPhysicsFunc>>()(physics)
     }
 }
+
+@OptIn(ExperimentalForeignApi::class)
+typealias StepPhysicsSimulationFunc = (CPhysics, Float) -> Unit
+
+@OptIn(ExperimentalForeignApi::class)
+var c_stepPhysicsSimulation: StepPhysicsSimulationFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktSetStepPhysicsSimulationFunc")
+fun ktSetStepPhysicsSimulationFunc(callback: CPointer<CFunction<StepPhysicsSimulationFunc>>) {
+    c_stepPhysicsSimulation = { physics, deltaTime ->
+        callback.reinterpret<CFunction<StepPhysicsSimulationFunc>>()(physics, deltaTime)
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias RigidBodyCallback = CPointer<CFunction<(
+    entityInfo: COpaquePointer,
+    x: Float, y: Float, z: Float,
+    rotX: Float, rotY: Float, rotZ: Float
+) -> Unit>>
+
+@OptIn(ExperimentalForeignApi::class)
+typealias SetOnRigidBodyUpdatedFunc = (CPhysics, RigidBodyCallback) -> Unit
+
+@OptIn(ExperimentalForeignApi::class)
+var c_setOnRigidBodyUpdated: SetOnRigidBodyUpdatedFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktSetOnRigidBodyUpdatedFunc")
+fun ktSetOnRigidBodyUpdatedFunc(callback: CPointer<CFunction<SetOnRigidBodyUpdatedFunc>>) {
+    c_setOnRigidBodyUpdated = { physics, func ->
+        callback.reinterpret<CFunction<SetOnRigidBodyUpdatedFunc>>()(physics, func)
+    }
+}
+
+//@OptIn(ExperimentalForeignApi::class)
+//external fun setOnRigidBodyUpdatedFunction(
+//    context: CPhysics,
+//    callback: CPointer<CFunction<(
+//        entity: CEntity,
+//        x: Float, y: Float, z: Float,
+//        rotX: Float, rotY: Float, rotZ: Float
+//    ) -> Unit>>
+//)

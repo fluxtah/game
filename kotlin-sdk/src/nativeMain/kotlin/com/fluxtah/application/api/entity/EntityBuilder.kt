@@ -174,12 +174,9 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
             behaviors = behaviors,
             collisionGroup = collisionGroup,
             collisionMask = collisionMask,
-            physicsEnabled = enablePhysics
+            physicsEnabled = enablePhysics,
+            isKinematic = isKinematic
         )
-
-        if(enablePhysics) {
-            c_initEntityPhysics!!.invoke(cEntity, (scene as SceneImpl).physicsHandle, isKinematic)
-        }
 
         return EntityInfo(
             entity = entity,
@@ -191,6 +188,10 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
             val ref = StableRef.create(this)
             c_attachKotlinEntity!!.invoke(cEntity, ref.asCPointer())
             stableRef = ref
+
+            if(enablePhysics) {
+                c_initEntityPhysics!!.invoke(cEntity, (scene as SceneImpl).physicsHandle, isKinematic)
+            }
         }
     }
 }

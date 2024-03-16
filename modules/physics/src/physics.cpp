@@ -11,6 +11,8 @@ typedef struct PhysicsContext {
     btBroadphaseInterface *overlappingPairCache;
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *dynamicsWorld;
+
+    void (*callback)(void *, float, float, float, float, float, float);
 } PhysicsContext;
 
 void *initPhysics(CreatePhysicsInfo *info) {
@@ -25,9 +27,56 @@ void *initPhysics(CreatePhysicsInfo *info) {
     // Set the gravity for our world
     context->dynamicsWorld->setGravity(btVector3(info->gravityX, info->gravityY, info->gravityZ));
 
+    context->callback = nullptr;
+
     std::cout << "Bullet Physics world created." << std::endl;
 
     return context;
+}
+
+void setOnRigidBodyUpdatedFunction(void *context,
+                                   void (*callback)(void *userPtr,
+                                                    float x, float y, float z,
+                                                    float rotX, float rotY, float rotZ)) {
+    auto *physicsContext = (PhysicsContext *) context;
+    physicsContext->callback = callback;
+}
+
+void stepPhysicsSimulation(void *context, float timeStep) {
+    auto *physicsContext = (PhysicsContext *) context;
+
+    physicsContext->dynamicsWorld->stepSimulation(timeStep, 10);
+
+// Step 2 & 3: Iterate over rigid bodies and retrieve their transforms
+    int numRigidBodies = physicsContext->dynamicsWorld->getNumCollisionObjects();
+    for (int i = 0; i < numRigidBodies; i++) {
+        btCollisionObject *obj = physicsContext->dynamicsWorld->getCollisionObjectArray()[i];
+        btRigidBody *body = btRigidBody::upcast(obj);
+        if (body && body->getMotionState()) {
+            btTransform trans;
+            body->getMotionState()->getWorldTransform(trans);
+
+            // Step 4: Update your entity's transform
+            void *userPtr = body->getUserPointer();
+            if (userPtr) {
+                // Convert btTransform's position to your entity's position format
+                btVector3 pos = trans.getOrigin();
+
+                btScalar roll, pitch, yaw;
+                trans.getBasis().getEulerZYX(yaw, pitch, roll); // This gives yaw, pitch, and roll in radians
+
+                float rollDegrees = roll * 180.0f / M_PI;
+                float pitchDegrees = pitch * 180.0f / M_PI;
+                float yawDegrees = yaw * 180.0f / M_PI;
+
+                if (physicsContext->callback != nullptr) {
+                    physicsContext->callback(userPtr,
+                                             pos.getX(), pos.getY(), pos.getZ(),
+                                             rollDegrees, pitchDegrees, yawDegrees);
+                }
+            }
+        }
+    }
 }
 
 void destroyPhysics(void *context) {
@@ -43,15 +92,15 @@ void destroyPhysics(void *context) {
 
 void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count) {
     std::cout << "Creating rigid body from AABBs." << std::endl;
-    auto *physicsContext = (PhysicsContext *)context;
+    auto *physicsContext = (PhysicsContext *) context;
 
     if (count == 0) {
         std::cerr << "No AABBs to add." << std::endl;
         return nullptr;
     }
 
-    btCollisionShape* shape = nullptr;
-    btMotionState* motionState = new btDefaultMotionState(); // Create a default motion state
+    btCollisionShape *shape = nullptr;
+    btMotionState *motionState = new btDefaultMotionState(); // Create a default motion state
 
     if (count == 1) {
         shape = new btBoxShape(btVector3(
@@ -75,7 +124,8 @@ void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int 
         shape->calculateLocalInertia(0, localInertia); // Calculate inertia for non-moving objects, if necessary
     }
 
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(0, motionState, shape, localInertia); // Use 0 mass for static objects
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(0, motionState, shape,
+                                                    localInertia); // Use 0 mass for static objects
     auto *body = new btRigidBody(rbInfo);
     body->setUserPointer(data);
     physicsContext->dynamicsWorld->addRigidBody(body, group, mask);
@@ -121,9 +171,7 @@ void makePhysicsRigidBodyKinematic(void *body) {
 void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDegrees, vec3 velocity, float mass) {
     auto *rigidBody = (btRigidBody *) body;
     btTransform transform;
-    if (rigidBody->getMotionState() != nullptr) {
-        rigidBody->getMotionState()->getWorldTransform(transform);
-    }
+    rigidBody->getMotionState()->getWorldTransform(transform);
 
     // Convert degrees to radians
     float rotationRadians[3];
@@ -132,16 +180,22 @@ void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDeg
     rotationRadians[2] = rotationDegrees[2] * btScalar(M_PI / 180.0);
 
     // Convert Euler angles (in radians) to a quaternion
-    btQuaternion quaternion;
-    quaternion.setEulerZYX(rotationRadians[2], rotationRadians[1], rotationRadians[0]); // ZYX order for Euler angles
+    btQuaternion qx, qy, qz;
+    qx.setEulerZYX(0, 0, rotationRadians[0]); // Rotate around X
+    qy.setEulerZYX(0, rotationRadians[1], 0); // Rotate around Y
+    qz.setEulerZYX(rotationRadians[2], 0, 0); // Rotate around Z
 
+    // Combine rotations: since Bullet uses a quaternion, the order of multiplication matters.
+    // We apply rotations in reverse order since the last multiplication affects the object first.
+    btQuaternion quaternion = qz * qy * qx;
+
+    // Now use this quaternion for the transform
+    transform.setRotation(quaternion);
     transform.setOrigin(btVector3(position[0], position[1], position[2]));
     transform.setRotation(quaternion);
 
     rigidBody->setWorldTransform(transform);
-    if (rigidBody->getMotionState() != nullptr) {
-        rigidBody->getMotionState()->setWorldTransform(transform);
-    }
+    rigidBody->getMotionState()->setWorldTransform(transform);
     rigidBody->setLinearVelocity(btVector3(velocity[0], velocity[1], velocity[2]));
 
     if (rigidBody->getMass() != mass) {

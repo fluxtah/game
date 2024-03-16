@@ -215,6 +215,8 @@ int main() {
             syncTextBatchMemoryBuffers(context, textBatch);
         }
 
+        ktStepPhysics();
+
         //
         // Collision detection
         //

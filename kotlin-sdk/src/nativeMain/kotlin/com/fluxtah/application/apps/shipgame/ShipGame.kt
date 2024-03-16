@@ -33,7 +33,7 @@ import com.fluxtah.application.apps.shipgame.scenes.testScene
 class ShipGame : Application {
 
     companion object {
-        const val PLAYERS_PER_TEAM = 5
+        const val PLAYERS_PER_TEAM = 1
         const val TEAM_WIN_POWER_LEVEL = 1000
     }
 

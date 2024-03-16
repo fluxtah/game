@@ -13,6 +13,7 @@ import com.fluxtah.application.api.interop.c_destroyTextBatch
 import com.fluxtah.application.api.interop.c_isKeyPressed
 import com.fluxtah.application.api.interop.c_removeEntityPhysics
 import com.fluxtah.application.api.interop.c_setEnableDebugBoundingVolumes
+import com.fluxtah.application.api.interop.c_stepPhysicsSimulation
 import com.fluxtah.application.api.scene.BaseScene
 import com.fluxtah.application.api.scene.Scene
 import com.fluxtah.application.api.scene.SceneImpl
@@ -83,7 +84,20 @@ fun ktSetScreenSize(width: Int, height: Int) {
     screenHeight = height
 }
 
-@OptIn(ExperimentalNativeApi::class)
+@OptIn(ExperimentalNativeApi::class, ExperimentalForeignApi::class)
+@CName("ktStepPhysics")
+fun ktStepPhysics() {
+    val activeSceneInfo = activeSceneInfo
+    if (activeSceneInfo.scene is Scene.EMPTY) {
+        return
+    }
+    val scene = activeSceneInfo.scene
+    if(scene is SceneImpl) {
+        c_stepPhysicsSimulation?.invoke(scene.physicsHandle, fixedTimeStep)
+    }
+}
+
+@OptIn(ExperimentalNativeApi::class, ExperimentalForeignApi::class)
 @CName("ktUpdateApplication")
 fun ktUpdateApplication(time: Float, deltaTime: Float) {
     accumulatedTime += deltaTime
@@ -126,7 +140,6 @@ fun ktUpdateApplication(time: Float, deltaTime: Float) {
         }
     }
 
-
     while (accumulatedTime >= fixedTimeStep) {
         activeSceneInfo.onSceneUpdate?.invoke(activeSceneInfo.scene, time)
         scene.components.forEach {
@@ -151,6 +164,7 @@ fun ktUpdateApplication(time: Float, deltaTime: Float) {
         applicationInstance.update(time)
         accumulatedTime -= fixedTimeStep
     }
+
 
     activeSceneInfo.onSceneAfterUpdate?.invoke(activeSceneInfo.scene, time, deltaTime)
 

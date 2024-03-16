@@ -95,7 +95,7 @@ void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
 
     entity->physicsBody = createPhysicsRigidBodyFromAABBs(
             physicsContext,
-            entity,
+            entity->kotlinEntityInfo,
             entity->collisionGroup,
             entity->collisionMask,
             entity->aabbs,
@@ -165,14 +165,14 @@ void applyEntityChanges(Entity *entity) {
         updateEntityAABBs(entity);
     }
 
-//    if(entity->physicsBody != NULL) {
-//        updatePhysicsRigidBodyTransform(
-//                entity->physicsBody,
-//                entity->position,
-//                entity->rotation,
-//                entity->velocity,
-//                entity->mass);
-//    }
+    if(entity->physicsBody != NULL) {
+        updatePhysicsRigidBodyTransform(
+                entity->physicsBody,
+                entity->position,
+                entity->rotation,
+                entity->velocity,
+                entity->mass);
+    }
 }
 
 void updateEntityAABBs(Entity *entity) {
