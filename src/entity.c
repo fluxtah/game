@@ -23,6 +23,7 @@ Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info) {
     entity->collisionGroup = info->collisionGroup;
     entity->collisionMask = info->collisionMask;
     entity->physicsBody = NULL; // This will be attached later
+    entity->isKinematic = false; // This will be set later
 
     // Dynamically allocate a BufferMemory
     entity->transformUBO = (BufferMemory *) malloc(sizeof(BufferMemory));
@@ -103,7 +104,8 @@ void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
             entity->mass
     );
 
-    if(isKinematic) {
+    if (isKinematic) {
+        entity->isKinematic = true;
         makePhysicsRigidBodyKinematic(entity->physicsBody);
     }
 
@@ -174,7 +176,9 @@ void applyEntityChanges(Entity *entity) {
         updateEntityAABBs(entity);
     }
 
-  //  updateEntityPhysicsTransform(entity);
+    if (entity->isKinematic || entity->mass == 0) {
+        updateEntityPhysicsTransform(entity);
+    }
 }
 
 void updateEntityPhysicsTransform(Entity *entity) {

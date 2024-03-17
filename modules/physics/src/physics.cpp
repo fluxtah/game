@@ -53,21 +53,20 @@ void stepPhysicsSimulation(void *context, float timeStep) {
         btCollisionObject *obj = physicsContext->dynamicsWorld->getCollisionObjectArray()[i];
         btRigidBody *body = btRigidBody::upcast(obj);
         if (body && body->getMotionState()) {
-            btTransform trans;
-            body->getMotionState()->getWorldTransform(trans);
-
             // Step 4: Update your entity's transform
             void *userPtr = body->getUserPointer();
-            if (userPtr) {
+            if (userPtr && body->isActive()) {
+                btTransform trans;
+                body->getMotionState()->getWorldTransform(trans);
                 // Convert btTransform's position to your entity's position format
                 btVector3 pos = trans.getOrigin();
 
                 btScalar roll, pitch, yaw;
                 btQuaternion q = trans.getRotation();
-                q.getEulerZYX(pitch, yaw, roll); // This gives yaw, pitch, and roll in radians
+                q.getEulerZYX(yaw, pitch, roll); // This gives yaw, pitch, and roll in radians
 
-                float rotX = btDegrees(pitch);
-                float rotY = btDegrees(yaw);
+                float rotX = btDegrees(yaw);
+                float rotY = btDegrees(pitch);
                 float rotZ = btDegrees(roll);
 
                 if (physicsContext->callback != nullptr) {

@@ -36,7 +36,7 @@ fun Application.testScene() {
             initialSize(1)
             collisionGroup(CollisionGroups.GROUP_CUBE)
             collisionMask(CollisionGroups.MASK_CUBE)
-            position(00f, 10f, 0f)
+            position(0f, 10f, 0f)
             rotation(0f, 0f, 0f)
             scale(1f, 1f, 1f)
         }
@@ -61,10 +61,10 @@ fun Application.testScene() {
                scene.spawnEntityFromPool("cube")
             }
             if(isKeyPressed(Key.LeftBracket)) {
-                scene.entityById("plane").rotate(0f, 0f, 5f)
+                scene.entityById("plane").rotate(0f, 0f, 1f)
             }
             if(isKeyPressed(Key.RightBracket)) {
-                scene.entityById("plane").rotate(0f, 0f, -5f)
+                scene.entityById("plane").rotate(0f, 0f, -1f)
             }
         }
     }

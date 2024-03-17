@@ -29,6 +29,8 @@ typedef struct Entity {
     int collisionGroup;
     int collisionMask;
 
+    bool isKinematic;
+
     VkDescriptorSet vertexDescriptorSet;
     VkDescriptorSet fragmentDescriptorSet;
     BufferMemory *transformUBO;
