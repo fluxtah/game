@@ -210,15 +210,16 @@ class SceneBuilder(val sceneId: String) {
                                                                      rotX: Float, rotY: Float, rotZ: Float ->
             val sourceEntityInfo = entityInfo.asStableRef<EntityInfo>().get()
             // TODO update entities from physics
-//            if(sourceEntityInfo.entity.id == Id.ENT_PLAYER_SHIP && sourceEntityInfo.entity.data<ShipData>().playerData.isLocalPlayer()) {
-//                println("Position: ($x, $y, $z), Rotation: ($rotX, $rotY, $rotZ)")
-//            }
-//            if(!sourceEntityInfo.entity.isKinematic) {
-//                sourceEntityInfo.entity.apply {
-//                    setPosition(x, y, z)
-//                    setRotation(rotX, rotY, rotZ)
-//                }
-//            }
+            if (sourceEntityInfo.entity.id == "cube") {
+                println("Rot Before: (${sourceEntityInfo.entity.rotationX}, ${sourceEntityInfo.entity.rotationY}, ${sourceEntityInfo.entity.rotationZ})")
+                println("Rot After: ($rotX, $rotY, $rotZ)")
+            }
+            //    if(!sourceEntityInfo.entity.isKinematic) {
+            sourceEntityInfo.entity.apply {
+                setPosition(x, y, z)
+                setRotation(rotX, rotY, rotZ)
+            }
+            //    }
         }
 
         c_setOnRigidBodyUpdated!!.invoke(physicsHandle, onRigidBodyUpdate)

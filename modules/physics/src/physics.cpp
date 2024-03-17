@@ -63,16 +63,18 @@ void stepPhysicsSimulation(void *context, float timeStep) {
                 btVector3 pos = trans.getOrigin();
 
                 btScalar roll, pitch, yaw;
-                trans.getBasis().getEulerZYX(yaw, pitch, roll); // This gives yaw, pitch, and roll in radians
+                btQuaternion q = trans.getRotation();
+                q.getEulerZYX(pitch, yaw, roll); // This gives yaw, pitch, and roll in radians
 
-                float rollDegrees = roll * 180.0f / M_PI;
-                float pitchDegrees = pitch * 180.0f / M_PI;
-                float yawDegrees = yaw * 180.0f / M_PI;
+                float rotX = btDegrees(pitch);
+                float rotY = btDegrees(yaw);
+                float rotZ = btDegrees(roll);
 
                 if (physicsContext->callback != nullptr) {
-                    physicsContext->callback(userPtr,
-                                             pos.getX(), pos.getY(), pos.getZ(),
-                                             rollDegrees, pitchDegrees, yawDegrees);
+                    physicsContext->callback(
+                            userPtr,
+                            pos.getX(), pos.getY(), pos.getZ(),
+                            rotX, rotY, rotZ);
                 }
             }
         }
@@ -90,8 +92,8 @@ void destroyPhysics(void *context) {
     std::cout << "Bullet Physics world destroyed." << std::endl;
 }
 
-void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count) {
-    std::cout << "Creating rigid body from AABBs." << std::endl;
+void *
+createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass) {
     auto *physicsContext = (PhysicsContext *) context;
 
     if (count == 0) {
@@ -120,23 +122,25 @@ void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int 
     }
 
     btVector3 localInertia(0, 0, 0);
-    if (shape->isNonMoving()) {
-        shape->calculateLocalInertia(0, localInertia); // Calculate inertia for non-moving objects, if necessary
-    }
+    shape->calculateLocalInertia(mass, localInertia);
 
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(0, motionState, shape,
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,
                                                     localInertia); // Use 0 mass for static objects
     auto *body = new btRigidBody(rbInfo);
+    // make extremely bouncey
+ //   body->setRestitution(0.6f);
+    // rotate extremely
+//    body->setAngularFactor(btVector3(1, 1, 1));
+//    body->applyTorqueImpulse(btVector3(10, 0, 2));
+//    body->applyForce(btVector3(10, 0, 2), btVector3(0, 0, 0));
+
     body->setUserPointer(data);
     physicsContext->dynamicsWorld->addRigidBody(body, group, mask);
 
     return body;
 }
 
-
 void deletePhysicsRigidBody(void *context, void *body) {
-    std::cout << "Deleting rigid body." << std::endl;
-
     auto *rigidBody = (btRigidBody *) body;
     auto *physicsContext = (PhysicsContext *) context;
 
@@ -162,51 +166,32 @@ void deletePhysicsRigidBody(void *context, void *body) {
 }
 
 void makePhysicsRigidBodyKinematic(void *body) {
-    std::cout << "Making rigid body kinematic." << std::endl;
     auto *rigidBody = (btRigidBody *) body;
     rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
     rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
-void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDegrees, vec3 velocity, float mass) {
+void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDegrees, vec3 velocity) {
     auto *rigidBody = (btRigidBody *) body;
+    // Convert degrees to radians for Bullet
+    btVector3 btPosition(position[0], position[1], position[2]);
+    btVector3 btVelocity(velocity[0], velocity[1], velocity[2]);
+
+    btQuaternion btRotation;
+    btRotation.setEulerZYX(
+            btRadians(rotationDegrees[2]), // Yaw (Z rotation)
+            btRadians(rotationDegrees[1]), // Pitch (Y rotation)
+            btRadians(rotationDegrees[0]) // Roll (X rotation)
+    );
+
     btTransform transform;
-    rigidBody->getMotionState()->getWorldTransform(transform);
-
-    // Convert degrees to radians
-    float rotationRadians[3];
-    rotationRadians[0] = rotationDegrees[0] * btScalar(M_PI / 180.0);
-    rotationRadians[1] = rotationDegrees[1] * btScalar(M_PI / 180.0);
-    rotationRadians[2] = rotationDegrees[2] * btScalar(M_PI / 180.0);
-
-    // Convert Euler angles (in radians) to a quaternion
-    btQuaternion qx, qy, qz;
-    qx.setEulerZYX(0, 0, rotationRadians[0]); // Rotate around X
-    qy.setEulerZYX(0, rotationRadians[1], 0); // Rotate around Y
-    qz.setEulerZYX(rotationRadians[2], 0, 0); // Rotate around Z
-
-    // Combine rotations: since Bullet uses a quaternion, the order of multiplication matters.
-    // We apply rotations in reverse order since the last multiplication affects the object first.
-    btQuaternion quaternion = qz * qy * qx;
-
-    // Now use this quaternion for the transform
-    transform.setRotation(quaternion);
-    transform.setOrigin(btVector3(position[0], position[1], position[2]));
-    transform.setRotation(quaternion);
+    transform.setIdentity();
+    transform.setOrigin(btPosition);
+    transform.setRotation(btRotation);
 
     rigidBody->setWorldTransform(transform);
     rigidBody->getMotionState()->setWorldTransform(transform);
-    rigidBody->setLinearVelocity(btVector3(velocity[0], velocity[1], velocity[2]));
-
-    if (rigidBody->getMass() != mass) {
-        // Recalculate inertia if mass is non-zero
-        btVector3 inertia(0, 0, 0);
-        if (mass != 0.f) {
-            rigidBody->getCollisionShape()->calculateLocalInertia(mass, inertia);
-        }
-        rigidBody->setMassProps(mass, inertia);
-        rigidBody->updateInertiaTensor(); // Always update inertia tensor after changing mass properties
-    }
+    rigidBody->setLinearVelocity(btVelocity);
 }
 
 }

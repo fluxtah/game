@@ -99,19 +99,15 @@ void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
             entity->collisionGroup,
             entity->collisionMask,
             entity->aabbs,
-            entity->num_aabbs
+            entity->num_aabbs,
+            entity->mass
     );
 
     if(isKinematic) {
         makePhysicsRigidBodyKinematic(entity->physicsBody);
     }
 
-    updatePhysicsRigidBodyTransform(
-            entity->physicsBody,
-            entity->position,
-            entity->rotation,
-            entity->velocity,
-            entity->mass);
+    updateEntityPhysicsTransform(entity);
 }
 
 void removeEntityPhysics(Entity *entity, void *physicsContext) {
@@ -147,7 +143,20 @@ void setEntityMass(Entity *entity, float mass) {
     entity->mass = mass;
 }
 
+bool are_matrices_identical(mat4 matA, mat4 matB) {
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (matA[i][j] != matB[i][j]) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 void applyEntityChanges(Entity *entity) {
+    mat4 previousModelMatrix;
+    glm_mat4_copy(entity->modelMatrix, previousModelMatrix);
     glm_mat4_identity(entity->modelMatrix);
 
     // Apply rotation and translation first
@@ -165,13 +174,16 @@ void applyEntityChanges(Entity *entity) {
         updateEntityAABBs(entity);
     }
 
-    if(entity->physicsBody != NULL) {
+  //  updateEntityPhysicsTransform(entity);
+}
+
+void updateEntityPhysicsTransform(Entity *entity) {
+    if (entity->physicsBody != NULL) {
         updatePhysicsRigidBodyTransform(
                 entity->physicsBody,
                 entity->position,
                 entity->rotation,
-                entity->velocity,
-                entity->mass);
+                entity->velocity);
     }
 }
 

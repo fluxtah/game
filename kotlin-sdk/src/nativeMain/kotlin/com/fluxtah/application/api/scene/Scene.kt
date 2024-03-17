@@ -45,7 +45,7 @@ data class EntityPool(
 )
 
 data class EntityPoolInfo(
-    val initialSize: Int,
+    var initialSize: Int,
     val factory: () -> EntityInfo,
     val entityPool: EntityPool
 )
@@ -84,7 +84,7 @@ interface Scene {
     fun entityToPool(entity: Entity)
     fun resetEntityPool(id: String)
     fun entityInPoolByCondition(poolId: String, condition: (entity: Entity) -> Boolean): Entity?
-
+    fun spawnEntityFromPool(id: String): Entity
     fun emitterById(id: String): Emitter?
     fun emitterFromPool(id: String, block: (emitter: Emitter) -> Unit)
     fun emitterToPool(emitter: Emitter)
@@ -116,6 +116,7 @@ interface Scene {
         override fun entityToPool(entity: Entity) = Unit
         override fun resetEntityPool(id: String) = Unit
         override fun entityInPoolByCondition(poolId: String, condition: (entity: Entity) -> Boolean): Entity? = null
+        override fun spawnEntityFromPool(id: String): Entity = throw Exception("Entity with id $id does not exist")
 
         override fun emitterById(id: String): Emitter? = null
         override fun emitterFromPool(id: String, block: (emitter: Emitter) -> Unit) = Unit

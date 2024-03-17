@@ -68,6 +68,16 @@ class SceneImpl(val physicsHandle: CPhysics) : BaseScene() {
         return info.entityPool.entities.firstOrNull { condition(it.entity) }?.entity
     }
 
+    override fun spawnEntityFromPool(poolId: String): Entity {
+        val info = entityPools[poolId] ?: throw Exception("Entity pool with id $poolId does not exist")
+        val entity =  info.factory.invoke()
+        entity.entity.active = true
+        entity.entity.visible = true
+        info.entityPool.entitiesInUse.add(entity)
+        info.initialSize++
+        return entity.entity
+    }
+
     override fun emitterById(id: String): Emitter? {
         return emitters[id]?.emitter
     }

@@ -11,6 +11,16 @@ import com.fluxtah.application.apps.shipgame.handleInput
 import com.fluxtah.application.apps.shipgame.scenes.main.lightOne
 import kotlin.math.sin
 
+object CollisionGroups {
+    // Groups
+    const val GROUP_CUBE = 1 shl 0
+    const val GROUP_FLOOR = 1 shl 1
+
+    // Masks
+    const val MASK_CUBE = GROUP_CUBE or GROUP_FLOOR
+    const val MASK_FLOOR = GROUP_CUBE
+}
+
 fun Application.testScene() {
     scene("test") {
         camera(Id.CAMERA1) {
@@ -19,58 +29,25 @@ fun Application.testScene() {
             farPlane(1000.0f)
         }
         lightOne()
-        emitter("testEmitter") {
-            maxParticles(100)
-            particleBatchSize(16)
-            texture("textures/particle-smoke.png")
-            computeShader("shaders/particle2.comp.spv")
-            vertexShader("shaders/particle2.vert.spv")
-            fragmentShader("shaders/particle2.frag.spv")
 
-            particleLifetime(0.8f)
-            particleSpawnRate(0.1f)
-            particleGravity(y = 10f)
-
-            particleSpawnPosition(fromX = -0.5f, toX = 0.5f, fromY = 0f, toY = 0f, fromZ = -0.5f, toZ = 0.5f)
-            particleSpawnVelocity(fromX = -1f, toX = 1f, fromY = 5f, toY = 8f, fromZ = -1f, toZ = 1f)
-        }
-        emitter("testEmitter2") {
-            maxParticles(100)
-            particleBatchSize(16)
-            model("models/quad-explosion.glb")
-            computeShader("shaders/particle2.comp.spv")
-            vertexShader("shaders/particle2.vert.spv")
-            fragmentShader("shaders/particle2.frag.spv")
-
-            particleLifetime(1.6f)
-            particleSpawnRate(0.0f)
-            particleGravity(y = -5.81f)
-
-            particleSpawnPosition(fromX = -0.5f, toX = 0.5f, fromY = 0f, toY = 0f, fromZ = -0.5f, toZ = 0.5f)
-            particleSpawnVelocity(fromX = -1f, toX = 1f, fromY = 1f, toY = 2f, fromZ = -1f, toZ = 1f)
-        }
-        entity("testEntity", modelPath = "models/cube.glb") {
-            position(60f, 0f, 0f)
+        entityPool("cube", modelPath = "models/cube.glb") {
+            mass(100f)
+            startActive()
+            initialSize(1)
+            collisionGroup(CollisionGroups.GROUP_CUBE)
+            collisionMask(CollisionGroups.MASK_CUBE)
+            position(00f, 10f, 0f)
             rotation(0f, 0f, 0f)
             scale(1f, 1f, 1f)
         }
         entity("plane", modelPath = "models/plane.glb") {
+            mass(0f)
+            collisionGroup(CollisionGroups.GROUP_FLOOR)
+            collisionMask(CollisionGroups.MASK_FLOOR)
             position(0f, -5f, 0f)
             rotation(0f, 0f, 0f)
             scale(10f, 1f, 10f)
         }
-
-        entity("ring", "models/energy-ring/energy-ring.glb") {
-            position(0f, -3.7f, 0f)
-            scale(10f, 10f, 10f)
-            skin(1)
-        }
-
-        //            entity("testEntity", modelPath = "models/block-aabb-test.glb") {
-        //                position(0f, 0f, 5f)
-        //                rotation(0f, 0f, 0f)
-        //                scale(1f, 1f, 1f)
-        //            }
 
         onSceneCreated {
             it.setActiveCamera(Id.CAMERA1)
@@ -80,29 +57,15 @@ fun Application.testScene() {
             handleInput(scene)
             handleCameraInput(scene, fixedTimeStep)
 
-            val emitter = scene.emitterById("testEmitter")
-            val entity = scene.entityById("testEntity")
-
-            //  emitter!!.setPosition(x = 1 + 20f * sin(time * 0.5f), y = 0f, z = 0f)
-            //    entity.setPosition(x = 1f + 20f * sin(time * 0.5f), y = 0f, z = 0f)
-
-            if (isKeyPressed(Key.F4)) {
-                emitter!!.setPosition(x = 20f)
-                entity.setPosition(x = 20f)
+            if (isKeyPressed(Key.P)) {
+               scene.spawnEntityFromPool("cube")
             }
-            if (isKeyPressed(Key.F5)) {
-                emitter!!.setPosition(x = -20f)
-                entity.setPosition(x = -20f)
+            if(isKeyPressed(Key.LeftBracket)) {
+                scene.entityById("plane").rotate(0f, 0f, 5f)
             }
-
-            val scaleFrom = 1.0f
-            val scaleTo = 100.0f
-            // calcualte scale based on time between scaleFrom and scaleTo
-            val scale = scaleFrom + (sin(time) * (scaleTo - scaleFrom))
-            val rotate = time * 0.05f
-            val ring = scene.entityById("ring")
-            ring.setScale(scale, 1f, scale)
-            ring.rotate(y = rotate)
+            if(isKeyPressed(Key.RightBracket)) {
+                scene.entityById("plane").rotate(0f, 0f, -5f)
+            }
         }
     }
 }

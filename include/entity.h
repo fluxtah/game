@@ -59,6 +59,8 @@ void setEntityMass(Entity *entity, float mass);
 
 void applyEntityChanges(Entity *entity);
 
+void updateEntityPhysicsTransform(Entity *entity);
+
 void updateEntityAABBs(Entity *entity);
 
 void updateEntityOBBs(Entity *entity);
