@@ -37,7 +37,7 @@ class MapComponent : SceneComponent() {
             entityPool(ENTITY_POOL_BLOCK_POWER, "models/blocks/power/block-power.glb") {
                 mass(0f)
                 data { PowerNodeData() }
-                initialSize(ShipGame.PLAYERS_PER_TEAM * 2)
+                initialSize(ShipGame.PLAYERS_PER_TEAM * 10)
                 collisionGroup(CollisionGroups.GROUP_MAP_BLOCK)
                 collisionMask(CollisionGroups.MASK_MAP_BLOCK)
 
