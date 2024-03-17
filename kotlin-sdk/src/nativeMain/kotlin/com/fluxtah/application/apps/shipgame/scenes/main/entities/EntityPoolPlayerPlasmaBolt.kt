@@ -9,6 +9,7 @@ import com.fluxtah.application.apps.shipgame.scenes.main.data.PlasmaBoltData
 fun SceneBuilder.entityPoolPlayerPlasmaBolt() {
     entityPool(Id.ENT_PLAYER_PLASMA_BOLT, "models/plasma-bolt.glb") {
         //useOrientedBoundingBox()
+        kinematic(true)
         collisionGroup(CollisionGroups.GROUP_PROJECTILE)
         collisionMask(CollisionGroups.MASK_PROJECTILE)
         data { PlasmaBoltData() }

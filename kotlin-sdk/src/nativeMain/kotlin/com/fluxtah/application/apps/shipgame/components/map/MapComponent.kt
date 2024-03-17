@@ -133,6 +133,7 @@ class MapComponent : SceneComponent() {
                                 tileEntity.setPosition(tile.worldX.toFloat(), 5.0f, tile.worldZ.toFloat())
                             }
                         }
+                        tileEntity.updatePhysicsState()
                     }
                 }
             }

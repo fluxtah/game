@@ -18,10 +18,10 @@ var c_createSpriteSheet: CreateSpriteSheetFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateSpriteSheetFunc")
-fun ktSetCreateSpriteSheetFunc(callback: CPointer<CFunction<CreateSpriteSheetFunc>>) {
+fun ktSetCreateSpriteSheetFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateSpriteSheetFunc>>) {
     c_createSpriteSheet = { context, info ->
         memScoped {
-            callback.reinterpret<CFunction<CreateSpriteSheetFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateSpriteSheetFunc>>()(
                 context, info
             )
         }
@@ -36,10 +36,10 @@ var c_destroySpriteSheet: DestroySpriteSheetFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroySpriteSheetFunc")
-fun ktSetDestroySpriteSheetFunc(callback: CPointer<CFunction<DestroySpriteSheetFunc>>) {
+fun ktSetDestroySpriteSheetFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<DestroySpriteSheetFunc>>) {
     c_destroySpriteSheet = { context, spriteSheet ->
         memScoped {
-            callback.reinterpret<CFunction<DestroySpriteSheetFunc>>()(context, spriteSheet)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<DestroySpriteSheetFunc>>()(context, spriteSheet)
         }
     }
 }

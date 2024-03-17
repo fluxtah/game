@@ -20,6 +20,7 @@ import com.fluxtah.application.api.interop.c_setEntityRotation
 import com.fluxtah.application.api.interop.c_setEntityScale
 import com.fluxtah.application.api.interop.c_setEntitySkinIndex
 import com.fluxtah.application.api.interop.c_setEntityVelocity
+import com.fluxtah.application.api.interop.c_updateEntityPhysicsTransform
 import kotlinx.cinterop.ExperimentalForeignApi
 
 @OptIn(ExperimentalForeignApi::class)
@@ -149,6 +150,12 @@ class Entity(
         val newPositionY = positionY + y
         val newPositionZ = positionZ + z
         c_setEntityPosition!!.invoke(handle, newPositionX, newPositionY, newPositionZ)
+    }
+
+    fun updatePhysicsState() {
+        if (physicsEnabled) {
+            c_updateEntityPhysicsTransform!!.invoke(handle)
+        }
     }
 
     fun setSkin(index: Int) {

@@ -9,7 +9,7 @@ import com.fluxtah.application.apps.shipgame.Id
 import com.fluxtah.application.apps.shipgame.behaviors.AsteroidDieBehavior
 
 class ProjectileToDestroyableCollisionHandler :
-    CollisionHandler(CollisionGroups.GROUP_PROJECTILE, CollisionGroups.GROUP_DESTROYABLE) {
+    CollisionHandler(CollisionGroups.GROUP_PROJECTILE, CollisionGroups.GROUP_ASTEROID) {
     override fun onHandleCollision(
         scene: Scene,
         sourceEntity: Entity,

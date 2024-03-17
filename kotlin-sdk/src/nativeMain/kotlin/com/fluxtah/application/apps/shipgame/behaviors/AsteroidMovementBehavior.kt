@@ -11,12 +11,8 @@ class AsteroidMovementBehavior(
 ) : EntityBehavior() {
 
     override fun initialize() {
-        entity.setPosition(-400 + (Random.nextFloat() * 400), 100f, -400 + (Random.nextFloat() * 400))
-        entity.setScale(
-            x = 0.9f + (Random.nextFloat() * 1.2f),
-            y = 0.9f + (Random.nextFloat() * 1.2f),
-            z = 0.9f + (Random.nextFloat() * 1.2f)
-        )
+        entity.setPosition(-400 + (Random.nextFloat() * 400), 200f, -400 + (Random.nextFloat() * 400))
+        entity.updatePhysicsState()
     }
 
     override fun update(time: Float) {

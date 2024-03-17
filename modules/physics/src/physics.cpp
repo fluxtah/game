@@ -3,8 +3,6 @@
 #include "../../../kotlin-sdk/cinterop/model.h"
 #include "../../../libs/include/cglm/vec3.h"
 
-extern "C" {
-
 typedef struct PhysicsContext {
     btDefaultCollisionConfiguration *collisionConfiguration;
     btCollisionDispatcher *dispatcher;
@@ -12,8 +10,32 @@ typedef struct PhysicsContext {
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *dynamicsWorld;
 
-    void (*callback)(void *, float, float, float, float, float, float);
+    void (*rigidBodyTransformUpdatedCallback)(void *, float, float, float, float, float, float);
 } PhysicsContext;
+
+void notifyRigidBodyTransformUpdated(PhysicsContext *physicsContext, btRigidBody *body, void *userPtr) {
+    btTransform trans;
+    body->getMotionState()->getWorldTransform(trans);
+    // Convert btTransform's position to your entity's position format
+    btVector3 pos = trans.getOrigin();
+
+    btScalar roll, pitch, yaw;
+    btQuaternion q = trans.getRotation();
+    q.getEulerZYX(yaw, pitch, roll); // This gives yaw, pitch, and roll in radians
+
+    float rotX = btDegrees(yaw);
+    float rotY = btDegrees(pitch);
+    float rotZ = btDegrees(roll);
+
+    if (physicsContext->rigidBodyTransformUpdatedCallback != nullptr) {
+        physicsContext->rigidBodyTransformUpdatedCallback(
+                userPtr,
+                pos.getX(), pos.getY(), pos.getZ(),
+                rotX, rotY, rotZ);
+    }
+}
+
+extern "C" {
 
 void *initPhysics(CreatePhysicsInfo *info) {
     auto *context = new PhysicsContext();
@@ -27,7 +49,7 @@ void *initPhysics(CreatePhysicsInfo *info) {
     // Set the gravity for our world
     context->dynamicsWorld->setGravity(btVector3(info->gravityX, info->gravityY, info->gravityZ));
 
-    context->callback = nullptr;
+    context->rigidBodyTransformUpdatedCallback = nullptr;
 
     std::cout << "Bullet Physics world created." << std::endl;
 
@@ -39,42 +61,22 @@ void setOnRigidBodyUpdatedFunction(void *context,
                                                     float x, float y, float z,
                                                     float rotX, float rotY, float rotZ)) {
     auto *physicsContext = (PhysicsContext *) context;
-    physicsContext->callback = callback;
+    physicsContext->rigidBodyTransformUpdatedCallback = callback;
 }
 
 void stepPhysicsSimulation(void *context, float timeStep) {
     auto *physicsContext = (PhysicsContext *) context;
 
-    physicsContext->dynamicsWorld->stepSimulation(timeStep, 10);
+    physicsContext->dynamicsWorld->stepSimulation(timeStep, 4);
 
-// Step 2 & 3: Iterate over rigid bodies and retrieve their transforms
     int numRigidBodies = physicsContext->dynamicsWorld->getNumCollisionObjects();
     for (int i = 0; i < numRigidBodies; i++) {
         btCollisionObject *obj = physicsContext->dynamicsWorld->getCollisionObjectArray()[i];
         btRigidBody *body = btRigidBody::upcast(obj);
         if (body && body->getMotionState()) {
-            // Step 4: Update your entity's transform
             void *userPtr = body->getUserPointer();
-            if (userPtr && body->isActive()) {
-                btTransform trans;
-                body->getMotionState()->getWorldTransform(trans);
-                // Convert btTransform's position to your entity's position format
-                btVector3 pos = trans.getOrigin();
-
-                btScalar roll, pitch, yaw;
-                btQuaternion q = trans.getRotation();
-                q.getEulerZYX(yaw, pitch, roll); // This gives yaw, pitch, and roll in radians
-
-                float rotX = btDegrees(yaw);
-                float rotY = btDegrees(pitch);
-                float rotZ = btDegrees(roll);
-
-                if (physicsContext->callback != nullptr) {
-                    physicsContext->callback(
-                            userPtr,
-                            pos.getX(), pos.getY(), pos.getZ(),
-                            rotX, rotY, rotZ);
-                }
+            if (userPtr && body->isActive() && !body->isStaticOrKinematicObject()) {
+                notifyRigidBodyTransformUpdated(physicsContext, body, userPtr);
             }
         }
     }

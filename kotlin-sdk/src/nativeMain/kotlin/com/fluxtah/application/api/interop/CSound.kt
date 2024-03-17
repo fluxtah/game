@@ -25,10 +25,10 @@ var c_loadSound: LoadSoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetLoadSoundFunc")
-fun ktSetLoadSoundFunc(callback: CPointer<CFunction<LoadSoundFunc>>) {
+fun ktSetLoadSoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<LoadSoundFunc>>) {
     c_loadSound = { name, info ->
         memScoped {
-            callback.reinterpret<CFunction<LoadSoundFunc>>()(name, info)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<LoadSoundFunc>>()(name, info)
         }
     }
 }
@@ -41,10 +41,10 @@ var c_destroySound: DestroySoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroySoundFunc")
-fun ktSetDestroySoundFunc(callback: CPointer<CFunction<DestroySoundFunc>>) {
+fun ktSetDestroySoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<DestroySoundFunc>>) {
     c_destroySound = { sound ->
         memScoped {
-            callback.reinterpret<CFunction<DestroySoundFunc>>()(sound)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<DestroySoundFunc>>()(sound)
         }
     }
 }
@@ -57,10 +57,10 @@ var c_playSound: PlaySoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetPlaySoundFunc")
-fun ktSetPlaySoundFunc(callback: CPointer<CFunction<PlaySoundFunc>>) {
+fun ktSetPlaySoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<PlaySoundFunc>>) {
     c_playSound = { sound ->
         memScoped {
-            callback.reinterpret<CFunction<PlaySoundFunc>>()(sound)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<PlaySoundFunc>>()(sound)
         }
     }
 }
@@ -73,10 +73,10 @@ var c_isSoundPlaying: IsSoundPlayingFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetIsSoundPlayingFunc")
-fun ktSetIsSoundPlayingFunc(callback: CPointer<CFunction<IsSoundPlayingFunc>>) {
+fun ktSetIsSoundPlayingFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<IsSoundPlayingFunc>>) {
     c_isSoundPlaying = { sound ->
         memScoped {
-            callback.reinterpret<CFunction<IsSoundPlayingFunc>>()(sound)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<IsSoundPlayingFunc>>()(sound)
         }
     }
 }
@@ -89,10 +89,10 @@ var c_stopSound: StopSoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetStopSoundFunc")
-fun ktSetStopSoundFunc(callback: CPointer<CFunction<StopSoundFunc>>) {
+fun ktSetStopSoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<StopSoundFunc>>) {
     c_stopSound = { sound ->
         memScoped {
-            callback.reinterpret<CFunction<StopSoundFunc>>()(sound)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<StopSoundFunc>>()(sound)
         }
     }
 }
@@ -105,10 +105,10 @@ var c_setSoundPitch: SetSoundPitchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetSoundPitchFunc")
-fun ktSetSoundPitchFunc(callback: CPointer<CFunction<SetSoundPitchFunc>>) {
+fun ktSetSoundPitchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<SetSoundPitchFunc>>) {
     c_setSoundPitch = { sound, pitch ->
         memScoped {
-            callback.reinterpret<CFunction<SetSoundPitchFunc>>()(sound, pitch)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<SetSoundPitchFunc>>()(sound, pitch)
         }
     }
 }
@@ -121,10 +121,10 @@ var c_setSoundPosition: SetSoundPositionFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetSoundPositionFunc")
-fun ktSetSoundPositionFunc(callback: CPointer<CFunction<SetSoundPositionFunc>>) {
+fun ktSetSoundPositionFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<SetSoundPositionFunc>>) {
     c_setSoundPosition = { sound, x, y, z ->
         memScoped {
-            callback.reinterpret<CFunction<SetSoundPositionFunc>>()(sound, x, y, z)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<SetSoundPositionFunc>>()(sound, x, y, z)
         }
     }
 }

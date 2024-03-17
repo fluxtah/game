@@ -18,10 +18,10 @@ var c_createSpriteBatch: CreateSpriteBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateSpriteBatchFunc")
-fun ktSetCreateSpriteBatchFunc(callback: CPointer<CFunction<CreateSpriteBatchFunc>>) {
+fun ktSetCreateSpriteBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateSpriteBatchFunc>>) {
     c_createSpriteBatch = { spriteSheet ->
         memScoped {
-            callback.reinterpret<CFunction<CreateSpriteBatchFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateSpriteBatchFunc>>()(
                 spriteSheet
             )
         }
@@ -36,10 +36,10 @@ var c_destroySpriteBatch: DestroySpriteBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroySpriteBatchFunc")
-fun ktSetDestroySpriteBatchFunc(callback: CPointer<CFunction<DestroySpriteBatchFunc>>) {
+fun ktSetDestroySpriteBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<DestroySpriteBatchFunc>>) {
     c_destroySpriteBatch = { context, spriteBatch ->
         memScoped {
-            callback.reinterpret<CFunction<DestroySpriteBatchFunc>>()(context, spriteBatch)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<DestroySpriteBatchFunc>>()(context, spriteBatch)
         }
     }
 }
@@ -52,10 +52,10 @@ var c_initializeSpriteBatch: InitializeSpriteBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetInitializeSpriteBatchFunc")
-fun ktSetInitializeSpriteBatchFunc(callback: CPointer<CFunction<InitializeSpriteBatchFunc>>) {
+fun ktSetInitializeSpriteBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<InitializeSpriteBatchFunc>>) {
     c_initializeSpriteBatch = { context, spriteBatch ->
         memScoped {
-            callback.reinterpret<CFunction<InitializeSpriteBatchFunc>>()(context, spriteBatch)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<InitializeSpriteBatchFunc>>()(context, spriteBatch)
         }
     }
 }
@@ -68,10 +68,10 @@ var c_addSpriteElementToBatch: AddSpriteElementToBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetAddSpriteElementToBatchFunc")
-fun ktSetAddSpriteElementToBatchFunc(callback: CPointer<CFunction<AddSpriteElementToBatchFunc>>) {
+fun ktSetAddSpriteElementToBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<AddSpriteElementToBatchFunc>>) {
     c_addSpriteElementToBatch = { spriteBatch, element ->
         memScoped {
-            callback.reinterpret<CFunction<AddSpriteElementToBatchFunc>>()(spriteBatch, element)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<AddSpriteElementToBatchFunc>>()(spriteBatch, element)
         }
     }
 }
@@ -84,10 +84,10 @@ var c_updateSpriteElementIndexInBatch: UpdateSpriteElementIndexInBatchFunc? = nu
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetUpdateSpriteElementIndexInBatchFunc")
-fun ktSetUpdateSpriteElementIndexInBatchFunc(callback: CPointer<CFunction<UpdateSpriteElementIndexInBatchFunc>>) {
+fun ktSetUpdateSpriteElementIndexInBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<UpdateSpriteElementIndexInBatchFunc>>) {
     c_updateSpriteElementIndexInBatch = { context, batch, elementIndex, spriteSheetIndex ->
         memScoped {
-            callback.reinterpret<CFunction<UpdateSpriteElementIndexInBatchFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<UpdateSpriteElementIndexInBatchFunc>>()(
                 context, batch, elementIndex, spriteSheetIndex
             )
         }
@@ -120,10 +120,10 @@ var c_transformSpriteElementInBatch: TransformSpriteElementInBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetTransformSpriteElementInBatchFunc")
-fun ktSetTransformSpriteElementInBatchFunc(callback: CPointer<CFunction<TransformSpriteElementInBatchFunc>>) {
+fun ktSetTransformSpriteElementInBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<TransformSpriteElementInBatchFunc>>) {
     c_transformSpriteElementInBatch = { context, batch, elementIndex, x, y, scale, rot, startCrop, endCrop ->
         memScoped {
-            callback.reinterpret<CFunction<TransformSpriteElementInBatchFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<TransformSpriteElementInBatchFunc>>()(
                 context, batch, elementIndex, x, y, scale, rot, startCrop, endCrop
             )
         }

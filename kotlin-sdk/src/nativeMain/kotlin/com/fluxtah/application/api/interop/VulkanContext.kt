@@ -21,10 +21,10 @@ var c_setActiveCamera: SetActiveCameraFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetActiveCameraFunc")
-fun ktSetActiveCameraFunc(callback: CPointer<CFunction<(CApplicationContext, CCamera) -> Unit>>) {
+fun ktSetActiveCameraFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CApplicationContext, CCamera) -> Unit>>) {
     c_setActiveCamera = { context, camera ->
         memScoped {
-            callback.reinterpret<CFunction<(CApplicationContext, CCamera) -> Unit>>()(context, camera)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CApplicationContext, CCamera) -> Unit>>()(context, camera)
         }
     }
 }
@@ -37,10 +37,10 @@ var c_setEnableDebugBoundingVolumes: SetEnableDebugBoundingVolumesFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetEnableDebugBoundingVolumesFunc")
-fun ktSetEnableDebugBoundingVolumesFunc(callback: CPointer<CFunction<(CApplicationContext, Boolean) -> Unit>>) {
+fun ktSetEnableDebugBoundingVolumesFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CApplicationContext, Boolean) -> Unit>>) {
     c_setEnableDebugBoundingVolumes = { context, enable ->
         memScoped {
-            callback.reinterpret<CFunction<(CApplicationContext, Boolean) -> Unit>>()(context, enable)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CApplicationContext, Boolean) -> Unit>>()(context, enable)
         }
     }
 }

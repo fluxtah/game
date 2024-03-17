@@ -11,7 +11,7 @@ import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
 import com.fluxtah.application.apps.shipgame.scenes.main.sequences.SequencePlayerDeathRespawnArgs
 
 class ShipToDestroyableCollisionHandler : CollisionHandler(
-    CollisionGroups.GROUP_PLAYER, CollisionGroups.GROUP_DESTROYABLE
+    CollisionGroups.GROUP_PLAYER, CollisionGroups.GROUP_ASTEROID
 ) {
     override fun onHandleCollision(
         scene: Scene,

@@ -17,10 +17,10 @@ var c_createTextBatch: CreateTextBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateTextBatchFunc")
-fun ktSetCreateTextBatchFunc(callback: CPointer<CFunction<CreateTextBatchFunc>>) {
+fun ktSetCreateTextBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateTextBatchFunc>>) {
     c_createTextBatch = { spriteSheet ->
         memScoped {
-            callback.reinterpret<CFunction<CreateTextBatchFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateTextBatchFunc>>()(
                 spriteSheet
             )
         }
@@ -35,10 +35,10 @@ var c_destroyTextBatch: DestroyTextBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroyTextBatchFunc")
-fun ktSetDestroyTextBatchFunc(callback: CPointer<CFunction<DestroyTextBatchFunc>>) {
+fun ktSetDestroyTextBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<DestroyTextBatchFunc>>) {
     c_destroyTextBatch = { context, textBatch ->
         memScoped {
-            callback.reinterpret<CFunction<DestroyTextBatchFunc>>()(context, textBatch)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<DestroyTextBatchFunc>>()(context, textBatch)
         }
     }
 }
@@ -51,10 +51,10 @@ var c_initializeTextBatch: InitializeTextBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetInitializeTextBatchFunc")
-fun ktSetInitializeTextBatchFunc(callback: CPointer<CFunction<InitializeTextBatchFunc>>) {
+fun ktSetInitializeTextBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<InitializeTextBatchFunc>>) {
     c_initializeTextBatch = { context, textBatch ->
         memScoped {
-            callback.reinterpret<CFunction<InitializeTextBatchFunc>>()(context, textBatch)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<InitializeTextBatchFunc>>()(context, textBatch)
         }
     }
 }
@@ -67,10 +67,10 @@ var c_addTextElementToBatch: AddTextElementToBatchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetAddTextElementToBatchFunc")
-fun ktSetAddTextElementToBatchFunc(callback: CPointer<CFunction<AddTextElementToBatchFunc>>) {
+fun ktSetAddTextElementToBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<AddTextElementToBatchFunc>>) {
     c_addTextElementToBatch = { textBatch, element ->
         memScoped {
-            callback.reinterpret<CFunction<AddTextElementToBatchFunc>>()(textBatch, element)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<AddTextElementToBatchFunc>>()(textBatch, element)
         }
     }
 }
@@ -83,10 +83,10 @@ var c_updateTextElementSegmentInBatch: UpdateTextElementSegmentInBatchFunc? = nu
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetUpdateTextElementSegmentInBatchFunc")
-fun ktSetUpdateTextElementSegmentInBatchFunc(callback: CPointer<CFunction<UpdateTextElementSegmentInBatchFunc>>) {
+fun ktSetUpdateTextElementSegmentInBatchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<UpdateTextElementSegmentInBatchFunc>>) {
     c_updateTextElementSegmentInBatch = { context, batch, elementIndex, segmentIndex, newText ->
         memScoped {
-            callback.reinterpret<CFunction<UpdateTextElementSegmentInBatchFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<UpdateTextElementSegmentInBatchFunc>>()(
                 context, batch, elementIndex, segmentIndex, newText
             )
         }
@@ -101,10 +101,10 @@ var c_updateTextElementPosition: UpdateTextElementPositionFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetUpdateTextElementPositionFunc")
-fun ktSetUpdateTextElementPositionFunc(callback: CPointer<CFunction<UpdateTextElementPositionFunc>>) {
+fun ktSetUpdateTextElementPositionFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<UpdateTextElementPositionFunc>>) {
     c_updateTextElementPosition = { context, batch, elementIndex, x, y ->
         memScoped {
-            callback.reinterpret<CFunction<UpdateTextElementPositionFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<UpdateTextElementPositionFunc>>()(
                 context, batch, elementIndex, x, y
             )
         }

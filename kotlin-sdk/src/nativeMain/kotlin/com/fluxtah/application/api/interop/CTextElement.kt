@@ -18,10 +18,10 @@ var c_createTextElement: CreateTextElementFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateTextElementFunc")
-fun ktSetCreateTextElementFunc(callback: CPointer<CFunction<CreateTextElementFunc>>) {
+fun ktSetCreateTextElementFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateTextElementFunc>>) {
     c_createTextElement = { spriteSheet, info ->
         memScoped {
-            callback.reinterpret<CFunction<CreateTextElementFunc>>()(
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateTextElementFunc>>()(
                 spriteSheet, info
             )
         }
@@ -36,10 +36,10 @@ var c_measureTextElementWidth: MeasureTextElementWidthFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMeasureTextElementWidthFunc")
-fun ktSetMeasureTextElementWidthFunc(callback: CPointer<CFunction<MeasureTextElementWidthFunc>>) {
+fun ktSetMeasureTextElementWidthFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MeasureTextElementWidthFunc>>) {
     c_measureTextElementWidth = { element ->
         memScoped {
-            callback.reinterpret<CFunction<MeasureTextElementWidthFunc>>()(element)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MeasureTextElementWidthFunc>>()(element)
         }
     }
 }
@@ -52,10 +52,10 @@ var c_measureTextElementHeight: MeasureTextElementHeightFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMeasureTextElementHeightFunc")
-fun ktSetMeasureTextElementHeightFunc(callback: CPointer<CFunction<MeasureTextElementHeightFunc>>) {
+fun ktSetMeasureTextElementHeightFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MeasureTextElementHeightFunc>>) {
     c_measureTextElementHeight = { element ->
         memScoped {
-            callback.reinterpret<CFunction<MeasureTextElementHeightFunc>>()(element)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MeasureTextElementHeightFunc>>()(element)
         }
     }
 }
