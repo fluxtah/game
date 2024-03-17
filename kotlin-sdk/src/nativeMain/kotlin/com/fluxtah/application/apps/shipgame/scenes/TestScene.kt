@@ -15,10 +15,12 @@ object CollisionGroups {
     // Groups
     const val GROUP_CUBE = 1 shl 0
     const val GROUP_FLOOR = 1 shl 1
+    const val GROUP_SHIP = 1 shl 2
 
     // Masks
-    const val MASK_CUBE = GROUP_CUBE or GROUP_FLOOR
-    const val MASK_FLOOR = GROUP_CUBE
+    const val MASK_CUBE = GROUP_CUBE or GROUP_FLOOR or GROUP_SHIP
+    const val MASK_FLOOR = GROUP_CUBE or GROUP_SHIP
+    const val MASK_SHIP = GROUP_CUBE or GROUP_FLOOR
 }
 
 fun Application.testScene() {
@@ -49,6 +51,15 @@ fun Application.testScene() {
             scale(10f, 1f, 10f)
         }
 
+        entity("ship", modelPath = "models/ship/ship.glb") {
+            mass(100f)
+            kinematic(true)
+            collisionGroup(CollisionGroups.GROUP_SHIP)
+            collisionMask(CollisionGroups.MASK_SHIP)
+            position(0f, 10f, 0f)
+            rotation(0f, 0f, 0f)
+            scale(1f, 1f, 1f)
+        }
         onSceneCreated {
             it.setActiveCamera(Id.CAMERA1)
         }

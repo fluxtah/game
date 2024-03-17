@@ -101,7 +101,7 @@ void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
             entity->collisionMask,
             entity->aabbs,
             entity->num_aabbs,
-            entity->mass
+            isKinematic ? 0 : entity->mass
     );
 
     if (isKinematic) {

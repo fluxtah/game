@@ -64,6 +64,35 @@ void setOnRigidBodyUpdatedFunction(void *context,
     physicsContext->rigidBodyTransformUpdatedCallback = callback;
 }
 
+void checkKinematicRigidBodyCollisions(void *context) {
+    auto *physicsContext = (PhysicsContext *) context;
+
+    int numManifolds = physicsContext->dynamicsWorld->getDispatcher()->getNumManifolds();
+    for (int i = 0; i < numManifolds; i++) {
+        btPersistentManifold *contactManifold = physicsContext->dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(
+                i);
+        const auto *obA = static_cast<const btCollisionObject *>(contactManifold->getBody0());
+        const auto *obB = static_cast<const btCollisionObject *>(contactManifold->getBody1());
+
+        // Determine if one object is kinematic and the other is not
+        bool isKinematicA = obA->isKinematicObject();
+        bool isKinematicB = obB->isKinematicObject();
+
+        // Check for collisions between kinematic and (static or dynamic) objects
+        if ((isKinematicA || isKinematicB)) {
+            int numContacts = contactManifold->getNumContacts();
+            for (int j = 0; j < numContacts; j++) {
+                btManifoldPoint &pt = contactManifold->getContactPoint(j);
+                if (pt.getDistance() < 0.f) {
+                    std::cout << "Kinematic body collided with static/dynamic object:" << std::endl << pt.getDistance()
+                              << std::endl;
+                    // print collision info
+                }
+            }
+        }
+    }
+}
+
 void stepPhysicsSimulation(void *context, float timeStep) {
     auto *physicsContext = (PhysicsContext *) context;
 
@@ -80,6 +109,8 @@ void stepPhysicsSimulation(void *context, float timeStep) {
             }
         }
     }
+
+    checkKinematicRigidBodyCollisions(context);
 }
 
 void destroyPhysics(void *context) {
@@ -129,7 +160,7 @@ createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, 
                                                     localInertia); // Use 0 mass for static objects
     auto *body = new btRigidBody(rbInfo);
     // make extremely bouncey
- //   body->setRestitution(0.6f);
+    //   body->setRestitution(0.6f);
     // rotate extremely
 //    body->setAngularFactor(btVector3(1, 1, 1));
 //    body->applyTorqueImpulse(btVector3(10, 0, 2));

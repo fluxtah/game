@@ -211,8 +211,8 @@ class SceneBuilder(val sceneId: String) {
             val sourceEntityInfo = entityInfo.asStableRef<EntityInfo>().get()
             // TODO update entities from physics
             if (sourceEntityInfo.entity.id == "cube") {
-                println("Rot Before: (${sourceEntityInfo.entity.rotationX}, ${sourceEntityInfo.entity.rotationY}, ${sourceEntityInfo.entity.rotationZ})")
-                println("Rot After: ($rotX, $rotY, $rotZ)")
+  //              println("Rot Before: (${sourceEntityInfo.entity.rotationX}, ${sourceEntityInfo.entity.rotationY}, ${sourceEntityInfo.entity.rotationZ})")
+  //              println("Rot After: ($rotX, $rotY, $rotZ)")
             }
             //    if(!sourceEntityInfo.entity.isKinematic) {
             sourceEntityInfo.entity.apply {
