@@ -221,4 +221,24 @@ typedef struct CreatePhysicsInfo {
     float gravityZ;
 } CreatePhysicsInfo;
 
+typedef struct CCollisionContactPoint {
+    float distance;
+    float positionAX;
+    float positionAY;
+    float positionAZ;
+    float positionBX;
+    float positionBY;
+    float positionBZ;
+    float collisionNormalX;
+    float collisionNormalY;
+    float collisionNormalZ;
+} CCollisionContactPoint;
+
+typedef struct CCollisionResult2 {
+    void *userPointerA;
+    void *userPointerB;
+    CCollisionContactPoint contactPoints[100]; // Default to 100
+    int numContacts;
+} CCollisionResult2;
+
 #endif // MODEL_H

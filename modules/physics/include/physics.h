@@ -29,6 +29,9 @@ void setOnRigidBodyUpdatedFunction(void *context,
                                                     float x, float y, float z,
                                                     float rotX, float rotY, float rotZ));
 
+void setCollisionCallbackFunction(void *context,
+                                  void (*callback)(CCollisionResult2 *result));
+
 void stepPhysicsSimulation(void *context, float timeStep);
 
 void deletePhysicsRigidBody(void *context, void *body);

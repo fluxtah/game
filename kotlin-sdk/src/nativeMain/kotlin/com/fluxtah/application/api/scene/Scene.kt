@@ -5,6 +5,7 @@ import com.fluxtah.application.api.Sound
 import com.fluxtah.application.api.camera.Camera
 import com.fluxtah.application.api.emitter.Emitter
 import com.fluxtah.application.api.emitter.EmitterBehavior
+import com.fluxtah.application.api.entity.CollisionResult2
 import com.fluxtah.application.api.entity.Entity
 import com.fluxtah.application.api.entity.EntityBehavior
 import com.fluxtah.application.api.entity.KotlinCollisionResult
@@ -21,7 +22,7 @@ private val scenes = mutableMapOf<String, SceneInfo>()
 
 data class SceneInfo(
     val scene: BaseScene,
-    val onCollision: ((scene: Scene, result: KotlinCollisionResult) -> Unit)? = null,
+    val onCollision: ((scene: Scene, result: CollisionResult2) -> Unit)? = null,
     val onSceneCreated: ((Scene) -> Unit)? = null,
     val onSceneUpdate: OnSceneUpdate? = null,
     val onSceneBeforeUpdate: OnSceneBeforeUpdate? = null,

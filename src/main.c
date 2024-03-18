@@ -215,14 +215,12 @@ int main() {
             syncTextBatchMemoryBuffers(context, textBatch);
         }
 
-        ktStepPhysics();
-
         //
-        // Collision detection
+        // Run Physics & Collision Detection
         //
         double collisionStartTime = glfwGetTime();
 
-        detectCollisions(ktEntities);
+        ktStepPhysics();
 
         collisionAccumulatedTime += glfwGetTime() - collisionStartTime;
 

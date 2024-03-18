@@ -138,6 +138,7 @@ void bindKotlinApi() {
     ktSetRemoveEntityPhysicsFunc(removeEntityPhysics);
     ktSetStepPhysicsSimulationFunc(stepPhysicsSimulation);
     ktSetOnRigidBodyUpdatedFunc(setOnRigidBodyUpdatedFunction);
+    ktSetCollisionCallbackFunc(setCollisionCallbackFunction);
     ktSetUpdateEntityPhysicsTransformFunc(updateEntityPhysicsTransform);
 }
 
@@ -263,5 +264,6 @@ void bindKotlinApiHeadless() {
     ktSetRemoveEntityPhysicsFunc(removeEntityPhysics);
     ktSetStepPhysicsSimulationFunc(stepPhysicsSimulation);
     ktSetOnRigidBodyUpdatedFunc(setOnRigidBodyUpdatedFunction);
+    ktSetCollisionCallbackFunc(setCollisionCallbackFunction);
     ktSetUpdateEntityPhysicsTransformFunc(updateEntityPhysicsTransform);
 }

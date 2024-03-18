@@ -11,6 +11,8 @@ typedef struct PhysicsContext {
     btDiscreteDynamicsWorld *dynamicsWorld;
 
     void (*rigidBodyTransformUpdatedCallback)(void *, float, float, float, float, float, float);
+
+    void (*collisionCallback)(CCollisionResult2 *);
 } PhysicsContext;
 
 void notifyRigidBodyTransformUpdated(PhysicsContext *physicsContext, btRigidBody *body, void *userPtr) {
@@ -50,6 +52,7 @@ void *initPhysics(CreatePhysicsInfo *info) {
     context->dynamicsWorld->setGravity(btVector3(info->gravityX, info->gravityY, info->gravityZ));
 
     context->rigidBodyTransformUpdatedCallback = nullptr;
+    context->collisionCallback = nullptr;
 
     std::cout << "Bullet Physics world created." << std::endl;
 
@@ -62,6 +65,12 @@ void setOnRigidBodyUpdatedFunction(void *context,
                                                     float rotX, float rotY, float rotZ)) {
     auto *physicsContext = (PhysicsContext *) context;
     physicsContext->rigidBodyTransformUpdatedCallback = callback;
+}
+
+void setCollisionCallbackFunction(void *context,
+                                  void (*callback)(CCollisionResult2 *result)) {
+    auto *physicsContext = (PhysicsContext *) context;
+    physicsContext->collisionCallback = callback;
 }
 
 void checkKinematicRigidBodyCollisions(void *context) {
@@ -77,17 +86,36 @@ void checkKinematicRigidBodyCollisions(void *context) {
         // Determine if one object is kinematic and the other is not
         bool isKinematicA = obA->isKinematicObject();
         bool isKinematicB = obB->isKinematicObject();
+        bool isStaticA = obA->isStaticObject();
+        bool isStaticB = obB->isStaticObject();
 
         // Check for collisions between kinematic and (static or dynamic) objects
-        if ((isKinematicA || isKinematicB)) {
-            int numContacts = contactManifold->getNumContacts();
-            for (int j = 0; j < numContacts; j++) {
+        int currentContactIndex = 0;
+        if ((isKinematicA && isStaticB) || (isKinematicB && isStaticA) || (isKinematicA && isKinematicB)) {
+            CCollisionResult2 result = {0};
+            result.userPointerA = obA->getUserPointer();
+            result.userPointerB = obB->getUserPointer();
+            result.numContacts = contactManifold->getNumContacts();
+            for (int j = 0; j < result.numContacts; j++) {
                 btManifoldPoint &pt = contactManifold->getContactPoint(j);
-                if (pt.getDistance() < 0.f) {
-                    std::cout << "Kinematic body collided with static/dynamic object:" << std::endl << pt.getDistance()
-                              << std::endl;
-                    // print collision info
-                }
+                result.contactPoints[currentContactIndex].distance = pt.getDistance();
+
+                result.contactPoints[currentContactIndex].positionAX = pt.getPositionWorldOnA().getX();
+                result.contactPoints[currentContactIndex].positionAY = pt.getPositionWorldOnA().getY();
+                result.contactPoints[currentContactIndex].positionAZ = pt.getPositionWorldOnA().getZ();
+                result.contactPoints[currentContactIndex].positionBX = pt.getPositionWorldOnB().getX();
+                result.contactPoints[currentContactIndex].positionBY = pt.getPositionWorldOnB().getY();
+                result.contactPoints[currentContactIndex].positionBZ = pt.getPositionWorldOnB().getZ();
+
+                result.contactPoints[currentContactIndex].collisionNormalX = pt.m_normalWorldOnB.getX();
+                result.contactPoints[currentContactIndex].collisionNormalY = pt.m_normalWorldOnB.getY();
+                result.contactPoints[currentContactIndex].collisionNormalZ = pt.m_normalWorldOnB.getZ();
+
+                currentContactIndex++;
+            }
+
+            if (physicsContext->collisionCallback != nullptr) {
+                physicsContext->collisionCallback(&result);
             }
         }
     }
@@ -159,6 +187,7 @@ createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, 
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, shape,
                                                     localInertia); // Use 0 mass for static objects
     auto *body = new btRigidBody(rbInfo);
+    // TODO make it so we can set these from Kotlin
     // make extremely bouncey
     //   body->setRestitution(0.6f);
     // rotate extremely

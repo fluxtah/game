@@ -2,6 +2,7 @@ package com.fluxtah.application.apps.shipgame.scenes.main.collision
 
 import com.fluxtah.application.api.collision.CollisionHandler
 import com.fluxtah.application.api.entity.BoundingVolumeCollisionResult
+import com.fluxtah.application.api.entity.CollisionContactPoint
 import com.fluxtah.application.api.entity.Entity
 import com.fluxtah.application.api.scene.Scene
 import com.fluxtah.application.apps.shipgame.CollisionGroups
@@ -16,12 +17,12 @@ class ShipToShipCollisionHandler : CollisionHandler(
         scene: Scene,
         sourceEntity: Entity,
         targetEntity: Entity,
-        results: List<BoundingVolumeCollisionResult>
+        contactPoints: List<CollisionContactPoint>
     ) {
         if(sourceEntity.data is ShipData && targetEntity.data is ShipData) {
             sourceEntity.getBehaviorByType<ShipCollisionResponseBehavior>()
                 // TODO need to consider all colliding volumes
-                .handleResponse(scene, targetEntity, results[0].sourceVolumeIndex, results[0].targetVolumeIndex)
+                .handleResponse(scene, targetEntity, contactPoints)
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.fluxtah.application.api.interop
 
+import com.fluxtah.application.api.entity.CollisionResult2
+import com.fluxtah.application.api.interop.model.CCollisionResult2
 import com.fluxtah.application.api.interop.model.CreateEmitterInfo
 import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import kotlinx.cinterop.CFunction
@@ -77,6 +79,23 @@ var c_setOnRigidBodyUpdated: SetOnRigidBodyUpdatedFunc? = null
 fun ktSetOnRigidBodyUpdatedFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<SetOnRigidBodyUpdatedFunc>>) {
     c_setOnRigidBodyUpdated = { physics, func ->
         rigidBodyTransformUpdatedCallback.reinterpret<CFunction<SetOnRigidBodyUpdatedFunc>>()(physics, func)
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias CollisionCallback = CPointer<CFunction<(result: CCollisionResult2) -> Unit>>
+
+@OptIn(ExperimentalForeignApi::class)
+typealias SetCollisionCallbackFunc = (CPhysics, CollisionCallback) -> Unit
+
+@OptIn(ExperimentalForeignApi::class)
+var c_setCollisionCallback: SetCollisionCallbackFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktSetCollisionCallbackFunc")
+fun ktSetCollisionCallbackFunc(collisionCallback: CPointer<CFunction<SetCollisionCallbackFunc>>) {
+    c_setCollisionCallback = { context, func ->
+        collisionCallback.reinterpret<CFunction<SetCollisionCallbackFunc>>()(context, func)
     }
 }
 

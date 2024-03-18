@@ -69,7 +69,7 @@ sh compile_shaders.sh
 - **Models**: Import your 3D models as GLTF files.
 - **Textures**: Use PNG files for textures. Assign basic textures in the GLTF file and override them using a `skins` directory alongside your GLTF files, with subdirectories for different skins (`0`, `1`, etc.), containing:
     - `base.png`
-    - `normal.png`
+    - `collisionNormal.png`
     - `metalrough.png`
 
 ### Axis-Aligned Bounding Boxes (AABBs)

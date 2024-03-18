@@ -1,6 +1,8 @@
 package com.fluxtah.application.api.collision
 
 import com.fluxtah.application.api.entity.BoundingVolumeCollisionResult
+import com.fluxtah.application.api.entity.CollisionContactPoint
+import com.fluxtah.application.api.entity.CollisionResult2
 import com.fluxtah.application.api.entity.Entity
 import com.fluxtah.application.api.entity.KotlinCollisionResult
 import com.fluxtah.application.api.scene.Scene
@@ -12,25 +14,20 @@ import com.fluxtah.application.api.scene.Scene
  * @param groupB The second collision group
  */
 abstract class CollisionHandler(private val groupA: Int, private val groupB: Int) {
-    fun handleCollision(scene: Scene, result: KotlinCollisionResult): Boolean {
+    fun handleCollision(scene: Scene, result: CollisionResult2): Boolean {
         // Switch the source and target if the source is groupB and the target is groupA
         if (result.sourceEntity.collisionGroup == groupA
             && result.targetEntity.collisionGroup == groupB
         ) {
-            onHandleCollision(scene, result.sourceEntity, result.targetEntity, result.results.map {
-                BoundingVolumeCollisionResult(
-                    it.sourceVolumeIndex,
-                    it.targetVolumeIndex
-                )
-            })
+            onHandleCollision(scene, result.sourceEntity, result.targetEntity, result.contactPoints)
             return true
         } else if (result.sourceEntity.collisionGroup == groupB
             && result.targetEntity.collisionGroup == groupA
         ) {
-            onHandleCollision(scene, result.targetEntity, result.sourceEntity, result.results.map {
-                BoundingVolumeCollisionResult(
-                    it.targetVolumeIndex,
-                    it.sourceVolumeIndex
+            onHandleCollision(scene, result.targetEntity, result.sourceEntity, result.contactPoints.map {
+                it.copy(
+                    positionA = it.positionB,
+                    positionB = it.positionA,
                 )
             })
             return true
@@ -43,6 +40,6 @@ abstract class CollisionHandler(private val groupA: Int, private val groupB: Int
         scene: Scene,
         sourceEntity: Entity,
         targetEntity: Entity,
-        results: List<BoundingVolumeCollisionResult>
+        contactPoints: List<CollisionContactPoint>
     )
 }

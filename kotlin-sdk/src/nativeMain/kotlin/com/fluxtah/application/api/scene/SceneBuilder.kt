@@ -5,12 +5,17 @@ import com.fluxtah.application.api.camera.Camera
 import com.fluxtah.application.api.camera.CameraBuilder
 import com.fluxtah.application.api.emitter.EmitterBuilder
 import com.fluxtah.application.api.emitter.EmitterPoolBuilder
+import com.fluxtah.application.api.entity.CollisionResult2
 import com.fluxtah.application.api.entity.EntityBuilder
 import com.fluxtah.application.api.entity.EntityPoolBuilder
 import com.fluxtah.application.api.entity.KotlinCollisionResult
+import com.fluxtah.application.api.entity.ktCollisionCallback2
+import com.fluxtah.application.api.interop.CollisionCallback
 import com.fluxtah.application.api.interop.RigidBodyCallback
 import com.fluxtah.application.api.interop.c_createPhysics
+import com.fluxtah.application.api.interop.c_setCollisionCallback
 import com.fluxtah.application.api.interop.c_setOnRigidBodyUpdated
+import com.fluxtah.application.api.interop.model.CCollisionResult2
 import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import com.fluxtah.application.api.sequence.Sequence
 import com.fluxtah.application.api.sequence.SequenceBuilder
@@ -56,7 +61,7 @@ class SceneBuilder(val sceneId: String) {
     private var onSceneUpdate: OnSceneUpdate? = null
     private var onSceneBeforeUpdate: OnSceneBeforeUpdate? = null
     private var onSceneAfterUpdate: OnSceneAfterUpdate? = null
-    private var onCollision: ((scene: Scene, result: KotlinCollisionResult) -> Unit)? = null
+    private var onCollision: ((scene: Scene, result: CollisionResult2) -> Unit)? = null
 
     private var gravityX: Float = 0.0f
     private var gravityY: Float = -9.81f
@@ -186,7 +191,7 @@ class SceneBuilder(val sceneId: String) {
         }
     }
 
-    fun onCollision(block: (scene: Scene, result: KotlinCollisionResult) -> Unit) {
+    fun onCollision(block: (scene: Scene, result: CollisionResult2) -> Unit) {
         onCollision = block
     }
 
@@ -221,8 +226,10 @@ class SceneBuilder(val sceneId: String) {
             }
             //    }
         }
-
         c_setOnRigidBodyUpdated!!.invoke(physicsHandle, onRigidBodyUpdate)
+
+        val collisionCallback: CollisionCallback  = staticCFunction(::ktCollisionCallback2)
+        c_setCollisionCallback!!.invoke(physicsHandle, collisionCallback)
 
         val scene = SceneImpl(physicsHandle)
         scene.data = data.invoke()

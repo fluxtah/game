@@ -41,8 +41,8 @@ class ShipGame : Application {
         testScene()
         mainScene()
 
-         setActiveScene("test")
-       // setActiveScene(Id.SCENE_MAIN)
+       //  setActiveScene("test")
+        setActiveScene(Id.SCENE_MAIN)
     }
 }
 

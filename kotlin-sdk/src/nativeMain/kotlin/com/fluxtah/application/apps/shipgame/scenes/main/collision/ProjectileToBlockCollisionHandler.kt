@@ -2,6 +2,7 @@ package com.fluxtah.application.apps.shipgame.scenes.main.collision
 
 import com.fluxtah.application.api.collision.CollisionHandler
 import com.fluxtah.application.api.entity.BoundingVolumeCollisionResult
+import com.fluxtah.application.api.entity.CollisionContactPoint
 import com.fluxtah.application.api.entity.Entity
 import com.fluxtah.application.api.scene.Scene
 import com.fluxtah.application.apps.shipgame.CollisionGroups
@@ -21,7 +22,7 @@ class ProjectileToBlockCollisionHandler :
         scene: Scene,
         sourceEntity: Entity,
         targetEntity: Entity,
-        results: List<BoundingVolumeCollisionResult>
+        contactPoints: List<CollisionContactPoint>
     ) {
         if (targetEntity.data is PowerNodeData) {
             val powerNodeData = targetEntity.data<PowerNodeData>()
