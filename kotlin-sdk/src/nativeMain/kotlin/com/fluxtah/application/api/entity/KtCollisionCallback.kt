@@ -86,12 +86,13 @@ fun ktCollisionCallback2(collisionResult: CCollisionResult2) {
     val targetEntityInfo = collisionResult.userPointerB!!.asStableRef<EntityInfo>().get()
     if (!sourceEntityInfo.entity.active || !targetEntityInfo.entity.active) return
 
-    println("COLLISION: Source entity: ${sourceEntityInfo.entity.id} with  ${targetEntityInfo.entity.id}")
+    // println("COLLISION: Source entity: ${sourceEntityInfo.entity.id} with  ${targetEntityInfo.entity.id}")
 
     val contactPoints = mutableListOf<CollisionContactPoint>()
 
     for (i in 0 until collisionResult.numContacts) {
         val cContactPoint = collisionResult.contactPoints[i]
+        // println("COLLISION: Contact distance: ${cContactPoint.distance}")
         contactPoints.add(
             CollisionContactPoint(
                 distance = cContactPoint.distance,

@@ -94,6 +94,8 @@ void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
         exit(EXIT_FAILURE);
     }
 
+    entity->isKinematic = isKinematic;
+
     entity->physicsBody = createPhysicsRigidBodyFromAABBs(
             physicsContext,
             entity->kotlinEntityInfo,
@@ -101,13 +103,9 @@ void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
             entity->collisionMask,
             entity->aabbs,
             entity->num_aabbs,
-            isKinematic ? 0 : entity->mass
+            entity->mass,
+            entity->isKinematic
     );
-
-    if (isKinematic) {
-        entity->isKinematic = true;
-        makePhysicsRigidBodyKinematic(entity->physicsBody);
-    }
 
     updateEntityPhysicsTransform(entity);
 }

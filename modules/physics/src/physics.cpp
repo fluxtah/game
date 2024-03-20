@@ -2,6 +2,7 @@
 #include <btBulletDynamicsCommon.h> // Include the Bullet Physics Header
 #include "../../../kotlin-sdk/cinterop/model.h"
 #include "../../../libs/include/cglm/vec3.h"
+#include "BulletDebugDrawer.h"
 
 typedef struct PhysicsContext {
     btDefaultCollisionConfiguration *collisionConfiguration;
@@ -9,6 +10,7 @@ typedef struct PhysicsContext {
     btBroadphaseInterface *overlappingPairCache;
     btSequentialImpulseConstraintSolver *solver;
     btDiscreteDynamicsWorld *dynamicsWorld;
+    BulletDebugDrawer *debugDrawer;
 
     void (*rigidBodyTransformUpdatedCallback)(void *, float, float, float, float, float, float);
 
@@ -53,6 +55,9 @@ void *initPhysics(CreatePhysicsInfo *info) {
 
     context->rigidBodyTransformUpdatedCallback = nullptr;
     context->collisionCallback = nullptr;
+
+    context->debugDrawer = new BulletDebugDrawer();
+    context->dynamicsWorld->setDebugDrawer(context->debugDrawer);
 
     std::cout << "Bullet Physics world created." << std::endl;
 
@@ -139,6 +144,7 @@ void stepPhysicsSimulation(void *context, float timeStep) {
     }
 
     checkKinematicRigidBodyCollisions(context);
+    physicsContext->dynamicsWorld->debugDrawWorld();
 }
 
 void destroyPhysics(void *context) {
@@ -148,12 +154,15 @@ void destroyPhysics(void *context) {
     delete physicsContext->overlappingPairCache;
     delete physicsContext->dispatcher;
     delete physicsContext->collisionConfiguration;
+    delete physicsContext->debugDrawer;
     delete physicsContext;
+
     std::cout << "Bullet Physics world destroyed." << std::endl;
 }
 
 void *
-createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass) {
+createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass,
+                                bool isKinematic) {
     auto *physicsContext = (PhysicsContext *) context;
 
     if (count == 0) {
@@ -161,7 +170,7 @@ createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, 
         return nullptr;
     }
 
-    btCollisionShape *shape = nullptr;
+    btCollisionShape *shape;
     btMotionState *motionState = new btDefaultMotionState(); // Create a default motion state
 
     if (count == 1) {
@@ -195,7 +204,13 @@ createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, 
 //    body->applyTorqueImpulse(btVector3(10, 0, 2));
 //    body->applyForce(btVector3(10, 0, 2), btVector3(0, 0, 0));
 
+    if (isKinematic) {
+        body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+        body->setActivationState(DISABLE_DEACTIVATION);
+    }
+
     body->setUserPointer(data);
+
     physicsContext->dynamicsWorld->addRigidBody(body, group, mask);
 
     return body;
@@ -224,12 +239,6 @@ void deletePhysicsRigidBody(void *context, void *body) {
     delete rigidBody->getMotionState();
     delete rigidBody;
 
-}
-
-void makePhysicsRigidBodyKinematic(void *body) {
-    auto *rigidBody = (btRigidBody *) body;
-    rigidBody->setCollisionFlags(rigidBody->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-    rigidBody->setActivationState(DISABLE_DEACTIVATION);
 }
 
 void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDegrees, vec3 velocity) {

@@ -18,11 +18,9 @@ void destroyPhysics(void *context);
  * @param count The number of AABBs
  * @return A pointer to the created rigid body
  */
-void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass);
+void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass, bool isKinematic);
 
 void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDegrees, vec3 velocity);
-
-void makePhysicsRigidBodyKinematic(void *body);
 
 void setOnRigidBodyUpdatedFunction(void *context,
                                    void (*callback)(void *userPtr,
