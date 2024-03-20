@@ -307,6 +307,16 @@ ApplicationContext *createApplication() {
             VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             cubeVertices);
+
+
+    applicationContext->physicsDebugBuffer = (BufferMemory *) malloc(sizeof(BufferMemory));
+    applicationContext->physicsDebugBufferVertexCount = 50000;
+    createBufferMemory(
+            applicationContext->vulkanDeviceContext,
+            applicationContext->physicsDebugBuffer,
+            applicationContext->physicsDebugBufferVertexCount * sizeof(DebugVertex),
+            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
+            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
 #else
     applicationContext->debugPipelineConfig = NULL;
     applicationContext->debugCubeBuffer = NULL;
@@ -361,6 +371,10 @@ void destroyApplication(ApplicationContext *context) {
 
         if (context->debugCubeBuffer != NULL && context->vulkanDeviceContext != NULL) {
             destroyBufferMemory(context->vulkanDeviceContext, context->debugCubeBuffer);
+        }
+
+        if(context->physicsDebugBuffer != NULL && context->vulkanDeviceContext != NULL) {
+            destroyBufferMemory(context->vulkanDeviceContext, context->physicsDebugBuffer);
         }
 
         destroyPipelineConfig(

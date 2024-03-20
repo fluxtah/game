@@ -419,7 +419,7 @@ void updateSpriteElementAndStage(ApplicationContext *context, SpriteBatch *batch
 
     // Update the sprite in the staging buffer
     size_t bufferOffset = element->spriteBatchStartIndex * sizeof(SpriteVertex);
-    updateStagingBufferSegment(
+    updateBuffer(
             context,
             batch->vertexBufferStagingMemory,
             tempVertices,

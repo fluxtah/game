@@ -26,6 +26,14 @@ void recordDebugCommandBuffer(
         VkBuffer unitCubeVertexBuffer,
         Camera *camera);
 
+void recordDebugLinesCommandBuffer(
+        VkCommandBuffer commandBuffer,
+        VkPipeline graphicsPipeline,
+        VkPipelineLayout pipelineLayout,
+        VkBuffer lineBuffer,
+        int vertexCount,
+        Camera *camera);
+
 void recordEmitterBuffer(
         VkCommandBuffer commandBuffer,
         EmitterArray *emitters

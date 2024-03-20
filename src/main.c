@@ -271,6 +271,25 @@ int main() {
                         context->debugCubeBuffer->buffer,
                         context->activeCamera);
             }
+
+            void *debugLineData = getPhysicsDebugVertexData(ktGetCurrentPhysicsHandle());
+            int debugVertexCount = getPhysicsDebugVertexCount(ktGetCurrentPhysicsHandle());
+
+            updateBuffer(context,
+                         context->physicsDebugBuffer,
+                         debugLineData,
+                         0,
+                         debugVertexCount * sizeof(DebugVertex));
+
+            //printf("Debug vertex count: %d\n", debugVertexCount);
+
+            recordDebugLinesCommandBuffer(
+                    context->commandBuffers[i],
+                    context->debugPipelineConfig->pipeline,
+                    context->debugPipelineConfig->pipelineLayout,
+                    context->physicsDebugBuffer->buffer,
+                    debugVertexCount,
+                    context->activeCamera);
 #endif
 
             endCommandBufferRecording(context->commandBuffers[i]);

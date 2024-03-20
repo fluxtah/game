@@ -33,6 +33,9 @@ void setCollisionCallbackFunction(void *context,
 void stepPhysicsSimulation(void *context, float timeStep);
 
 void deletePhysicsRigidBody(void *context, void *body);
+
+void* getPhysicsDebugVertexData(void *context);
+int getPhysicsDebugVertexCount(void *context);
 #ifdef __cplusplus
 }
 #endif

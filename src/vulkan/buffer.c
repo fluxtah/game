@@ -138,14 +138,14 @@ void copyBuffer(VkDevice device, VkCommandPool commandPool, VkQueue queue, VkBuf
     vkFreeCommandBuffers(device, commandPool, 1, &commandBuffer);
 }
 
-void updateStagingBufferSegment(ApplicationContext *context,
-                                BufferMemory *stagingBufferMemory,
-                                void *data,
-                                size_t offset,
-                                size_t size) {
+void updateBuffer(ApplicationContext *context,
+                  BufferMemory *bufferMemory,
+                  void *data,
+                  size_t offset,
+                  size_t size) {
     void *mappedMemory;
-    vkMapMemory(context->vulkanDeviceContext->device, stagingBufferMemory->memory, offset, size, 0, &mappedMemory);
+    vkMapMemory(context->vulkanDeviceContext->device, bufferMemory->memory, offset, size, 0, &mappedMemory);
     memcpy(mappedMemory, data, size);
-    vkUnmapMemory(context->vulkanDeviceContext->device, stagingBufferMemory->memory);
+    vkUnmapMemory(context->vulkanDeviceContext->device, bufferMemory->memory);
 }
 

@@ -147,6 +147,16 @@ void stepPhysicsSimulation(void *context, float timeStep) {
     physicsContext->dynamicsWorld->debugDrawWorld();
 }
 
+void* getPhysicsDebugVertexData(void *context) {
+    auto *physicsContext = (PhysicsContext *) context;
+    return physicsContext->debugDrawer->getVertexData();
+}
+
+int getPhysicsDebugVertexCount(void *context) {
+    auto *physicsContext = (PhysicsContext *) context;
+    return physicsContext->debugDrawer->getVertexCount();
+}
+
 void destroyPhysics(void *context) {
     auto *physicsContext = (PhysicsContext *) context;
     delete physicsContext->dynamicsWorld;

@@ -165,6 +165,33 @@ void recordDebugCommandBuffer(
     }
 }
 
+void recordDebugLinesCommandBuffer(
+        VkCommandBuffer commandBuffer,
+        VkPipeline graphicsPipeline,
+        VkPipelineLayout pipelineLayout,
+        VkBuffer lineBuffer,
+        int vertexCount,
+        Camera *camera) {
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+
+    mat4 transform = GLM_MAT4_IDENTITY_INIT;
+
+    PushConstants pushConstants = {0};
+    memcpy(pushConstants.view, camera->view, sizeof(mat4));
+    memcpy(pushConstants.proj, camera->proj, sizeof(mat4));
+    memcpy(pushConstants.model, transform, sizeof(mat4));
+
+    // Push the transform to the shader
+    vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(PushConstants),
+                       &pushConstants);
+
+    VkBuffer buffers[] = {lineBuffer};
+    VkDeviceSize offsets[] = {0};
+    vkCmdBindVertexBuffers(commandBuffer, 0, 1, buffers, offsets);
+
+    vkCmdDraw(commandBuffer, vertexCount, 1, 0, 0);
+}
+
 void recordEmitterBuffer(VkCommandBuffer commandBuffer, EmitterArray *emitters) {
     for (size_t i = 0; i < emitters->size; i++) {
         Emitter *emitter = (Emitter *) (emitters->emitters[i]);

@@ -35,6 +35,8 @@ typedef struct ApplicationContext {
     AudioContext *audioContext;
     Camera *activeCamera;
     BufferMemory *debugCubeBuffer;
+    BufferMemory *physicsDebugBuffer;
+    int physicsDebugBufferVertexCount;
     bool debugBoundingVolumes;
     VkRenderPass renderPass;
     VkFramebuffer *swapChainFramebuffers;

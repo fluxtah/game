@@ -1,6 +1,7 @@
 package com.fluxtah.application.api
 
 import com.fluxtah.application.api.input.Key
+import com.fluxtah.application.api.interop.CPhysics
 import com.fluxtah.application.api.interop.c_destroyCamera
 import com.fluxtah.application.api.interop.c_destroyEmitter
 import com.fluxtah.application.api.interop.c_destroyEntity
@@ -273,4 +274,19 @@ private fun BaseScene.destroy() {
     if (this is SceneImpl) {
         c_destroyPhysics!!.invoke(physicsHandle)
     }
+}
+
+@OptIn(ExperimentalNativeApi::class, ExperimentalForeignApi::class)
+@CName("ktGetCurrentPhysicsHandle")
+fun ktGetCurrentPhysicsHandle(): CPhysics? {
+    val activeSceneInfo = activeSceneInfo
+    if (activeSceneInfo.scene is Scene.EMPTY) {
+        return null
+    }
+    val scene = activeSceneInfo.scene
+    if(scene is SceneImpl) {
+        return scene.physicsHandle
+    }
+
+    return null
 }

@@ -1,14 +1,14 @@
 #ifndef GAME_VERTEX_H
 #define GAME_VERTEX_H
 
-typedef struct {
+typedef struct Vertex {
     float position[3];
     float normal[3];
     float uv[2];
     float tangent[4];
 } Vertex;
 
-typedef struct {
+typedef struct DebugVertex {
     float position[3];
 } DebugVertex;
 

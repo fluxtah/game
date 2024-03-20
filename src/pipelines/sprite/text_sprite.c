@@ -214,7 +214,7 @@ void updateTextElementSegmentInBatch(ApplicationContext *context, TextBatch *bat
 
     // Update the segment in the staging buffer
     size_t bufferOffset = vertexStartIndex * sizeof(SpriteVertex);
-    updateStagingBufferSegment(
+    updateBuffer(
             context,
             batch->vertexBufferStagingMemory,
             tempVertices,
@@ -413,7 +413,7 @@ void updateTextElementPosition(ApplicationContext *context, TextBatch *batch, si
 
     // Update the segment in the staging buffer
     size_t bufferOffset = element->textBatchStartIndex * sizeof(SpriteVertex);
-    updateStagingBufferSegment(
+    updateBuffer(
             context,
             batch->vertexBufferStagingMemory,
             tempVertices,

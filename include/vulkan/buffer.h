@@ -28,9 +28,9 @@ void createStagedBufferMemory(
 
 void copyBuffer(VkDevice device, VkCommandPool commandPool, VkQueue queue, VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size);
 
-void updateStagingBufferSegment(ApplicationContext *context,
-                                BufferMemory *stagingBufferMemory,
-                                void *data,
-                                size_t offset,
-                                size_t size);
+void updateBuffer(ApplicationContext *context,
+                  BufferMemory *bufferMemory,
+                  void *data,
+                  size_t offset,
+                  size_t size);
 #endif // VULKAN_BUFFER_H
