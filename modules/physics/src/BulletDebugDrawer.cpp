@@ -22,7 +22,7 @@ void BulletDebugDrawer::drawLine(const btVector3 &from, const btVector3 &to, con
 
 void BulletDebugDrawer::drawContactPoint(const btVector3 &PointOnB, const btVector3 &normalOnB, btScalar distance,
                                          int lifeTime, const btVector3 &color) {
-std::cout << "Drawing contact point" << std::endl;
+    //std::cout << "Drawing contact point" << std::endl;
 }
 
 void BulletDebugDrawer::reportErrorWarning(const char *warningString) {
@@ -30,7 +30,7 @@ void BulletDebugDrawer::reportErrorWarning(const char *warningString) {
 }
 
 void BulletDebugDrawer::draw3dText(const btVector3 &location, const char *textString) {
-    std::cout << "Drawing 3D text at " << location.getX() << ", " << location.getY() << ", " << location.getZ() << ": " << textString << std::endl;
+   // std::cout << "Drawing 3D text at " << location.getX() << ", " << location.getY() << ", " << location.getZ() << ": " << textString << std::endl;
 }
 
 void BulletDebugDrawer::clearLines() {

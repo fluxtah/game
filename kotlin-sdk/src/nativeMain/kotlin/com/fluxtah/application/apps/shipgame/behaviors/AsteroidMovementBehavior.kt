@@ -16,10 +16,10 @@ class AsteroidMovementBehavior(
     }
 
     override fun update(time: Float) {
-        entity.setRotation(
-            entity.rotationX + (fixedTimeStep * speedX),
-            entity.rotationY + (fixedTimeStep * speedY),
-            entity.rotationZ + (fixedTimeStep * speedZ)
-        )
+//        entity.setRotation(
+//            entity.rotationX + (fixedTimeStep * speedX),
+//            entity.rotationY + (fixedTimeStep * speedY),
+//            entity.rotationZ + (fixedTimeStep * speedZ)
+//        )
     }
 }

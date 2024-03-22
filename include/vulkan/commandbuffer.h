@@ -18,14 +18,6 @@ void recordEntityCommandBuffer(
         VkPipelineLayout pipelineLayout,
         EntityArray *ktEntities);
 
-void recordDebugCommandBuffer(
-        VkCommandBuffer commandBuffer,
-        VkPipeline graphicsPipeline,
-        VkPipelineLayout pipelineLayout,
-        EntityArray *ktEntities,
-        VkBuffer unitCubeVertexBuffer,
-        Camera *camera);
-
 void recordDebugLinesCommandBuffer(
         VkCommandBuffer commandBuffer,
         VkPipeline graphicsPipeline,

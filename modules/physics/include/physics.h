@@ -20,7 +20,7 @@ void destroyPhysics(void *context);
  */
 void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass, bool isKinematic);
 
-void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDegrees, vec3 velocity);
+void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotation, vec3 velocity);
 
 void setOnRigidBodyUpdatedFunction(void *context,
                                    void (*callback)(void *userPtr,

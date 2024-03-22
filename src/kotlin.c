@@ -86,9 +86,7 @@ void bindKotlinApi() {
     ktGetEntityMassFunc(getEntityMass);
 
     ktSetAttachKotlinEntityFunc(attachKotlinEntityInfo);
-    ktGetEntityCollisionInfoFunc(getEntityCollisionInfo);
     ktSetEntitySkinIndexFunc(setEntitySkinIndex);
-    // ktGetEntityAabbFunc(getEntityAABB);
 
     // Emitter
     ktSetCreateEmitterFunc(createEmitter);
@@ -212,9 +210,7 @@ void bindKotlinApiHeadless() {
     ktGetEntityMassFunc(getEntityMass);
 
     ktSetAttachKotlinEntityFunc(attachKotlinEntityInfo);
-    ktGetEntityCollisionInfoFunc(getEntityCollisionInfo);
     ktSetEntitySkinIndexFunc(setEntitySkinIndex);
-    // ktGetEntityAabbFunc(getEntityAABB);
 
     // Emitter
     ktSetCreateEmitterFunc(createEmitter);

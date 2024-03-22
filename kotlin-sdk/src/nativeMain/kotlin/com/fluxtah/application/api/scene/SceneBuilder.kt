@@ -1,6 +1,8 @@
 package com.fluxtah.application.api.scene
 
-import com.fluxtah.application.api.*
+import com.fluxtah.application.api.Light
+import com.fluxtah.application.api.LightBuilder
+import com.fluxtah.application.api.SoundPoolBuilder
 import com.fluxtah.application.api.camera.Camera
 import com.fluxtah.application.api.camera.CameraBuilder
 import com.fluxtah.application.api.emitter.EmitterBuilder
@@ -8,14 +10,12 @@ import com.fluxtah.application.api.emitter.EmitterPoolBuilder
 import com.fluxtah.application.api.entity.CollisionResult2
 import com.fluxtah.application.api.entity.EntityBuilder
 import com.fluxtah.application.api.entity.EntityPoolBuilder
-import com.fluxtah.application.api.entity.KotlinCollisionResult
 import com.fluxtah.application.api.entity.ktCollisionCallback2
 import com.fluxtah.application.api.interop.CollisionCallback
 import com.fluxtah.application.api.interop.RigidBodyCallback
 import com.fluxtah.application.api.interop.c_createPhysics
 import com.fluxtah.application.api.interop.c_setCollisionCallback
 import com.fluxtah.application.api.interop.c_setOnRigidBodyUpdated
-import com.fluxtah.application.api.interop.model.CCollisionResult2
 import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import com.fluxtah.application.api.sequence.Sequence
 import com.fluxtah.application.api.sequence.SequenceBuilder
@@ -25,9 +25,6 @@ import com.fluxtah.application.api.sprite.SpriteSheet
 import com.fluxtah.application.api.sprite.SpriteSheetBuilder
 import com.fluxtah.application.api.text.TextBatch
 import com.fluxtah.application.api.text.TextBatchBuilder
-import com.fluxtah.application.apps.shipgame.Id
-import com.fluxtah.application.apps.shipgame.scenes.main.data.PlayerData
-import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
 import kotlinx.cinterop.COpaquePointer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.asStableRef

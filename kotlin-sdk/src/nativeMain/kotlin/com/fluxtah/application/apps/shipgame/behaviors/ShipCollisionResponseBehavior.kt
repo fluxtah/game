@@ -3,7 +3,6 @@ package com.fluxtah.application.apps.shipgame.behaviors
 import com.fluxtah.application.api.entity.CollisionContactPoint
 import com.fluxtah.application.api.entity.Entity
 import com.fluxtah.application.api.entity.EntityBehavior
-import com.fluxtah.application.api.entity.getEntityCollisionInfo
 import com.fluxtah.application.api.scene.Scene
 
 class ShipCollisionResponseBehavior : EntityBehavior() {

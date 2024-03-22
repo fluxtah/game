@@ -81,8 +81,6 @@ typedef struct CreateEntityInfo {
     float velocityZ;
     float mass;
 
-    bool useOrientedBoundingBox;
-
     int collisionGroup;
     int collisionMask;
 

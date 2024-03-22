@@ -18,25 +18,20 @@ typedef struct PhysicsContext {
 } PhysicsContext;
 
 void notifyRigidBodyTransformUpdated(PhysicsContext *physicsContext, btRigidBody *body, void *userPtr) {
+    if (physicsContext->rigidBodyTransformUpdatedCallback == nullptr) return;
+
     btTransform trans;
     body->getMotionState()->getWorldTransform(trans);
     // Convert btTransform's position to your entity's position format
     btVector3 pos = trans.getOrigin();
 
-    btScalar roll, pitch, yaw;
-    btQuaternion q = trans.getRotation();
-    q.getEulerZYX(yaw, pitch, roll); // This gives yaw, pitch, and roll in radians
+    btScalar yaw, pitch, roll;
+    trans.getBasis().getEulerZYX(yaw, pitch, roll);
 
-    float rotX = btDegrees(yaw);
-    float rotY = btDegrees(pitch);
-    float rotZ = btDegrees(roll);
-
-    if (physicsContext->rigidBodyTransformUpdatedCallback != nullptr) {
-        physicsContext->rigidBodyTransformUpdatedCallback(
-                userPtr,
-                pos.getX(), pos.getY(), pos.getZ(),
-                rotX, rotY, rotZ);
-    }
+    physicsContext->rigidBodyTransformUpdatedCallback(
+            userPtr,
+            pos.getX(), pos.getY(), pos.getZ(),
+            roll, pitch, yaw);
 }
 
 extern "C" {
@@ -147,7 +142,7 @@ void stepPhysicsSimulation(void *context, float timeStep) {
     physicsContext->dynamicsWorld->debugDrawWorld();
 }
 
-void* getPhysicsDebugVertexData(void *context) {
+void *getPhysicsDebugVertexData(void *context) {
     auto *physicsContext = (PhysicsContext *) context;
     return physicsContext->debugDrawer->getVertexData();
 }
@@ -251,7 +246,7 @@ void deletePhysicsRigidBody(void *context, void *body) {
 
 }
 
-void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDegrees, vec3 velocity) {
+void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotation, vec3 velocity) {
     auto *rigidBody = (btRigidBody *) body;
     // Convert degrees to radians for Bullet
     btVector3 btPosition(position[0], position[1], position[2]);
@@ -259,9 +254,9 @@ void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotationDeg
 
     btQuaternion btRotation;
     btRotation.setEulerZYX(
-            btRadians(rotationDegrees[2]), // Yaw (Z rotation)
-            btRadians(rotationDegrees[1]), // Pitch (Y rotation)
-            btRadians(rotationDegrees[0]) // Roll (X rotation)
+            rotation[2],
+            rotation[1],
+            rotation[0]
     );
 
     btTransform transform;

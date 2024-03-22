@@ -8,7 +8,6 @@ import com.fluxtah.application.api.emitter.EmitterBehavior
 import com.fluxtah.application.api.entity.CollisionResult2
 import com.fluxtah.application.api.entity.Entity
 import com.fluxtah.application.api.entity.EntityBehavior
-import com.fluxtah.application.api.entity.KotlinCollisionResult
 import com.fluxtah.application.api.sequence.Sequence
 import com.fluxtah.application.api.sprite.SpriteBatch
 import com.fluxtah.application.api.text.TextBatch

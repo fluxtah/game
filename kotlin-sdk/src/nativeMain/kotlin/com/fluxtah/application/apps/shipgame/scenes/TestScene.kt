@@ -4,6 +4,7 @@ import com.fluxtah.application.api.Application
 import com.fluxtah.application.api.fixedTimeStep
 import com.fluxtah.application.api.input.Key
 import com.fluxtah.application.api.isKeyPressed
+import com.fluxtah.application.api.math.toRadians
 import com.fluxtah.application.api.scene.scene
 import com.fluxtah.application.apps.shipgame.Id
 import com.fluxtah.application.apps.shipgame.handleCameraInput
@@ -52,7 +53,7 @@ fun Application.testScene() {
         }
 
         entity("ship", modelPath = "models/ship/ship.glb") {
-            mass(100f)
+            mass(0f)
             kinematic(true)
             collisionGroup(CollisionGroups.GROUP_SHIP)
             collisionMask(CollisionGroups.MASK_SHIP)
@@ -72,10 +73,10 @@ fun Application.testScene() {
                scene.spawnEntityFromPool("cube")
             }
             if(isKeyPressed(Key.LeftBracket)) {
-                scene.entityById("plane").rotate(0f, 0f, 1f)
+                scene.entityById("plane").rotate(0f, 0f, 1f.toRadians())
             }
             if(isKeyPressed(Key.RightBracket)) {
-                scene.entityById("plane").rotate(0f, 0f, -1f)
+                scene.entityById("plane").rotate(0f, 0f, (-1f).toRadians())
             }
         }
     }

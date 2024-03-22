@@ -31,8 +31,6 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
 
     private var data: () -> Any = {}
 
-    private var orientatedBoundingBox: Boolean = false
-
     private var initialSize: Int = 10
     private var startActive: Boolean = false
 
@@ -94,10 +92,6 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
         this.mass = mass
     }
 
-    fun useOrientedBoundingBox() {
-        orientatedBoundingBox = true
-    }
-
     fun collisionGroup(group: Int) {
         collisionGroup = group
     }
@@ -150,7 +144,6 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
                 velocityY = this@EntityPoolBuilder.velocityY
                 velocityZ = this@EntityPoolBuilder.velocityZ
                 mass = this@EntityPoolBuilder.mass
-                useOrientedBoundingBox = this@EntityPoolBuilder.orientatedBoundingBox
                 collisionGroup = this@EntityPoolBuilder.collisionGroup
                 collisionMask = this@EntityPoolBuilder.collisionMask
                 skinIndex = this@EntityPoolBuilder.skinIndex

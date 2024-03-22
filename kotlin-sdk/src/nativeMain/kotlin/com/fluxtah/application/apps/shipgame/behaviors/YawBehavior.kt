@@ -2,6 +2,7 @@ package com.fluxtah.application.apps.shipgame.behaviors
 
 import com.fluxtah.application.api.entity.EntityBehavior
 import com.fluxtah.application.api.fixedTimeStep
+import com.fluxtah.application.api.math.toRadians
 import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
 
 class YawBehavior : EntityBehavior() {
@@ -22,6 +23,6 @@ class YawBehavior : EntityBehavior() {
         val yawIncrement = yawSpeed * yawDirection * fixedTimeStep
 
         // Apply the yaw increment to the entity's rotation
-        entity.rotate(0.0f, -yawIncrement, 0.0f)
+        entity.rotate(0.0f, (-yawIncrement).toRadians(), 0.0f)
     }
 }

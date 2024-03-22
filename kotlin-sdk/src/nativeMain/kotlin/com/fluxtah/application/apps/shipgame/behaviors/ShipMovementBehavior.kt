@@ -18,7 +18,7 @@ class ShipMovementBehavior(
     val maxReverseSpeed: Float = -60.0f,
     private val lateralAcceleration: Float = 40.0f,
     private val maxLateralSpeed: Float = 100.0f,
-    private val maxLeanAngle: Float = 10.0f // Maximum lean angle in degrees
+    private val maxLeanAngle: Float = (10.0f).toRadians()
 ) : EntityBehavior() {
     val data: ShipData by lazy { entity.data() }
 
@@ -48,15 +48,17 @@ class ShipMovementBehavior(
         val velocityX = calculateVelocityX()
         val velocityZ = calculateVelocityZ()
 
-        entity.setVelocity(x = velocityX, z = velocityZ)
+        val rotatedVelocities = rotateVelocity(Vector3(velocityX, 0.0f, velocityZ), entity.rotationY)
 
-        // Calculate new position based on forward and lateral velocity
+        entity.setVelocity(x = rotatedVelocities.x, z = rotatedVelocities.z)
+
+        // Calculate new position based on rotated velocities
         val newPosition = Vector3(entity.positionX, entity.positionY, entity.positionZ) + calculateForwardMovement(
             entity.rotationY,
-            entity.velocityZ * fixedTimeStep
+            rotatedVelocities.z * fixedTimeStep
         ) + calculateLateralMovement(
             entity.rotationY,
-            entity.velocityX * fixedTimeStep
+            rotatedVelocities.x * fixedTimeStep
         )
 
         entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
@@ -66,6 +68,17 @@ class ShipMovementBehavior(
 
         engineSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
         movementSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
+    }
+
+    private fun rotateVelocity(velocity: Vector3, yaw: Float): Vector3 {
+        val yawRadians = yaw.toRadians()
+        val cosYaw = cos(yawRadians)
+        val sinYaw = sin(yawRadians)
+
+        val rotatedVelocityX = velocity.x * cosYaw - velocity.z * sinYaw
+        val rotatedVelocityZ = velocity.x * sinYaw + velocity.z * cosYaw
+
+        return Vector3(rotatedVelocityX, 0f, rotatedVelocityZ)
     }
 
     private fun calculateVelocityX() = when {

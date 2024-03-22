@@ -43,8 +43,6 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
 
     private var startActive: Boolean = true
 
-    private var orientatedBoundingBox: Boolean = false
-
     private var collisionGroup: Int = 0
     private var collisionMask: Int = 0
 
@@ -100,10 +98,6 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
         this.mass = mass
     }
 
-    fun useOrientedBoundingBox() {
-        orientatedBoundingBox = true
-    }
-
     fun onSceneUpdate(block: OnSceneEntityUpdate) {
         onSceneEntityUpdate = block
     }
@@ -153,7 +147,6 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
                 velocityY = this@EntityBuilder.velocityY
                 velocityZ = this@EntityBuilder.velocityZ
                 mass = this@EntityBuilder.mass
-                useOrientedBoundingBox = this@EntityBuilder.orientatedBoundingBox
                 collisionGroup = this@EntityBuilder.collisionGroup
                 collisionMask = this@EntityBuilder.collisionMask
                 skinIndex = this@EntityBuilder.skinIndex

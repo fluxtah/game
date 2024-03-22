@@ -21,11 +21,6 @@ typedef struct Entity {
     AABB *aabbs;
     int num_aabbs;
 
-    OBB *obbs;
-    int num_obbs;
-
-    bool useOBB;   // Flag to indicate if the entity uses an OBB
-
     int collisionGroup;
     int collisionMask;
 
@@ -63,19 +58,9 @@ void applyEntityChanges(Entity *entity);
 
 void updateEntityPhysicsTransform(Entity *entity);
 
-void updateEntityAABBs(Entity *entity);
-
-void updateEntityOBBs(Entity *entity);
-
 void attachKotlinEntityInfo(Entity *entity, void *kotlinEntityInfo);
 
 void destroyEntity(ApplicationContext *context, Entity *entity);
-
-CCollisionInfo getEntityCollisionInfo(Entity *entityA, Entity *entityB, int aabbIndexA, int aabbIndexB);
-
-AABB getEntityAABB(Entity *entity);
-
-bool shouldEntitiesCollide(const Entity *entityA, const Entity *entityB);
 
 void setEntitySkinIndex(Entity *entity, int skinIndex);
 

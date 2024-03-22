@@ -34,8 +34,6 @@ typedef struct RenderResources {
 
     AABB *aabbs;
     int num_aabbs;
-    OBB *obbs;
-    int num_obbs;
 } RenderResources;
 
 typedef struct RenderResourcesMap {
@@ -49,8 +47,6 @@ extern RenderResourcesMap *renderResourcesMap;
 
 RenderResources *createRenderResourcesFromFile(ApplicationContext *context, const char *filename);
 RenderResources *createRenderResourcesFromData(ApplicationContext *context, const char *key, ModelData *modelData);
-
-void imageDataToImageMemory(ApplicationContext *context, struct ImageData *imageData, ImageMemory *imageMemory);
 
 void destroyRenderResources(ApplicationContext *context, RenderResources *obj);
 

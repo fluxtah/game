@@ -17,7 +17,6 @@
 #include "include/pipelines/sprite/sprite.h"
 #include "include/pipelines/sprite/text_sprite.h"
 #include "modules/networking/include/hello.h"
-#include "include/collision.h"
 #include "include/debug_text_overlay.h"
 #include "modules/physics/include/physics.h"
 
@@ -55,7 +54,7 @@ int _main() {
             applyEntityChanges(entity);
         }
 
-        detectCollisions(ktEntities);
+        ktStepPhysics();
 
         free(ktEntities->entities);
         free(ktEntities);
@@ -263,33 +262,25 @@ int main() {
 
 #ifdef DEBUG
             if (context->debugBoundingVolumes) {
-                recordDebugCommandBuffer(
+                void *debugLineData = getPhysicsDebugVertexData(ktGetCurrentPhysicsHandle());
+                int debugVertexCount = getPhysicsDebugVertexCount(ktGetCurrentPhysicsHandle());
+
+                updateBuffer(context,
+                             context->physicsDebugBuffer,
+                             debugLineData,
+                             0,
+                             debugVertexCount * sizeof(DebugVertex));
+
+                //printf("Debug vertex count: %d\n", debugVertexCount);
+
+                recordDebugLinesCommandBuffer(
                         context->commandBuffers[i],
                         context->debugPipelineConfig->pipeline,
                         context->debugPipelineConfig->pipelineLayout,
-                        ktEntities,
-                        context->debugCubeBuffer->buffer,
+                        context->physicsDebugBuffer->buffer,
+                        debugVertexCount,
                         context->activeCamera);
             }
-
-            void *debugLineData = getPhysicsDebugVertexData(ktGetCurrentPhysicsHandle());
-            int debugVertexCount = getPhysicsDebugVertexCount(ktGetCurrentPhysicsHandle());
-
-            updateBuffer(context,
-                         context->physicsDebugBuffer,
-                         debugLineData,
-                         0,
-                         debugVertexCount * sizeof(DebugVertex));
-
-            //printf("Debug vertex count: %d\n", debugVertexCount);
-
-            recordDebugLinesCommandBuffer(
-                    context->commandBuffers[i],
-                    context->debugPipelineConfig->pipeline,
-                    context->debugPipelineConfig->pipelineLayout,
-                    context->physicsDebugBuffer->buffer,
-                    debugVertexCount,
-                    context->activeCamera);
 #endif
 
             endCommandBufferRecording(context->commandBuffers[i]);

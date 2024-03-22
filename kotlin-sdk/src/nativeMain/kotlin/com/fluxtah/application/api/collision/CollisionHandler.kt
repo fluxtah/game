@@ -1,10 +1,8 @@
 package com.fluxtah.application.api.collision
 
-import com.fluxtah.application.api.entity.BoundingVolumeCollisionResult
 import com.fluxtah.application.api.entity.CollisionContactPoint
 import com.fluxtah.application.api.entity.CollisionResult2
 import com.fluxtah.application.api.entity.Entity
-import com.fluxtah.application.api.entity.KotlinCollisionResult
 import com.fluxtah.application.api.scene.Scene
 
 /**

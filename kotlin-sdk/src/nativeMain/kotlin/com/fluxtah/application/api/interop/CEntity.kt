@@ -1,6 +1,5 @@
 package com.fluxtah.application.api.interop
 
-import com.fluxtah.application.api.interop.model.CCollisionInfo
 import com.fluxtah.application.api.interop.model.CreateEntityInfo
 import com.fluxtah.application.api.interop.model.EntityArray
 import com.fluxtah.application.api.scene.activeSceneInfo
@@ -43,7 +42,10 @@ var c_destroyEntity: DestroyEntityFunc? = null
 fun ktSetDestroyEntityFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CApplicationContext, CEntity) -> Unit>>) {
     c_destroyEntity = { device, entity ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CApplicationContext, CEntity) -> Unit>>()(device, entity)
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CApplicationContext, CEntity) -> Unit>>()(
+                device,
+                entity
+            )
         }
     }
 }
@@ -52,12 +54,14 @@ fun ktSetDestroyEntityFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction
 @CName("ktGetEntities")
 fun ktGetEntities(): CPointer<EntityArray> {
 
-   // if(activeSceneInfo.scene == Scene.EMPTY) return null
+    // if(activeSceneInfo.scene == Scene.EMPTY) return null
 
     val scene = activeSceneInfo.scene
     val entities =
-            scene.entityPools.values.flatMap { it.entityPool.entitiesInUse.filter { it.entity.visible }.map { it.entity.handle } } +
-                    scene.entities.values.filter { it.entity.visible && it.entity.active }.map { it.entity.handle }
+        scene.entityPools.values.flatMap {
+            it.entityPool.entitiesInUse.filter { it.entity.visible }.map { it.entity.handle }
+        } +
+                scene.entities.values.filter { it.entity.visible && it.entity.active }.map { it.entity.handle }
 
     val entityPointerArray = nativeHeap.allocArray<COpaquePointerVar>(entities.size)
 
@@ -415,24 +419,6 @@ fun ktSetAttachKotlinEntityFunc(rigidBodyTransformUpdatedCallback: CPointer<CFun
 }
 
 @OptIn(ExperimentalForeignApi::class)
-typealias GetEntityCollisionInfoFunc = (CEntity, CEntity, Int, Int) -> CValue<CCollisionInfo>
-
-@OptIn(ExperimentalForeignApi::class)
-var c_getEntityCollisionInfo: GetEntityCollisionInfoFunc? = null
-
-@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
-@CName("ktGetEntityCollisionInfoFunc")
-fun ktGetEntityCollisionInfoFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<GetEntityCollisionInfoFunc>>) {
-    c_getEntityCollisionInfo = { a, b, aAabbIndex, bAabbIndex ->
-        memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<GetEntityCollisionInfoFunc>>()(
-                a, b, aAabbIndex, bAabbIndex
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalForeignApi::class)
 typealias SetEntitySkinIndexFunc = (CEntity, Int) -> Unit
 
 @OptIn(ExperimentalForeignApi::class)
@@ -503,22 +489,3 @@ fun ktSetUpdateEntityPhysicsTransformFunc(rigidBodyTransformUpdatedCallback: CPo
         }
     }
 }
-
-//@OptIn(ExperimentalForeignApi::class)
-//typealias GetEntityAabbFunc = (CEntity) -> CValue<AABB>
-//
-//@OptIn(ExperimentalForeignApi::class)
-//var c_getEntityAABB: GetEntityAabbFunc? = null
-//
-//@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
-//@CName("ktGetEntityAabbFunc")
-//fun ktGetEntityAabbFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<GetEntityAabbFunc>>) {
-//    c_getEntityAABB = { a ->
-//        memScoped {
-//            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<GetEntityAabbFunc>>()(
-//                a
-//            )
-//        }
-//    }
-//}
-

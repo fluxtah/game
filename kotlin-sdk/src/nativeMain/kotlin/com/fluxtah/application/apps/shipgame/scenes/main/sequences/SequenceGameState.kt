@@ -1,6 +1,7 @@
 package com.fluxtah.application.apps.shipgame.scenes.main.sequences
 
 import com.fluxtah.application.api.camera.Camera
+import com.fluxtah.application.api.math.toRadians
 import com.fluxtah.application.api.scene.Scene
 import com.fluxtah.application.api.scene.SceneBuilder
 import com.fluxtah.application.apps.shipgame.Id
@@ -127,7 +128,7 @@ private fun setupEnemyPlayerEntities(sceneData: GameData, scene: Scene, distance
                 entity.positionY,
                 entity.positionZ
             )
-            entity.setRotation(0f, 180f, 0f)
+            entity.setRotation(0f, 180f.toRadians(), 0f)
             entity.setSkin(sceneData.enemyTeam.skin)
         }
     }

@@ -25,7 +25,7 @@ class ChaseCameraBehavior(
         val target = target ?: return
 
         // Calculate the offset position based on target's rotation
-        val rotatedOffset = rotateOffsetByTargetYaw(offset, -target.rotationY)
+        val rotatedOffset = rotateOffsetByTargetYaw(offset, -target.rotationY.toDegrees())
 
         // Calculate desired camera position based on target's position and rotated offset
         val desiredPosition = Vector3(target.positionX, target.positionY, target.positionZ) + rotatedOffset
@@ -60,4 +60,8 @@ class ChaseCameraBehavior(
         camera.pitch(20f)
         camera.applyChanges()
     }
+}
+
+private fun Float.toDegrees(): Float {
+    return this * (180.0f / PI).toFloat()
 }
