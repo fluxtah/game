@@ -12,7 +12,7 @@
 typedef struct Entity {
     vec3 scale;
     vec3 position;
-    vec3 rotation;
+    versor rotation;
     vec3 velocity;
     float mass;
 
@@ -46,7 +46,7 @@ Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info);
 
 void setEntityPosition(Entity *entity, float x, float y, float z);
 
-void setEntityRotation(Entity *entity, float x, float y, float z);
+void setEntityRotation(Entity *entity, float w, float x, float y, float z);
 
 void setEntityScale(Entity *obj, float x, float y, float z);
 
@@ -69,6 +69,8 @@ float getEntityPositionX(Entity *entity);
 float getEntityPositionY(Entity *entity);
 
 float getEntityPositionZ(Entity *entity);
+
+float getEntityRotationW(Entity *entity);
 
 float getEntityRotationX(Entity *entity);
 
@@ -93,5 +95,7 @@ float getEntityMass(Entity *entity);
 void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic);
 
 void removeEntityPhysics(Entity *entity, void *physicsContext);
+
+void setupEntityAABBs(Entity *entity);
 
 #endif //APP_ENTITY_H

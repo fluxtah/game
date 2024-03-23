@@ -16,6 +16,7 @@ import com.fluxtah.application.api.interop.RigidBodyCallback
 import com.fluxtah.application.api.interop.c_createPhysics
 import com.fluxtah.application.api.interop.c_setCollisionCallback
 import com.fluxtah.application.api.interop.c_setOnRigidBodyUpdated
+import com.fluxtah.application.api.interop.model.CPhysicsBodyUpdate
 import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import com.fluxtah.application.api.sequence.Sequence
 import com.fluxtah.application.api.sequence.SequenceBuilder
@@ -26,6 +27,7 @@ import com.fluxtah.application.api.sprite.SpriteSheetBuilder
 import com.fluxtah.application.api.text.TextBatch
 import com.fluxtah.application.api.text.TextBatchBuilder
 import kotlinx.cinterop.COpaquePointer
+import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.asStableRef
 import kotlinx.cinterop.cValue
@@ -207,25 +209,17 @@ class SceneBuilder(val sceneId: String) {
             c_createPhysics!!.invoke(info.ptr)
         }
 
-        val onRigidBodyUpdate: RigidBodyCallback = staticCFunction { entityInfo: COpaquePointer,
-                                                                     x: Float, y: Float, z: Float,
-                                                                     rotX: Float, rotY: Float, rotZ: Float ->
-            val sourceEntityInfo = entityInfo.asStableRef<EntityInfo>().get()
-            // TODO update entities from physics
-            if (sourceEntityInfo.entity.id == "cube") {
-  //              println("Rot Before: (${sourceEntityInfo.entity.rotationX}, ${sourceEntityInfo.entity.rotationY}, ${sourceEntityInfo.entity.rotationZ})")
-  //              println("Rot After: ($rotX, $rotY, $rotZ)")
+        val onRigidBodyUpdate: RigidBodyCallback =
+            staticCFunction { entityInfo: COpaquePointer, update: CPhysicsBodyUpdate ->
+                val sourceEntityInfo = entityInfo.asStableRef<EntityInfo>().get()
+                sourceEntityInfo.entity.apply {
+                    setPosition(update.positionX, update.positionY, update.positionZ)
+                    setRotation(update.rotationW, update.rotationX, update.rotationY, update.rotationZ)
+                }
             }
-            //    if(!sourceEntityInfo.entity.isKinematic) {
-            sourceEntityInfo.entity.apply {
-                setPosition(x, y, z)
-                setRotation(rotX, rotY, rotZ)
-            }
-            //    }
-        }
         c_setOnRigidBodyUpdated!!.invoke(physicsHandle, onRigidBodyUpdate)
 
-        val collisionCallback: CollisionCallback  = staticCFunction(::ktCollisionCallback2)
+        val collisionCallback: CollisionCallback = staticCFunction(::ktCollisionCallback2)
         c_setCollisionCallback!!.invoke(physicsHandle, collisionCallback)
 
         val scene = SceneImpl(physicsHandle)

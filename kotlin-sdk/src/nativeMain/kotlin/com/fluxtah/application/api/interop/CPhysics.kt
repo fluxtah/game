@@ -2,6 +2,7 @@ package com.fluxtah.application.api.interop
 
 import com.fluxtah.application.api.entity.CollisionResult2
 import com.fluxtah.application.api.interop.model.CCollisionResult2
+import com.fluxtah.application.api.interop.model.CPhysicsBodyUpdate
 import com.fluxtah.application.api.interop.model.CreateEmitterInfo
 import com.fluxtah.application.api.interop.model.CreatePhysicsInfo
 import kotlinx.cinterop.CFunction
@@ -63,9 +64,7 @@ fun ktSetStepPhysicsSimulationFunc(rigidBodyTransformUpdatedCallback: CPointer<C
 
 @OptIn(ExperimentalForeignApi::class)
 typealias RigidBodyCallback = CPointer<CFunction<(
-    entityInfo: COpaquePointer,
-    x: Float, y: Float, z: Float,
-    rotX: Float, rotY: Float, rotZ: Float
+    entityInfo: COpaquePointer, update: CPhysicsBodyUpdate
 ) -> Unit>>
 
 @OptIn(ExperimentalForeignApi::class)

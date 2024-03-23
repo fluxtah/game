@@ -70,6 +70,7 @@ typedef struct CreateEntityInfo {
     float positionX;
     float positionY;
     float positionZ;
+    float rotationW;
     float rotationX;
     float rotationY;
     float rotationZ;
@@ -238,5 +239,15 @@ typedef struct CCollisionResult2 {
     CCollisionContactPoint contactPoints[100]; // Default to 100
     int numContacts;
 } CCollisionResult2;
+
+typedef struct CPhysicsBodyUpdate {
+    float positionX;
+    float positionY;
+    float positionZ;
+    float rotationW;
+    float rotationX;
+    float rotationY;
+    float rotationZ;
+} CPhysicsBodyUpdate;
 
 #endif // MODEL_H

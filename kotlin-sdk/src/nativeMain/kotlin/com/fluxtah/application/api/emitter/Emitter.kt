@@ -1,6 +1,13 @@
 package com.fluxtah.application.api.emitter
 
-import com.fluxtah.application.api.interop.*
+import com.fluxtah.application.api.interop.CEmitter
+import com.fluxtah.application.api.interop.c_resetEmitter
+import com.fluxtah.application.api.interop.c_setEmitterLifetime
+import com.fluxtah.application.api.interop.c_setEmitterPosition
+import com.fluxtah.application.api.interop.c_setEmitterRotation
+import com.fluxtah.application.api.interop.c_setEmitterSpawnRate
+import com.fluxtah.application.api.interop.c_setEntityPosition
+import com.fluxtah.application.api.interop.c_setEntityScale
 import kotlinx.cinterop.ExperimentalForeignApi
 
 @OptIn(ExperimentalForeignApi::class)
@@ -96,14 +103,14 @@ class Emitter(
         _positionX = x ?: _positionX
         _positionY = y ?: _positionY
         _positionZ = z ?: _positionZ
-        c_setEntityPosition!!.invoke(handle, _positionX, _positionY, _positionZ)
+        c_setEmitterPosition!!.invoke(handle, _positionX, _positionY, _positionZ)
     }
 
     fun setRotation(x: Float? = null, y: Float? = null, z: Float? = null) {
         _rotationX = x ?: _rotationX
         _rotationY = y ?: _rotationY
         _rotationZ = z ?: _rotationZ
-        c_setEntityRotation!!.invoke(handle, _rotationX, _rotationY, _rotationZ)
+        c_setEmitterRotation!!.invoke(handle, _rotationX, _rotationY, _rotationZ)
     }
 
     fun setScale(x: Float? = null, y: Float? = null, z: Float? = null) {
@@ -117,7 +124,7 @@ class Emitter(
         _rotationX += x
         _rotationY += y
         _rotationZ += z
-        c_setEntityRotation!!.invoke(handle, _rotationX, _rotationY, _rotationZ)
+        c_setEmitterRotation!!.invoke(handle, _rotationX, _rotationY, _rotationZ)
     }
 
     fun translate(x: Float = 0.0f, y: Float = 0.0f, z: Float = 0.0f) {

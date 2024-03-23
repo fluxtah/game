@@ -40,7 +40,9 @@ class ShipMovementBehavior(
         if (!::movementSound.isInitialized) return
         movementSound.stopIfPlaying()
         entity.setVelocity(x = 0.0f)
-        entity.setRotation(z = 0.0f) // Reset lean angle when resetting behavior
+
+        // UNDONE: Bullet physics
+        //entity.setRotation(z = 0.0f) // Reset lean angle when resetting behavior
     }
 
     override fun update(time: Float) {
@@ -152,7 +154,8 @@ class ShipMovementBehavior(
         // Calculate lean angle based on lateral velocity, ensuring it does not exceed maxLeanAngle
         val leanAngle = (entity.velocityX / maxLateralSpeed) * maxLeanAngle
         // Apply lean angle to entity's Z-axis rotation
-        entity.setRotation(z = leanAngle)
+        // UNDONE: Bullet physics
+        //entity.setRotation(z = leanAngle)
     }
 
     fun calculateForwardMovement(yaw: Float, distance: Float): Vector3 {

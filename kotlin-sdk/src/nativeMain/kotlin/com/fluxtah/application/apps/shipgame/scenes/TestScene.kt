@@ -40,7 +40,6 @@ fun Application.testScene() {
             collisionGroup(CollisionGroups.GROUP_CUBE)
             collisionMask(CollisionGroups.MASK_CUBE)
             position(0f, 10f, 0f)
-            rotation(0f, 0f, 0f)
             scale(1f, 1f, 1f)
         }
         entity("plane", modelPath = "models/plane.glb") {
@@ -48,7 +47,6 @@ fun Application.testScene() {
             collisionGroup(CollisionGroups.GROUP_FLOOR)
             collisionMask(CollisionGroups.MASK_FLOOR)
             position(0f, -5f, 0f)
-            rotation(0f, 0f, 0f)
             scale(10f, 1f, 10f)
         }
 
@@ -58,7 +56,6 @@ fun Application.testScene() {
             collisionGroup(CollisionGroups.GROUP_SHIP)
             collisionMask(CollisionGroups.MASK_SHIP)
             position(0f, 10f, 0f)
-            rotation(0f, 0f, 0f)
             scale(1f, 1f, 1f)
         }
         onSceneCreated {
@@ -72,12 +69,12 @@ fun Application.testScene() {
             if (isKeyPressed(Key.P)) {
                scene.spawnEntityFromPool("cube")
             }
-            if(isKeyPressed(Key.LeftBracket)) {
-                scene.entityById("plane").rotate(0f, 0f, 1f.toRadians())
-            }
-            if(isKeyPressed(Key.RightBracket)) {
-                scene.entityById("plane").rotate(0f, 0f, (-1f).toRadians())
-            }
+//            if(isKeyPressed(Key.LeftBracket)) {
+//               // scene.entityById("plane").rotate(0f, 0f, 1f.toRadians())
+//            }
+//            if(isKeyPressed(Key.RightBracket)) {
+//              //  scene.entityById("plane").rotate(0f, 0f, (-1f).toRadians())
+//            }
         }
     }
 }

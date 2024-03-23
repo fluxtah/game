@@ -36,7 +36,10 @@ class FirePlasmaCannonBehaviour(
 
                 val boltBehaviour = bolt.getBehaviorByType<PlasmaBoltBehaviour>()
                 bolt.setPosition(entity.positionX, entity.positionY, entity.positionZ)
-                bolt.setRotation(entity.rotationX, entity.rotationY, entity.rotationZ)
+
+                // UNDONE: Bullet physics
+                //bolt.setRotation(entity.rotationX, entity.rotationY, entity.rotationZ)
+
                 bolt.visible = true
                 boltBehaviour.initialPosition.x = entity.positionX
                 boltBehaviour.initialPosition.y = entity.positionY

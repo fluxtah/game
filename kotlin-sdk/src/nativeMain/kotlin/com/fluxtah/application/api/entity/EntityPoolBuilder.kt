@@ -15,6 +15,7 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
     private var positionX: Float = 0.0f
     private var positionY: Float = 0.0f
     private var positionZ: Float = 0.0f
+    private var rotationW: Float = 1.0f
     private var rotationX: Float = 0.0f
     private var rotationY: Float = 0.0f
     private var rotationZ: Float = 0.0f
@@ -70,7 +71,8 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
         positionZ = z
     }
 
-    fun rotation(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
+    fun rotation(w: Float = 1f, x: Float = 0f, y: Float = 0f, z: Float = 0f) {
+        rotationW = w
         rotationX = x
         rotationY = y
         rotationZ = z
@@ -134,6 +136,7 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
                 positionX = this@EntityPoolBuilder.positionX
                 positionY = this@EntityPoolBuilder.positionY
                 positionZ = this@EntityPoolBuilder.positionZ
+                rotationW = this@EntityPoolBuilder.rotationW
                 rotationX = this@EntityPoolBuilder.rotationX
                 rotationY = this@EntityPoolBuilder.rotationY
                 rotationZ = this@EntityPoolBuilder.rotationZ

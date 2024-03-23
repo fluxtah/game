@@ -95,7 +95,7 @@ fun ktSetPositionEntityFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunctio
 }
 
 @OptIn(ExperimentalForeignApi::class)
-typealias EntityRotationFunc = (CEntity, Float, Float, Float) -> Unit
+typealias EntityRotationFunc = (CEntity, Float, Float, Float, Float) -> Unit
 
 @OptIn(ExperimentalForeignApi::class)
 var c_setEntityRotation: EntityRotationFunc? = null
@@ -103,10 +103,10 @@ var c_setEntityRotation: EntityRotationFunc? = null
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetEntityRotationFunc")
 fun ktSetEntityRotationFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<EntityRotationFunc>>) {
-    c_setEntityRotation = { entity, x, y, z ->
+    c_setEntityRotation = { entity, w, x, y, z ->
         memScoped {
             rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EntityRotationFunc>>()(
-                entity, x, y, z
+                entity, w, x, y, z
             )
         }
     }
@@ -214,6 +214,24 @@ fun ktGetEntityPositionZFunc(rigidBodyTransformUpdatedCallback: CPointer<CFuncti
     c_getEntityPositionZ = { entity ->
         memScoped {
             rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EntityGetPositionZFunc>>()(
+                entity
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+typealias EntityGetRotationWFunc = (CEntity) -> Float
+
+@OptIn(ExperimentalForeignApi::class)
+var c_getEntityRotationW: EntityGetRotationWFunc? = null
+
+@OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
+@CName("ktGetEntityRotationWFunc")
+fun ktGetEntityRotationWFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<EntityGetRotationWFunc>>) {
+    c_getEntityRotationW = { entity ->
+        memScoped {
+            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EntityGetRotationWFunc>>()(
                 entity
             )
         }

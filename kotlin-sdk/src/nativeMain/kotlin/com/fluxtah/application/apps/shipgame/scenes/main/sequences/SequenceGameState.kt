@@ -128,7 +128,8 @@ private fun setupEnemyPlayerEntities(sceneData: GameData, scene: Scene, distance
                 entity.positionY,
                 entity.positionZ
             )
-            entity.setRotation(0f, 180f.toRadians(), 0f)
+            // UNDONE: Bullet physics
+            //entity.setRotation(0f, 180f.toRadians(), 0f)
             entity.setSkin(sceneData.enemyTeam.skin)
         }
     }
@@ -147,7 +148,9 @@ private fun setupFriendlyPlayerEntities(sceneData: GameData, scene: Scene, dista
                 entity.positionY,
                 entity.positionZ
             )
-            entity.setRotation(0f, 0f, 0f)
+
+            // UNDONE: Bullet physics
+            //entity.setRotation(0f, 0f, 0f)
             entity.setSkin(sceneData.friendlyTeam.skin)
         }
     }

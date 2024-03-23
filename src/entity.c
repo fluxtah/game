@@ -11,9 +11,10 @@ Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info) {
     entity->position[0] = info->positionX;
     entity->position[1] = info->positionY;
     entity->position[2] = info->positionZ;
-    entity->rotation[0] = info->rotationX;
-    entity->rotation[1] = info->rotationY;
-    entity->rotation[2] = info->rotationZ;
+    entity->rotation[0] = info->rotationW;
+    entity->rotation[1] = info->rotationX;
+    entity->rotation[2] = info->rotationY;
+    entity->rotation[3] = info->rotationZ;
     entity->velocity[0] = info->velocityX;
     entity->velocity[1] = info->velocityY;
     entity->velocity[2] = info->velocityZ;
@@ -76,6 +77,7 @@ Entity *createEntity(ApplicationContext *context, CreateEntityInfo *info) {
         entity->aabbs[i] = entity->renderResources->aabbs[i];
     }
 
+
     return entity;
 }
 
@@ -86,6 +88,8 @@ void initEntityPhysics(Entity *entity, void *physicsContext, bool isKinematic) {
     }
 
     entity->isKinematic = isKinematic;
+
+    setupEntityAABBs(entity);
 
     entity->physicsBody = createPhysicsRigidBodyFromAABBs(
             physicsContext,
@@ -112,10 +116,11 @@ void setEntityPosition(Entity *obj, float x, float y, float z) {
     obj->position[2] = z;
 }
 
-void setEntityRotation(Entity *obj, float x, float y, float z) {
-    obj->rotation[0] = x;
-    obj->rotation[1] = y;
-    obj->rotation[2] = z;
+void setEntityRotation(Entity *obj, float w, float x, float y, float z) {
+    obj->rotation[0] = w;
+    obj->rotation[1] = x;
+    obj->rotation[2] = y;
+    obj->rotation[3] = z;
 }
 
 void setEntityScale(Entity *obj, float x, float y, float z) {
@@ -135,17 +140,17 @@ void setEntityMass(Entity *entity, float mass) {
 }
 
 void applyEntityChanges(Entity *entity) {
-    mat4 previousModelMatrix;
-    glm_mat4_copy(entity->modelMatrix, previousModelMatrix);
     glm_mat4_identity(entity->modelMatrix);
 
     // Apply rotation and translation first
     glm_translate(entity->modelMatrix, entity->position);
 
-    mat4 rot_matrix;
-    glm_euler_zyx(entity->rotation, rot_matrix);
-    glm_mat4_mul(entity->modelMatrix, rot_matrix, entity->modelMatrix);
+    // Apply rotation
+    vec4 rotation = {entity->rotation[1], entity->rotation[2], entity->rotation[3], entity->rotation[0]};
+    glm_quat_rotate(entity->modelMatrix, rotation, entity->modelMatrix);
     glm_scale(entity->modelMatrix, entity->scale);
+
+    // updateEntityAABBs(entity);
 
     if (entity->isKinematic || entity->mass == 0) {
         updateEntityPhysicsTransform(entity);
@@ -199,16 +204,20 @@ float getEntityPositionZ(Entity *entity) {
     return entity->position[2];
 }
 
-float getEntityRotationX(Entity *entity) {
+float getEntityRotationW(Entity *entity) {
     return entity->rotation[0];
 }
 
-float getEntityRotationY(Entity *entity) {
+float getEntityRotationX(Entity *entity) {
     return entity->rotation[1];
 }
 
-float getEntityRotationZ(Entity *entity) {
+float getEntityRotationY(Entity *entity) {
     return entity->rotation[2];
+}
+
+float getEntityRotationZ(Entity *entity) {
+    return entity->rotation[3];
 }
 
 float getEntityScaleX(Entity *entity) {
@@ -237,4 +246,20 @@ float getEntityVelocityZ(Entity *entity) {
 
 float getEntityMass(Entity *entity) {
     return entity->mass;
+}
+
+void setupEntityAABBs(Entity *entity) {
+    // Assuming original AABB is stored in the entities render resources
+    for (int i = 0; i < entity->num_aabbs; i++) {
+        AABB originalAABB = entity->renderResources->aabbs[i];
+
+        // Scale the AABB
+        vec3 scaledMin, scaledMax;
+        glm_vec3_mul(originalAABB.min, entity->scale, scaledMin);
+        glm_vec3_mul(originalAABB.max, entity->scale, scaledMax);
+
+        // Translate the AABB
+        glm_vec3_add(scaledMin, entity->position, entity->aabbs[i].min);
+        glm_vec3_add(scaledMax, entity->position, entity->aabbs[i].max);
+    }
 }

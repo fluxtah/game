@@ -12,7 +12,7 @@ typedef struct PhysicsContext {
     btDiscreteDynamicsWorld *dynamicsWorld;
     BulletDebugDrawer *debugDrawer;
 
-    void (*rigidBodyTransformUpdatedCallback)(void *, float, float, float, float, float, float);
+    void (*rigidBodyTransformUpdatedCallback)(void *, CPhysicsBodyUpdate update);
 
     void (*collisionCallback)(CCollisionResult2 *);
 } PhysicsContext;
@@ -22,16 +22,19 @@ void notifyRigidBodyTransformUpdated(PhysicsContext *physicsContext, btRigidBody
 
     btTransform trans;
     body->getMotionState()->getWorldTransform(trans);
-    // Convert btTransform's position to your entity's position format
     btVector3 pos = trans.getOrigin();
+    btQuaternion rot = trans.getRotation();
 
-    btScalar yaw, pitch, roll;
-    trans.getBasis().getEulerZYX(yaw, pitch, roll);
+    CPhysicsBodyUpdate update;
+    update.positionX = pos.getX();
+    update.positionY = pos.getY();
+    update.positionZ = pos.getZ();
+    update.rotationW = rot.getW();
+    update.rotationX = rot.getX();
+    update.rotationY = rot.getY();
+    update.rotationZ = rot.getZ();
 
-    physicsContext->rigidBodyTransformUpdatedCallback(
-            userPtr,
-            pos.getX(), pos.getY(), pos.getZ(),
-            roll, pitch, yaw);
+    physicsContext->rigidBodyTransformUpdatedCallback(userPtr, update);
 }
 
 extern "C" {
@@ -59,16 +62,12 @@ void *initPhysics(CreatePhysicsInfo *info) {
     return context;
 }
 
-void setOnRigidBodyUpdatedFunction(void *context,
-                                   void (*callback)(void *userPtr,
-                                                    float x, float y, float z,
-                                                    float rotX, float rotY, float rotZ)) {
+void setOnRigidBodyUpdatedFunction(void *context, void (*callback)(void *userPtr, CPhysicsBodyUpdate update)) {
     auto *physicsContext = (PhysicsContext *) context;
     physicsContext->rigidBodyTransformUpdatedCallback = callback;
 }
 
-void setCollisionCallbackFunction(void *context,
-                                  void (*callback)(CCollisionResult2 *result)) {
+void setCollisionCallbackFunction(void *context, void (*callback)(CCollisionResult2 *result)) {
     auto *physicsContext = (PhysicsContext *) context;
     physicsContext->collisionCallback = callback;
 }
@@ -246,18 +245,17 @@ void deletePhysicsRigidBody(void *context, void *body) {
 
 }
 
-void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotation, vec3 velocity) {
+void updatePhysicsRigidBodyTransform(void *body, vec3 position, versor rotation, vec3 velocity) {
     auto *rigidBody = (btRigidBody *) body;
     // Convert degrees to radians for Bullet
     btVector3 btPosition(position[0], position[1], position[2]);
     btVector3 btVelocity(velocity[0], velocity[1], velocity[2]);
 
     btQuaternion btRotation;
-    btRotation.setEulerZYX(
-            rotation[2],
-            rotation[1],
-            rotation[0]
-    );
+    btRotation.setW(rotation[0]);
+    btRotation.setX(rotation[1]);
+    btRotation.setY(rotation[2]);
+    btRotation.setZ(rotation[3]);
 
     btTransform transform;
     transform.setIdentity();

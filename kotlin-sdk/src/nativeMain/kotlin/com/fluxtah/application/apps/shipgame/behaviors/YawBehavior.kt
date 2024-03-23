@@ -23,6 +23,7 @@ class YawBehavior : EntityBehavior() {
         val yawIncrement = yawSpeed * yawDirection * fixedTimeStep
 
         // Apply the yaw increment to the entity's rotation
-        entity.rotate(0.0f, (-yawIncrement).toRadians(), 0.0f)
+        // UNDONE: Bullet physics
+        // entity.rotate(0.0f, (-yawIncrement).toRadians(), 0.0f)
     }
 }

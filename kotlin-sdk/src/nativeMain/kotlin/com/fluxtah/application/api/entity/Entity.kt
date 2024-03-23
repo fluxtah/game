@@ -5,6 +5,7 @@ import com.fluxtah.application.api.interop.c_getEntityMass
 import com.fluxtah.application.api.interop.c_getEntityPositionX
 import com.fluxtah.application.api.interop.c_getEntityPositionY
 import com.fluxtah.application.api.interop.c_getEntityPositionZ
+import com.fluxtah.application.api.interop.c_getEntityRotationW
 import com.fluxtah.application.api.interop.c_getEntityRotationX
 import com.fluxtah.application.api.interop.c_getEntityRotationY
 import com.fluxtah.application.api.interop.c_getEntityRotationZ
@@ -53,6 +54,11 @@ class Entity(
     val positionZ: Float
         get() {
             return c_getEntityPositionZ!!.invoke(handle)
+        }
+
+    val rotationW: Float
+        get() {
+            return c_getEntityRotationW!!.invoke(handle)
         }
 
     val rotationX: Float
@@ -112,11 +118,8 @@ class Entity(
         c_setEntityPosition!!.invoke(handle, newPosX, newPosY, newPosZ)
     }
 
-    fun setRotation(x: Float? = null, y: Float? = null, z: Float? = null) {
-        val newRotX = x ?: rotationX
-        val newRotY = y ?: rotationY
-        val newRotZ = z ?: rotationZ
-        c_setEntityRotation!!.invoke(handle, newRotX, newRotY, newRotZ)
+    fun setRotation(w: Float, x: Float, y: Float, z: Float) {
+        c_setEntityRotation!!.invoke(handle, w, x, y, z)
     }
 
     fun setScale(x: Float? = null, y: Float? = null, z: Float? = null) {
@@ -136,13 +139,6 @@ class Entity(
 
     fun setMass(mass: Float) {
         c_setEntityMass!!.invoke(handle, mass)
-    }
-
-    fun rotate(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
-        val newRotationX = rotationX + x
-        val newRotationY = rotationY + y
-        val newRotationZ = rotationZ + z
-        c_setEntityRotation!!.invoke(handle, newRotationX, newRotationY, newRotationZ)
     }
 
     fun translate(x: Float = 0.0f, y: Float = 0.0f, z: Float = 0.0f) {

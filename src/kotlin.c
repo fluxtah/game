@@ -72,6 +72,7 @@ void bindKotlinApi() {
     ktGetEntityPositionYFunc(getEntityPositionY);
     ktGetEntityPositionZFunc(getEntityPositionZ);
 
+    ktGetEntityRotationWFunc(getEntityRotationW);
     ktGetEntityRotationXFunc(getEntityRotationX);
     ktGetEntityRotationYFunc(getEntityRotationY);
     ktGetEntityRotationZFunc(getEntityRotationZ);
@@ -196,6 +197,7 @@ void bindKotlinApiHeadless() {
     ktGetEntityPositionYFunc(getEntityPositionY);
     ktGetEntityPositionZFunc(getEntityPositionZ);
 
+    ktGetEntityRotationWFunc(getEntityRotationW);
     ktGetEntityRotationXFunc(getEntityRotationX);
     ktGetEntityRotationYFunc(getEntityRotationY);
     ktGetEntityRotationZFunc(getEntityRotationZ);

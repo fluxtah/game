@@ -25,6 +25,7 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
     private var positionX: Float = 0.0f
     private var positionY: Float = 0.0f
     private var positionZ: Float = 0.0f
+    private var rotationW: Float = 1.0f
     private var rotationX: Float = 0.0f
     private var rotationY: Float = 0.0f
     private var rotationZ: Float = 0.0f
@@ -76,7 +77,8 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
         positionZ = z
     }
 
-    fun rotation(x: Float = 0f, y: Float = 0f, z: Float = 0f) {
+    fun rotation(w: Float = 1f, x: Float = 0f, y: Float = 0f, z: Float = 0f) {
+        rotationW = w
         rotationX = x
         rotationY = y
         rotationZ = z
@@ -137,6 +139,7 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
                 positionX = this@EntityBuilder.positionX
                 positionY = this@EntityBuilder.positionY
                 positionZ = this@EntityBuilder.positionZ
+                rotationW = this@EntityBuilder.rotationW
                 rotationX = this@EntityBuilder.rotationX
                 rotationY = this@EntityBuilder.rotationY
                 rotationZ = this@EntityBuilder.rotationZ

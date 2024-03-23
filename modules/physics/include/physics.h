@@ -18,14 +18,13 @@ void destroyPhysics(void *context);
  * @param count The number of AABBs
  * @return A pointer to the created rigid body
  */
-void *createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass, bool isKinematic);
+void *
+createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, AABB *aabbs, int count, float mass,
+                                bool isKinematic);
 
-void updatePhysicsRigidBodyTransform(void *body, vec3 position, vec3 rotation, vec3 velocity);
+void updatePhysicsRigidBodyTransform(void *body, vec3 position, versor rotation, vec3 velocity);
 
-void setOnRigidBodyUpdatedFunction(void *context,
-                                   void (*callback)(void *userPtr,
-                                                    float x, float y, float z,
-                                                    float rotX, float rotY, float rotZ));
+void setOnRigidBodyUpdatedFunction(void *context, void (*callback)(void *userPtr, CPhysicsBodyUpdate update));
 
 void setCollisionCallbackFunction(void *context,
                                   void (*callback)(CCollisionResult2 *result));
@@ -34,8 +33,10 @@ void stepPhysicsSimulation(void *context, float timeStep);
 
 void deletePhysicsRigidBody(void *context, void *body);
 
-void* getPhysicsDebugVertexData(void *context);
+void *getPhysicsDebugVertexData(void *context);
+
 int getPhysicsDebugVertexCount(void *context);
+
 #ifdef __cplusplus
 }
 #endif
