@@ -9,6 +9,8 @@ data class Vector3(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
     companion object {
         val zero = Vector3(0f, 0f, 0f)
 
+        val up = Vector3(0f, 1f, 0f)
+
         // Linear interpolation (lerp) function
         fun lerp(a: Vector3, b: Vector3, t: Float): Vector3 = Vector3(
             a.x + (b.x - a.x) * t,
@@ -63,6 +65,15 @@ data class Vector3(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
         x /= length
         y /= length
         z /= length
+    }
+
+    // Calculate and return the cross product of this vector with another vector
+    fun cross(other: Vector3): Vector3 {
+        return Vector3(
+            y * other.z - z * other.y,
+            z * other.x - x * other.z,
+            x * other.y - y * other.x
+        )
     }
 }
 

@@ -22,6 +22,7 @@ import com.fluxtah.application.api.interop.c_setEntityScale
 import com.fluxtah.application.api.interop.c_setEntitySkinIndex
 import com.fluxtah.application.api.interop.c_setEntityVelocity
 import com.fluxtah.application.api.interop.c_updateEntityPhysicsTransform
+import com.fluxtah.application.apps.shipgame.scenes.Quaternion
 import kotlinx.cinterop.ExperimentalForeignApi
 
 @OptIn(ExperimentalForeignApi::class)
@@ -156,6 +157,10 @@ class Entity(
 
     fun setSkin(index: Int) {
         c_setEntitySkinIndex!!.invoke(handle, index)
+    }
+
+    fun getOrientation(): Quaternion {
+        return Quaternion(rotationW, rotationX, rotationY, rotationZ)
     }
 
 //    fun getAabb(): AxisAlignedBoundingBox {
