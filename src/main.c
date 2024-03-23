@@ -127,7 +127,7 @@ int main() {
     double lastTime = glfwGetTime();
     double lastFrameTime = glfwGetTime();
     double updateAccumulatedTime = 0.0;
-    double collisionAccumulatedTime = 0.0;
+    double physicsAccumulatedTime = 0.0;
     double renderAccumulatedTime = 0.0;
     int frameCount = 0;
 
@@ -155,7 +155,7 @@ int main() {
         if (frameStartTime - lastTime >= 1.0) { // If a second has passed
             double avgUpdateTime = updateAccumulatedTime / frameCount;
             double avgRenderTime = renderAccumulatedTime / frameCount;
-            double avgCollisionTime = collisionAccumulatedTime / frameCount;
+            double avgCollisionTime = physicsAccumulatedTime / frameCount;
 
             updateDebugTextOverlay(context, debugTextOverlay->batch, frameCount, avgUpdateTime, avgCollisionTime,
                                    avgRenderTime);
@@ -163,7 +163,7 @@ int main() {
             frameCount = 0;
             updateAccumulatedTime = 0.0;
             renderAccumulatedTime = 0.0;
-            collisionAccumulatedTime = 0.0;
+            physicsAccumulatedTime = 0.0;
             lastTime = frameStartTime;
         }
 
@@ -217,11 +217,11 @@ int main() {
         //
         // Run Physics & Collision Detection
         //
-        double collisionStartTime = glfwGetTime();
+        double physicsStartTime = glfwGetTime();
 
         ktStepPhysics();
 
-        collisionAccumulatedTime += glfwGetTime() - collisionStartTime;
+        physicsAccumulatedTime += glfwGetTime() - physicsStartTime;
 
         //
         // Update UBOs

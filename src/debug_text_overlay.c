@@ -35,7 +35,7 @@ DebugTextOverlay *createDebugTextOverlay(ApplicationContext *context) {
     TextElement *updateTimeElement = createTextElement(
             overlay->sheet,
             &(CreateTextElementInfo) {
-                    .textTemplate = "Update:%s",
+                    .textTemplate = "Update: %s",
                     .replacements = replacements,
                     .numReplacements = 1,
                     .positionX = 10.0f,
@@ -48,7 +48,7 @@ DebugTextOverlay *createDebugTextOverlay(ApplicationContext *context) {
     TextElement *collisionTimeElement = createTextElement(
             overlay->sheet,
             &(CreateTextElementInfo) {
-                    .textTemplate = "Collision:%s",
+                    .textTemplate = "Physics: %s",
                     .replacements = replacements,
                     .numReplacements = 1,
                     .positionX = 20.0f,
@@ -62,7 +62,7 @@ DebugTextOverlay *createDebugTextOverlay(ApplicationContext *context) {
     TextElement *renderTimeElement = createTextElement(
             overlay->sheet,
             &(CreateTextElementInfo) {
-                    .textTemplate = "Render:%s",
+                    .textTemplate = "Render: %s",
                     .replacements = replacements,
                     .numReplacements = 1,
                     .positionX = 10.0f,
