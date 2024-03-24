@@ -41,13 +41,13 @@ class ThrustBehavior : EntityBehavior() {
             thrustSound.stopIfPlaying()
         }
 
-        map.getTileByWorldPosition(entity.positionX, entity.positionZ).apply {
-            if (type == TileType.LEVEL6) {
-                state.groundLevel = 8.0f
-            } else {
-                state.groundLevel = 0.0f
-            }
-        }
+//        map.getTileByWorldPosition(entity.positionX, entity.positionZ).apply {
+//            if (type == TileType.LEVEL6) {
+//                state.groundLevel = 8.0f
+//            } else {
+//                state.groundLevel = 0.0f
+//            }
+//        }
     }
 
     override fun update(time: Float) {

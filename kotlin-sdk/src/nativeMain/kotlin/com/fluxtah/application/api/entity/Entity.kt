@@ -16,12 +16,14 @@ import com.fluxtah.application.api.interop.c_getEntityVelocityX
 import com.fluxtah.application.api.interop.c_getEntityVelocityY
 import com.fluxtah.application.api.interop.c_getEntityVelocityZ
 import com.fluxtah.application.api.interop.c_setEntityMass
+import com.fluxtah.application.api.interop.c_setEntityPhysicsActive
 import com.fluxtah.application.api.interop.c_setEntityPosition
 import com.fluxtah.application.api.interop.c_setEntityRotation
 import com.fluxtah.application.api.interop.c_setEntityScale
 import com.fluxtah.application.api.interop.c_setEntitySkinIndex
 import com.fluxtah.application.api.interop.c_setEntityVelocity
 import com.fluxtah.application.api.interop.c_updateEntityPhysicsTransform
+import com.fluxtah.application.api.math.Vector3
 import com.fluxtah.application.apps.shipgame.scenes.Quaternion
 import kotlinx.cinterop.ExperimentalForeignApi
 
@@ -30,7 +32,7 @@ class Entity(
     val id: String,
     val handle: CEntity,
     val data: Any = Any(),
-    var active: Boolean = true,
+    startActive: Boolean = true,
     var visible: Boolean = true,
     var collisionGroup: Int = 0,
     var collisionMask: Int = 0,
@@ -40,7 +42,16 @@ class Entity(
 ) {
     init {
         behaviors.forEach { it.entity = this }
+        if(physicsEnabled) {
+            c_setEntityPhysicsActive!!.invoke(handle, startActive)
+        }
     }
+
+    var active: Boolean = startActive
+        set(value) {
+            field = value
+            c_setEntityPhysicsActive!!.invoke(handle, value)
+        }
 
     val positionX: Float
         get() {
@@ -165,6 +176,22 @@ class Entity(
 
     fun getOrientation(): Quaternion {
         return Quaternion(rotationW, rotationX, rotationY, rotationZ)
+    }
+
+    fun getPosition(): Vector3 {
+        return Vector3(positionX, positionY, positionZ)
+    }
+
+    fun setPosition(position: Vector3) {
+        setPosition(position.x, position.y, position.z)
+    }
+
+    fun setVelocity(velocity: Vector3) {
+        setVelocity(velocity.x, velocity.y, velocity.z)
+    }
+
+    fun getVelocity(): Vector3 {
+        return Vector3(velocityX, velocityY, velocityZ)
     }
 
 //    fun getAabb(): AxisAlignedBoundingBox {

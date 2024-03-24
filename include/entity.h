@@ -98,4 +98,6 @@ void removeEntityPhysics(Entity *entity, void *physicsContext);
 
 void setupEntityAABBs(Entity *entity);
 
+float setEntityPhysicsActive(Entity *entity, bool active);
+
 #endif //APP_ENTITY_H

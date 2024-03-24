@@ -8,7 +8,6 @@ import kotlin.math.sqrt
 data class Vector3(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
     companion object {
         val zero = Vector3(0f, 0f, 0f)
-
         val up = Vector3(0f, 1f, 0f)
 
         // Linear interpolation (lerp) function
@@ -76,9 +75,18 @@ data class Vector3(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
         )
     }
 
+    fun dot(other: Vector3): Float {
+        return x * other.x + y * other.y + z * other.z
+    }
+
     fun normalized(): Vector3 {
         val length = sqrt(x * x + y * y + z * z)
         return Vector3(x / length, y / length, z / length)
+    }
+
+    fun isMostlyVertical(): Boolean {
+        val dotProduct = this.dot(up)
+        return dotProduct > 0.8 || dotProduct < -0.8
     }
 }
 
@@ -95,4 +103,9 @@ fun Vector3.distanceTo(end: Vector3): Float = sqrt(
 )
 
 fun Vector3.length(): Float = sqrt(x * x + y * y + z * z)
+
+
+operator fun Float.times(normal: Vector3): Vector3 {
+    return Vector3(this * normal.x, this * normal.y, this * normal.z)
+}
 

@@ -161,7 +161,7 @@ class EntityPoolBuilder(private val scene: Scene, private val id: String, privat
             id = id,
             handle = cEntity,
             data = data,
-            active = startActive,
+            startActive = startActive,
             behaviors = behaviors,
             collisionGroup = collisionGroup,
             collisionMask = collisionMask,

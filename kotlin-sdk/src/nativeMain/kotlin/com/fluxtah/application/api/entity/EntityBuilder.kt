@@ -165,7 +165,7 @@ class EntityBuilder(private val scene: Scene, private val id: String, private va
             id = id,
             handle = cEntity,
             data = data,
-            active = startActive,
+            startActive = startActive,
             visible = true,
             behaviors = behaviors,
             collisionGroup = collisionGroup,

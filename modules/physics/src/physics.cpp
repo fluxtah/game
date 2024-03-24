@@ -105,7 +105,6 @@ void checkKinematicRigidBodyCollisions(void *context) {
                 result.contactPoints[currentContactIndex].positionBX = pt.getPositionWorldOnB().getX();
                 result.contactPoints[currentContactIndex].positionBY = pt.getPositionWorldOnB().getY();
                 result.contactPoints[currentContactIndex].positionBZ = pt.getPositionWorldOnB().getZ();
-
                 result.contactPoints[currentContactIndex].collisionNormalX = pt.m_normalWorldOnB.getX();
                 result.contactPoints[currentContactIndex].collisionNormalY = pt.m_normalWorldOnB.getY();
                 result.contactPoints[currentContactIndex].collisionNormalZ = pt.m_normalWorldOnB.getZ();
@@ -123,7 +122,7 @@ void checkKinematicRigidBodyCollisions(void *context) {
 void stepPhysicsSimulation(void *context, float timeStep) {
     auto *physicsContext = (PhysicsContext *) context;
 
-    physicsContext->dynamicsWorld->stepSimulation(timeStep, 4);
+    physicsContext->dynamicsWorld->stepSimulation(timeStep, 10);
 
     int numRigidBodies = physicsContext->dynamicsWorld->getNumCollisionObjects();
     for (int i = 0; i < numRigidBodies; i++) {
@@ -265,6 +264,15 @@ void updatePhysicsRigidBodyTransform(void *body, vec3 position, versor rotation,
     rigidBody->setWorldTransform(transform);
     rigidBody->getMotionState()->setWorldTransform(transform);
     rigidBody->setLinearVelocity(btVelocity);
+}
+
+void setPhysicsActive(void *body, bool active) {
+    auto *rigidBody = (btRigidBody *) body;
+    if (active) {
+        rigidBody->forceActivationState(ACTIVE_TAG);
+    } else {
+        rigidBody->forceActivationState(DISABLE_SIMULATION);
+    }
 }
 
 }

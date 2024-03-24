@@ -263,3 +263,9 @@ void setupEntityAABBs(Entity *entity) {
         glm_vec3_add(scaledMax, entity->position, entity->aabbs[i].max);
     }
 }
+
+float setEntityPhysicsActive(Entity *entity, bool active) {
+    if (entity->physicsBody != NULL) {
+        setPhysicsActive(entity->physicsBody, active);
+    }
+}

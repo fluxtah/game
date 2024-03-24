@@ -37,6 +37,8 @@ void *getPhysicsDebugVertexData(void *context);
 
 int getPhysicsDebugVertexCount(void *context);
 
+void setPhysicsActive(void *body, bool active);
+
 #ifdef __cplusplus
 }
 #endif

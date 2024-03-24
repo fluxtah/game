@@ -88,6 +88,7 @@ void bindKotlinApi() {
 
     ktSetAttachKotlinEntityFunc(attachKotlinEntityInfo);
     ktSetEntitySkinIndexFunc(setEntitySkinIndex);
+    ktSetEntityPhysicsActiveFunc(setEntityPhysicsActive);
 
     // Emitter
     ktSetCreateEmitterFunc(createEmitter);
@@ -213,6 +214,8 @@ void bindKotlinApiHeadless() {
 
     ktSetAttachKotlinEntityFunc(attachKotlinEntityInfo);
     ktSetEntitySkinIndexFunc(setEntitySkinIndex);
+
+    ktSetEntityPhysicsActiveFunc(setEntityPhysicsActive);
 
     // Emitter
     ktSetCreateEmitterFunc(createEmitter);

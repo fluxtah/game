@@ -122,7 +122,7 @@ private fun setupEnemyPlayerEntities(sceneData: GameData, scene: Scene, distance
             entity.resetBehaviors()
             entity.data<ShipData>().resetAll()
             entity.visible = true
-            entity.setPosition((index * 60f) - 30f, 200f, distanceFromCenter)
+            entity.setPosition((index * 60f) - 30f, 800f, distanceFromCenter)
             playerData.startPos.update(
                 entity.positionX,
                 entity.positionY,
@@ -142,7 +142,7 @@ private fun setupFriendlyPlayerEntities(sceneData: GameData, scene: Scene, dista
             entity.resetBehaviors()
             entity.data<ShipData>().resetAll()
             entity.visible = true
-            entity.setPosition((index * 60f) - 30f, 200f, -distanceFromCenter)
+            entity.setPosition((index * 60f) - 30f, 800f, -distanceFromCenter)
             playerData.startPos.update(
                 entity.positionX,
                 entity.positionY,
