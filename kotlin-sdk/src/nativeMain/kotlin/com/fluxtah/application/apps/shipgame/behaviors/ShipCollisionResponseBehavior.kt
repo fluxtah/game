@@ -33,7 +33,7 @@ class ShipCollisionResponseBehavior : EntityBehavior() {
             val velocity = entity.getVelocity()
             val newVelocity = reflect(velocity, normal)
             entity.setVelocity(newVelocity * 0.5f)
-        }d
+        }
     }
 
     private fun reflect(velocity: Vector3, normal: Vector3): Vector3 {
