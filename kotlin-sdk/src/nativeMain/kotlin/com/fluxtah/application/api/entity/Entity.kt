@@ -24,7 +24,7 @@ import com.fluxtah.application.api.interop.c_setEntitySkinIndex
 import com.fluxtah.application.api.interop.c_setEntityVelocity
 import com.fluxtah.application.api.interop.c_updateEntityPhysicsTransform
 import com.fluxtah.application.api.math.Vector3
-import com.fluxtah.application.apps.shipgame.scenes.Quaternion
+import com.fluxtah.application.api.math.Quaternion
 import kotlinx.cinterop.ExperimentalForeignApi
 
 @OptIn(ExperimentalForeignApi::class)
