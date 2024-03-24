@@ -12,7 +12,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class ShipMovementBehavior(
-    val forwardAcceleration: Float = 20.0f,
+    val forwardAcceleration: Float = 40.0f,
     private val reversingFactor: Float = 2.0f,
     val maxForwardSpeed: Float = 100.0f,
     val maxReverseSpeed: Float = -60.0f,
@@ -49,22 +49,16 @@ class ShipMovementBehavior(
 
         val velocityX = calculateVelocityX()
         val velocityZ = calculateVelocityZ()
+        val forward = entity.getOrientation().getLocalForwardAxis()
+        val right = entity.getOrientation().getLocalRightAxis()
 
-        val rotatedVelocities = rotateVelocity(Vector3(velocityX, 0.0f, velocityZ), entity.rotationY)
-
-        entity.setVelocity(x = rotatedVelocities.x, z = rotatedVelocities.z)
+        val velocity = forward * velocityZ + right * velocityX
 
         // Calculate new position based on rotated velocities
-        val newPosition = Vector3(entity.positionX, entity.positionY, entity.positionZ) + calculateForwardMovement(
-            entity.rotationY,
-            rotatedVelocities.z * fixedTimeStep
-        ) + calculateLateralMovement(
-            entity.rotationY,
-            rotatedVelocities.x * fixedTimeStep
-        )
+        val newPosition = Vector3(entity.positionX, entity.positionY, entity.positionZ) + velocity * fixedTimeStep
 
         entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
-
+        entity.setVelocity(x = velocityX, z = velocityZ)
         // Apply lean effect based on lateral velocity
         applyLeanEffect()
 
@@ -72,26 +66,15 @@ class ShipMovementBehavior(
         movementSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
     }
 
-    private fun rotateVelocity(velocity: Vector3, yaw: Float): Vector3 {
-        val yawRadians = yaw.toRadians()
-        val cosYaw = cos(yawRadians)
-        val sinYaw = sin(yawRadians)
-
-        val rotatedVelocityX = velocity.x * cosYaw - velocity.z * sinYaw
-        val rotatedVelocityZ = velocity.x * sinYaw + velocity.z * cosYaw
-
-        return Vector3(rotatedVelocityX, 0f, rotatedVelocityZ)
-    }
-
     private fun calculateVelocityX() = when {
         data.input.isMovingRight -> {
             movementSound.playIfNotPlaying()
-            (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(maxLateralSpeed)
+            (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtMost(maxLateralSpeed)
         }
 
         data.input.isMovingLeft -> {
             movementSound.playIfNotPlaying()
-            (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(-maxLateralSpeed)
+            (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtLeast(-maxLateralSpeed)
         }
 
         else -> {

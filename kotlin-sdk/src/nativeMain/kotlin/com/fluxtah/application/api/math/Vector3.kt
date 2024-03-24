@@ -75,6 +75,11 @@ data class Vector3(var x: Float = 0f, var y: Float = 0f, var z: Float = 0f) {
             x * other.y - y * other.x
         )
     }
+
+    fun normalized(): Vector3 {
+        val length = sqrt(x * x + y * y + z * z)
+        return Vector3(x / length, y / length, z / length)
+    }
 }
 
 fun Vector3.lerp(target: Vector3, alpha: Float) {

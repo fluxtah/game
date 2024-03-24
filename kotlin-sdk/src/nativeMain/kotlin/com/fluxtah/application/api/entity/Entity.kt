@@ -119,8 +119,12 @@ class Entity(
         c_setEntityPosition!!.invoke(handle, newPosX, newPosY, newPosZ)
     }
 
-    fun setRotation(w: Float, x: Float, y: Float, z: Float) {
+    fun setOrientation(w: Float, x: Float, y: Float, z: Float) {
         c_setEntityRotation!!.invoke(handle, w, x, y, z)
+    }
+
+    fun setOrientation(quaternion: Quaternion) {
+        c_setEntityRotation!!.invoke(handle, quaternion.w, quaternion.x, quaternion.y, quaternion.z)
     }
 
     fun setScale(x: Float? = null, y: Float? = null, z: Float? = null) {

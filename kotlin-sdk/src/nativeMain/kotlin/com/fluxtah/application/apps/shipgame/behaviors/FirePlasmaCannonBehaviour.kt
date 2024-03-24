@@ -37,14 +37,14 @@ class FirePlasmaCannonBehaviour(
                 val boltBehaviour = bolt.getBehaviorByType<PlasmaBoltBehaviour>()
                 bolt.setPosition(entity.positionX, entity.positionY, entity.positionZ)
 
-                // UNDONE: Bullet physics
-                //bolt.setRotation(entity.rotationX, entity.rotationY, entity.rotationZ)
+                val entityOrientation = entity.getOrientation()
+                bolt.setOrientation(entityOrientation)
 
                 bolt.visible = true
                 boltBehaviour.initialPosition.x = entity.positionX
                 boltBehaviour.initialPosition.y = entity.positionY
                 boltBehaviour.initialPosition.z = entity.positionZ
-                boltBehaviour.firingDirection = Vector3.calculateDirectionFromYaw(entity.rotationY)
+                boltBehaviour.firingDirection = entityOrientation.getLocalForwardAxis()
                 boltBehaviour.fireBolt()
             }
         }

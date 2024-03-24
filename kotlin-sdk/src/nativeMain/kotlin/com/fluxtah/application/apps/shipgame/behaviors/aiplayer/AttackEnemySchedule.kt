@@ -58,7 +58,6 @@ class AttackEnemySchedule : AiSchedule() {
             closestEnemy.positionZ
         )
 
-        val angleToEnemy = entity.angleToEntity(closestEnemy)
         val combatRange = sceneData.aiShipsCombatRange
         val shootingRange = sceneData.aiShipsCombatRange * 2f
 
@@ -87,13 +86,17 @@ class AttackEnemySchedule : AiSchedule() {
             shipActions.isFiring = false
         }
 
-        val currentYaw =
-            entity.rotationY.toRadians() // Assuming rotationY is the yaw and is in degrees, convert to radians
+        val entityForward = entity.getOrientation().getLocalForwardAxis()
+        val toTarget =
+            (Vector3(closestEnemy.positionX, closestEnemy.positionY, closestEnemy.positionZ) - Vector3(
+                entity.positionX,
+                entity.positionY,
+                entity.positionZ
+            )).normalized()
 
-        // Calculate the shortest direction to turn towards the player
-        val angleDifference = (angleToEnemy - currentYaw + PI * 3) % (PI * 2) - PI
-        shipActions.isYawingLeft = angleDifference > 0
-        shipActions.isYawingRight = angleDifference < 0
+        val crossProduct = entityForward.cross(toTarget)
+        shipActions.isYawingLeft = crossProduct.y > 0
+        shipActions.isYawingRight = crossProduct.y < 0
 
         checkConditionTimer.update(deltaTime) {
             if (shipData.energy < 20f) {

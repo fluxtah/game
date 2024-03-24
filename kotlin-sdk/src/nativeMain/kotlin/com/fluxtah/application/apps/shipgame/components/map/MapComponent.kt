@@ -63,7 +63,7 @@ class MapComponent : SceneComponent() {
         val tile = mapHeight.getTileByWorldPosition(posX, posZ)
 
         scene.entityFromPool(ENTITY_POOL_BLOCK_POWER) { powerNodeEntity ->
-            powerNodeEntity.setPosition(tile.worldX.toFloat(), -4.0f, tile.worldZ.toFloat())
+            powerNodeEntity.setPosition(tile.worldX.toFloat(), -8.0f, tile.worldZ.toFloat())
             powerNodeEntity.updatePhysicsState()
             val powerNodeData = powerNodeEntity.data<PowerNodeData>()
             powerNodeData.resetAll()
@@ -111,27 +111,27 @@ class MapComponent : SceneComponent() {
                         tileEntity.setSkin(skin)
                         when (tile.type) {
                             TileType.LEVEL1 -> {
-                                tileEntity.setPosition(tile.worldX.toFloat(), -10.0f, tile.worldZ.toFloat())
+                                tileEntity.setPosition(tile.worldX.toFloat(), -20.0f, tile.worldZ.toFloat())
                             }
 
                             TileType.LEVEL2 -> {
-                                tileEntity.setPosition(tile.worldX.toFloat(), -8.0f, tile.worldZ.toFloat())
+                                tileEntity.setPosition(tile.worldX.toFloat(), -18.0f, tile.worldZ.toFloat())
                             }
 
                             TileType.LEVEL3 -> {
-                                tileEntity.setPosition(tile.worldX.toFloat(), -6.0f, tile.worldZ.toFloat())
+                                tileEntity.setPosition(tile.worldX.toFloat(), -16.0f, tile.worldZ.toFloat())
                             }
 
                             TileType.LEVEL4 -> {
-                                tileEntity.setPosition(tile.worldX.toFloat(), -4.0f, tile.worldZ.toFloat())
+                                tileEntity.setPosition(tile.worldX.toFloat(), -14.0f, tile.worldZ.toFloat())
                             }
 
                             TileType.LEVEL5 -> {
-                                tileEntity.setPosition(tile.worldX.toFloat(), -2.0f, tile.worldZ.toFloat())
+                                tileEntity.setPosition(tile.worldX.toFloat(), -12.0f, tile.worldZ.toFloat())
                             }
 
                             TileType.LEVEL6 -> {
-                                tileEntity.setPosition(tile.worldX.toFloat(), 5.0f, tile.worldZ.toFloat())
+                                tileEntity.setPosition(tile.worldX.toFloat(), -5.0f, tile.worldZ.toFloat())
                             }
                         }
                         tileEntity.updatePhysicsState()

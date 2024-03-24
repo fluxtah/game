@@ -27,7 +27,6 @@ import com.fluxtah.application.api.sprite.SpriteSheetBuilder
 import com.fluxtah.application.api.text.TextBatch
 import com.fluxtah.application.api.text.TextBatchBuilder
 import kotlinx.cinterop.COpaquePointer
-import kotlinx.cinterop.CPointer
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.asStableRef
 import kotlinx.cinterop.cValue
@@ -214,7 +213,7 @@ class SceneBuilder(val sceneId: String) {
                 val sourceEntityInfo = entityInfo.asStableRef<EntityInfo>().get()
                 sourceEntityInfo.entity.apply {
                     setPosition(update.positionX, update.positionY, update.positionZ)
-                    setRotation(update.rotationW, update.rotationX, update.rotationY, update.rotationZ)
+                    setOrientation(update.rotationW, update.rotationX, update.rotationY, update.rotationZ)
                 }
             }
         c_setOnRigidBodyUpdated!!.invoke(physicsHandle, onRigidBodyUpdate)

@@ -75,32 +75,33 @@ fun Application.testScene() {
             val ship = scene.entityById("ship")
 
             if (isKeyPressed(Key.LeftBracket)) {
-                val currentRot = ship.getOrientation()
-                currentRot.rotateAroundAxis(Vector3.up, 1f)
-                ship.setRotation(currentRot.w, currentRot.x, currentRot.y, currentRot.z)
+                val orientation = ship.getOrientation()
+                orientation.rotateAroundAxis(Vector3.up, 1f)
+                ship.setOrientation(orientation)
             }
             if (isKeyPressed(Key.RightBracket)) {
-                val currentRot = ship.getOrientation()
-                currentRot.rotateAroundAxis(Vector3.up, -1f)
-                ship.setRotation(currentRot.w, currentRot.x, currentRot.y, currentRot.z)
+                val orientation = ship.getOrientation()
+                orientation.rotateAroundAxis(Vector3.up, -1f)
+                ship.setOrientation(orientation)
             }
 
             if (isKeyPressed(Key.Minus)) {
-                val currentRot = ship.getOrientation()
-                val axis = currentRot.getLocalForwardAxis()
-                currentRot.rotateAroundAxis(axis, 1f)
-                ship.setRotation(currentRot.w, currentRot.x, currentRot.y, currentRot.z)
+                val orientation = ship.getOrientation()
+                val axis = orientation.getLocalForwardAxis()
+                orientation.rotateAroundAxis(axis, 1f)
+                ship.setOrientation(orientation)
             }
 
             if (isKeyPressed(Key.Equal)) {
-                val currentRot = ship.getOrientation()
-                val axis = currentRot.getLocalForwardAxis()
-                currentRot.rotateAroundAxis(axis, -1f)
-                ship.setRotation(currentRot.w, currentRot.x, currentRot.y, currentRot.z)
+                val orientation = ship.getOrientation()
+                val axis = orientation.getLocalForwardAxis()
+                orientation.rotateAroundAxis(axis, -1f)
+                ship.setOrientation(orientation)
             }
         }
     }
 }
+
 data class Quaternion(var w: Float, var x: Float, var y: Float, var z: Float) {
 
     fun normalize() {
@@ -154,9 +155,14 @@ data class Quaternion(var w: Float, var x: Float, var y: Float, var z: Float) {
         return rotateVector(globalForward)
     }
 
-    fun getLocalUpAxis(quaternion: Quaternion): Vector3 {
+    fun getLocalUpAxis(): Vector3 {
         val globalUp = Vector3(0f, 1f, 0f) // Standard up vector in global coordinates
-        return quaternion.rotateVector(globalUp)
+        return rotateVector(globalUp)
+    }
+
+    fun getLocalRightAxis(): Vector3 {
+        val globalRight = Vector3(1f, 0f, 0f) // Standard right vector in global coordinates
+        return rotateVector(globalRight)
     }
 }
 

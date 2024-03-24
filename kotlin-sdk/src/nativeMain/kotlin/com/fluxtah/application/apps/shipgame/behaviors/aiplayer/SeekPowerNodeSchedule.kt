@@ -34,7 +34,7 @@ class SeekPowerNodeSchedule : AiSchedule() {
         }
 
         if (friendlyPowerNodes.isEmpty()) {
-            if(shipData.energy > 20f) {
+            if (shipData.energy > 20f) {
                 machine.changeState(AiPlayerShipState.AttackEnemy)
             } else {
                 machine.changeState(AiPlayerShipState.FleeEnemy)
@@ -62,8 +62,6 @@ class SeekPowerNodeSchedule : AiSchedule() {
             closestPowerNode.positionZ
         )
 
-        val angleToPowerNode = entity.angleToEntity(closestPowerNode)
-
         val rechargeDistance = closestPowerNode.data<PowerNodeData>().rechargeDistance * 0.5f
         // Determine movement based on distance and current velocity
         if (distanceToPowerNode > rechargeDistance) {
@@ -75,13 +73,17 @@ class SeekPowerNodeSchedule : AiSchedule() {
             shipActions.isMovingRight = false
         }
 
-        val currentYaw =
-            entity.rotationY.toRadians() // Assuming rotationY is the yaw and is in degrees, convert to radians
+        val entityForward = entity.getOrientation().getLocalForwardAxis()
+        val toTarget =
+            (Vector3(closestPowerNode.positionX, closestPowerNode.positionY, closestPowerNode.positionZ) - Vector3(
+                entity.positionX,
+                entity.positionY,
+                entity.positionZ
+            )).normalized()
 
-        // Calculate the shortest direction to turn towards the player
-        val angleDifference = (angleToPowerNode - currentYaw + PI * 3) % (PI * 2) - PI
-        shipActions.isYawingLeft = angleDifference > 0
-        shipActions.isYawingRight = angleDifference < 0
+        val crossProduct = entityForward.cross(toTarget)
+        shipActions.isYawingLeft = crossProduct.y > 0
+        shipActions.isYawingRight = crossProduct.y < 0
 
         checkConditionTimer.update(deltaTime) {
             machine.changeState(AiPlayerShipState.MoveToEnemy)

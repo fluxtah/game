@@ -56,16 +56,19 @@ class MoveToEnemySchedule : AiSchedule() {
             closestEnemy.positionZ
         )
 
-        val angleToEnemy = entity.angleToEntity(closestEnemy)
+        val entityForward = entity.getOrientation().getLocalForwardAxis()
+        val toTarget =
+            (Vector3(closestEnemy.positionX, closestEnemy.positionY, closestEnemy.positionZ) - Vector3(
+                entity.positionX,
+                entity.positionY,
+                entity.positionZ
+            )).normalized()
+        
+        val crossProduct = entityForward.cross(toTarget)
+        shipActions.isYawingLeft = crossProduct.y > 0
+        shipActions.isYawingRight = crossProduct.y < 0
+
         val combatRange = sceneData.aiShipsCombatRange * 0.75f
-
-        val currentYaw =
-            entity.rotationY.toRadians() // Assuming rotationY is the yaw and is in degrees, convert to radians
-
-        // Calculate the shortest direction to turn towards the player
-        val angleDifference = (angleToEnemy - currentYaw + PI * 3) % (PI * 2) - PI
-        shipActions.isYawingLeft = angleDifference > 0
-        shipActions.isYawingRight = angleDifference < 0
 
         // Determine movement based on distance and current velocity
         if (distanceToEnemy > combatRange) {
