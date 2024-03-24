@@ -29,13 +29,11 @@ class ShipCollisionResponseBehavior : EntityBehavior() {
             val newPosition = currentPosition + adjustment
             entity.setPosition(newPosition)
 
-            if(normal.isMostlyVertical()) {
-                // Reflect the spaceship's velocity
-                val velocity = entity.getVelocity()
-                val newVelocity = reflect(velocity, normal)
-                entity.setVelocity(newVelocity * 0.5f)
-            }
-        }
+            // Reflect the spaceship's velocity
+            val velocity = entity.getVelocity()
+            val newVelocity = reflect(velocity, normal)
+            entity.setVelocity(newVelocity * 0.5f)
+        }d
     }
 
     private fun reflect(velocity: Vector3, normal: Vector3): Vector3 {
