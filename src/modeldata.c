@@ -86,8 +86,8 @@ getAttributeAccessorByType(cgltf_mesh *mesh, int primitiveIndex, cgltf_attribute
     return accessor;
 }
 
-AABB readModelAABBNode(cgltf_mesh *mesh) {
-    cgltf_accessor *positionAccessor = getAttributeAccessorByType(mesh, 0, cgltf_attribute_type_position);
+AABB readModelAABBNode(cgltf_node *node) {
+    cgltf_accessor *positionAccessor = getAttributeAccessorByType(node->mesh, 0, cgltf_attribute_type_position);
 
     AABB aabb = {0};
     for (cgltf_size i = 0; i < positionAccessor->count; i++) {
@@ -111,13 +111,13 @@ AABB readModelAABBNode(cgltf_mesh *mesh) {
 
 void readModelData(cgltf_data *data, ModelData *modelData) {
     int numAABBs = 0;
-    for (int i = 0; i < data->meshes_count; i++) {
-        cgltf_mesh mesh = data->meshes[i];
+    for (int i = 0; i < data->nodes_count; i++) {
+        cgltf_node node = data->nodes[i];
         // printf("Mesh %d: %s\n", i, mesh.name);
 
-        if (strncmp(mesh.name, "AABB", 4) != 0) {
+        if (strncmp(node.name, "AABB", 4) != 0) {
             // Assuming the non-AABB mesh is the main model
-            readMainModelNode(&mesh, modelData);
+            readMainModelNode(node.mesh, modelData);
         } else {
             numAABBs++;
         }
@@ -129,11 +129,11 @@ void readModelData(cgltf_data *data, ModelData *modelData) {
 
         // Second Pass: Store AABBs
         size_t aabb_index = 0;
-        for (int i = 0; i < data->meshes_count; i++) {
-            cgltf_mesh mesh = data->meshes[i];
+        for (int i = 0; i < data->nodes_count; i++) {
+            cgltf_node node = data->nodes[i];
 
-            if (strncmp(mesh.name, "AABB", 4) == 0) {
-                AABB aabb = readModelAABBNode(&mesh);
+            if (strncmp(node.name, "AABB", 4) == 0) {
+                AABB aabb = readModelAABBNode(&node);
                 modelData->aabbs[aabb_index++] = aabb;
             }
         }
