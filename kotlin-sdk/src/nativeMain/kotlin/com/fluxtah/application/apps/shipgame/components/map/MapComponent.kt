@@ -63,7 +63,7 @@ class MapComponent : SceneComponent() {
         val tile = mapHeight.getTileByWorldPosition(posX, posZ)
 
         scene.entityFromPool(ENTITY_POOL_BLOCK_POWER) { powerNodeEntity ->
-            powerNodeEntity.setPosition(tile.worldX.toFloat(), -8.0f, tile.worldZ.toFloat())
+            powerNodeEntity.setPosition(tile.worldX.toFloat(), -14.0f, tile.worldZ.toFloat())
             powerNodeEntity.updatePhysicsState()
             val powerNodeData = powerNodeEntity.data<PowerNodeData>()
             powerNodeData.resetAll()

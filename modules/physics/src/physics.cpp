@@ -268,11 +268,11 @@ void updatePhysicsRigidBodyTransform(void *body, vec3 position, versor rotation,
 
 void setPhysicsActive(void *body, bool active) {
     auto *rigidBody = (btRigidBody *) body;
-    if (active) {
-        rigidBody->forceActivationState(ACTIVE_TAG);
-    } else {
-        rigidBody->forceActivationState(DISABLE_SIMULATION);
-    }
+//    if (active) {
+//        rigidBody->forceActivationState(ACTIVE_TAG);
+//    } else {
+//        rigidBody->forceActivationState(DISABLE_SIMULATION);
+//    }
 }
 
 }
