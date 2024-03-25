@@ -5,6 +5,7 @@ import com.fluxtah.application.api.entity.EntityBehavior
 import com.fluxtah.application.api.math.Vector3
 import com.fluxtah.application.api.math.distanceTo
 import com.fluxtah.application.apps.shipgame.Id
+import kotlin.random.Random
 
 class PlasmaBoltBehaviour(
     private val boltSpeed: Float = 256.0f,
@@ -19,6 +20,7 @@ class PlasmaBoltBehaviour(
 
     fun fireBolt() {
         boltSound = scene.soundFromPool(Id.SOUND_PLASMA_BOLT)
+        boltSound?.setPitch(1f + Random.nextInt(0, 10) * 0.02f)
         boltSound?.play()
         isBoltFiring = true
     }

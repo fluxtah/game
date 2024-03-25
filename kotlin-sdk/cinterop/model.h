@@ -203,18 +203,6 @@ typedef struct SpriteBatchArray {
     int size;     // Size of the array
 } SpriteBatchArray;
 
-typedef struct CBoundingVolumeCollisionResult {
-    int sourceVolumeIndex;
-    int targetVolumeIndex;
-} CBoundingVolumeCollisionResult;
-
-typedef struct CCollisionResult {
-    void *sourceEntityInfo;
-    void *targetEntityInfo;
-    CBoundingVolumeCollisionResult results[100]; // Default to 100
-    int numResults;
-} CCollisionResult;
-
 typedef struct CreatePhysicsInfo {
     float gravityX;
     float gravityY;

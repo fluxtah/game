@@ -106,7 +106,7 @@ class ThrustBehavior : EntityBehavior() {
         val maxThrust: Float = 30000.0f,
         val maxAltitude: Float = 12.2f,
         val thrustIncrement: Float = 9000f,
-        val overshootDamping: Float = 0.95f,
+        val overshootDamping: Float = 0.99f,
         val hoverDamping: Float = 0.99f,
         val maxVelocity: Float = 100.0f,
         var thrusting: Boolean = false,

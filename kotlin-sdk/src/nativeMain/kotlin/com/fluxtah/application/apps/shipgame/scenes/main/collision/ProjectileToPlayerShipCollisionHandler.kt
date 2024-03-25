@@ -46,6 +46,8 @@ class ProjectileToPlayerShipCollisionHandler :
                 targetEntity.getBehaviorByType<ShipDieBehavior>().die(boltOwner)
             }
 
+        }
+        if (targetEntity != boltOwner) {
             scene.entityToPool(sourceEntity)
             sourceEntity.visible = false
         }

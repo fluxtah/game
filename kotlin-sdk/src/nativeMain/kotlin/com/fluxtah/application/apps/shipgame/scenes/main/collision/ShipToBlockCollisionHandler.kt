@@ -22,7 +22,7 @@ class ShipToBlockCollisionHandler : CollisionHandler(
             shipData.input.isThrusting = shipData.playerData.isBot
             sourceEntity.getBehaviorByType<ShipCollisionResponseBehavior>()
                 // TODO need to consider all colliding volumes
-                .handleResponse(scene, targetEntity, contactPoints)
+                .handleResponse(targetEntity, contactPoints)
         }
     }
 }

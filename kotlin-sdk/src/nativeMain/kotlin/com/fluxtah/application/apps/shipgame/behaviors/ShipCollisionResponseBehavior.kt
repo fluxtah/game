@@ -6,11 +6,12 @@ import com.fluxtah.application.api.entity.EntityBehavior
 import com.fluxtah.application.api.math.Vector3
 import com.fluxtah.application.api.math.times
 import com.fluxtah.application.api.scene.Scene
+import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
 import kotlin.math.absoluteValue
 
 class ShipCollisionResponseBehavior : EntityBehavior() {
     fun handleResponse(
-        scene: Scene, otherEntity: Entity, contactPoints: List<CollisionContactPoint>
+        otherEntity: Entity, contactPoints: List<CollisionContactPoint>
     ) {
         if (contactPoints.isNotEmpty()) {
             // Assuming we're dealing with the spaceship and a plateau
@@ -32,7 +33,17 @@ class ShipCollisionResponseBehavior : EntityBehavior() {
             // Reflect the spaceship's velocity
             val velocity = entity.getVelocity()
             val newVelocity = reflect(velocity, normal)
-            entity.setVelocity(newVelocity * 0.5f)
+
+            if (otherEntity.data is ShipData) {
+                entity.setVelocity(newVelocity * 0.95f)
+
+                // If the other entity is a spaceship, reflect its velocity as well
+                val otherVelocity = otherEntity.getVelocity()
+                val newOtherVelocity = reflect(otherVelocity, normal)
+                otherEntity.setVelocity(newOtherVelocity * 0.95f)
+            } else {
+                entity.setVelocity(newVelocity * 0.5f)
+            }
         }
     }
 

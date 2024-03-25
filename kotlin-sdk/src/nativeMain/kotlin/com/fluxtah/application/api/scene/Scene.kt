@@ -84,7 +84,7 @@ interface Scene {
     fun entityToPool(entity: Entity)
     fun resetEntityPool(id: String)
     fun entityInPoolByCondition(poolId: String, condition: (entity: Entity) -> Boolean): Entity?
-    fun spawnEntityFromPool(id: String): Entity
+    fun spawnEntityFromPool(poolId: String): Entity
     fun emitterById(id: String): Emitter?
     fun emitterFromPool(id: String, block: (emitter: Emitter) -> Unit)
     fun emitterToPool(emitter: Emitter)

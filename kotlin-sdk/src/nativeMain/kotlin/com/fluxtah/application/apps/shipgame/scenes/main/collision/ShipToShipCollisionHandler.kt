@@ -17,10 +17,9 @@ class ShipToShipCollisionHandler : CollisionHandler(
         targetEntity: Entity,
         contactPoints: List<CollisionContactPoint>
     ) {
-        if(sourceEntity.data is ShipData && targetEntity.data is ShipData) {
+        if (sourceEntity.data is ShipData && targetEntity.data is ShipData) {
             sourceEntity.getBehaviorByType<ShipCollisionResponseBehavior>()
-                // TODO need to consider all colliding volumes
-                .handleResponse(scene, targetEntity, contactPoints)
+                .handleResponse(targetEntity, contactPoints)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.fluxtah.application.api.ai
 import com.fluxtah.application.api.entity.Entity
 import com.fluxtah.application.api.scene.Scene
 
+@Suppress("UNCHECKED_CAST")
 class AiEntityStateMachine<T>(val defaultState: T, val scene: Scene, val entity: Entity) {
     private val schedules = mutableMapOf<T, AiSchedule>()
 
