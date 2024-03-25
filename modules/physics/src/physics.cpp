@@ -188,7 +188,12 @@ createPhysicsRigidBodyFromAABBs(void *context, void *data, int group, int mask, 
                     (aabbs[i].max[0] - aabbs[i].min[0]) * 0.5f,
                     (aabbs[i].max[1] - aabbs[i].min[1]) * 0.5f,
                     (aabbs[i].max[2] - aabbs[i].min[2]) * 0.5f));
-            compShape->addChildShape(btTransform::getIdentity(), subShape);
+            btTransform trans = btTransform::getIdentity();
+            trans.setOrigin(btVector3(
+                    aabbs[i].translation[0],
+                    aabbs[i].translation[1],
+                    aabbs[i].translation[2]));
+            compShape->addChildShape(trans, subShape);
         }
         shape = compShape;
     }

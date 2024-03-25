@@ -26,6 +26,7 @@ abstract class CollisionHandler(private val groupA: Int, private val groupB: Int
                 it.copy(
                     positionA = it.positionB,
                     positionB = it.positionA,
+                    normal = -it.normal
                 )
             })
             return true

@@ -158,6 +158,7 @@ typedef struct CCollisionInfo {
 typedef struct AABB {
     float min[3]; // Minimum corner of the AABB
     float max[3]; // Maximum corner of the AABB
+    float translation[3]; // Translation of the AABB
 } AABB;
 
 typedef struct CreateSpriteSheetInfo {

@@ -90,6 +90,12 @@ AABB readModelAABBNode(cgltf_node *node) {
     cgltf_accessor *positionAccessor = getAttributeAccessorByType(node->mesh, 0, cgltf_attribute_type_position);
 
     AABB aabb = {0};
+
+    if(node->has_translation) {
+        aabb.translation[0] = node->translation[0];
+        aabb.translation[1] = node->translation[1];
+        aabb.translation[2] = node->translation[2];
+    }
     for (cgltf_size i = 0; i < positionAccessor->count; i++) {
         float *pos = (float *) ((char *) positionAccessor->buffer_view->buffer->data +
                                 positionAccessor->buffer_view->offset +

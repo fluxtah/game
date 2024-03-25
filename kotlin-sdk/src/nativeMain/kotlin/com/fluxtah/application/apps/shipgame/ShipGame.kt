@@ -10,8 +10,8 @@ import com.fluxtah.application.apps.shipgame.scenes.testScene
  *     - Special maneuvers (cost energy)
  *       - Barrel roll - invulnerable for a short time - fast acceleration boost forwards whilst spinning
  *       - Boost - fast acceleration forwards
-*        - Loop - fast acceleration upwards and then back on yourself/enemy, good for getting behind enemy
-            when they're chasing you
+ *        - Loop - fast acceleration upwards and then back on yourself/enemy, good for getting behind enemy
+when they're chasing you
  *    - Name tags for ships
  *       - Add a mini map
  *    - Add map bounds (make map rectangular where teams start on opposite sides)
@@ -46,7 +46,7 @@ class ShipGame : Application {
         testScene()
         mainScene()
 
-      //   setActiveScene("test")
+        //   setActiveScene("test")
         setActiveScene(Id.SCENE_MAIN)
     }
 }
