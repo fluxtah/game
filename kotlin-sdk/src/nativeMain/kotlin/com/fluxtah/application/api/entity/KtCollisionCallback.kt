@@ -54,6 +54,12 @@ fun ktCollisionCallback2(collisionResult: CCollisionResult2) {
         contactPoints
     )
 
+    for (handler in activeSceneInfo.collisionHandlers) {
+        if (handler.handleCollision(activeSceneInfo.scene, result)) {
+            break
+        }
+    }
+
     activeSceneInfo.onCollision?.invoke(activeSceneInfo.scene, result)
 
 }

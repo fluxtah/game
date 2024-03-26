@@ -1,7 +1,6 @@
 package com.fluxtah.application.apps.shipgame.scenes
 
 import com.fluxtah.application.api.Application
-import com.fluxtah.application.api.collision.CollisionHandler
 import com.fluxtah.application.api.fixedTimeStep
 import com.fluxtah.application.api.scene.scene
 import com.fluxtah.application.apps.shipgame.Id
@@ -34,7 +33,6 @@ import com.fluxtah.application.apps.shipgame.scenes.main.sequences.sequencePlaye
 import com.fluxtah.application.apps.shipgame.scenes.main.sheets.spriteSheetCourierNew
 import com.fluxtah.application.apps.shipgame.scenes.main.sheets.spriteSheetGameUi
 import com.fluxtah.application.apps.shipgame.scenes.main.sounds.shipSounds
-import kotlin.math.sin
 
 fun Application.mainScene() {
     scene(Id.SCENE_MAIN) {
@@ -115,21 +113,12 @@ fun Application.mainScene() {
             }
         }
 
-        val collisionHandlers = mutableListOf<CollisionHandler>()
-        collisionHandlers.add(ProjectileToPlayerShipCollisionHandler())
-        collisionHandlers.add(ProjectileToBlockCollisionHandler())
-        collisionHandlers.add(ProjectileToDestroyableCollisionHandler())
-        collisionHandlers.add(ShipToBlockCollisionHandler())
-        collisionHandlers.add(ShipToDestroyableCollisionHandler())
-        collisionHandlers.add(ShipToShipCollisionHandler())
-
-        onCollision { scene, result ->
-            for (handler in collisionHandlers) {
-                if (handler.handleCollision(scene, result)) {
-                    return@onCollision
-                }
-            }
-        }
+        collisionHandler(ProjectileToPlayerShipCollisionHandler())
+        collisionHandler(ProjectileToBlockCollisionHandler())
+        collisionHandler(ProjectileToDestroyableCollisionHandler())
+        collisionHandler(ShipToBlockCollisionHandler())
+        collisionHandler(ShipToDestroyableCollisionHandler())
+        collisionHandler(ShipToShipCollisionHandler())
     }
 }
 

@@ -26,10 +26,7 @@ class ProjectileToPlayerShipCollisionHandler :
 
         val otherEntityData: ShipData = targetEntity.data()
 
-        if (sourceEntity.data is PlasmaBoltData &&
-            targetEntity.data is ShipData &&
-            data.team != otherEntityData.playerData.team
-        ) {
+        if (sourceEntity.data is PlasmaBoltData && targetEntity.data is ShipData && data.team != otherEntityData.playerData.team) {
             if (otherEntityData.depleteShieldThenArmor(scene.data<GameData>().plasmaBoltDamage) > 0) {
                 boltOwner.apply {
                     val ownerData = this.data<ShipData>()
@@ -45,8 +42,8 @@ class ProjectileToPlayerShipCollisionHandler :
                 }
                 targetEntity.getBehaviorByType<ShipDieBehavior>().die(boltOwner)
             }
-
         }
+
         if (targetEntity != boltOwner) {
             scene.entityToPool(sourceEntity)
             sourceEntity.visible = false

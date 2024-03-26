@@ -3,6 +3,7 @@ package com.fluxtah.application.api.scene
 import com.fluxtah.application.api.Application
 import com.fluxtah.application.api.Sound
 import com.fluxtah.application.api.camera.Camera
+import com.fluxtah.application.api.collision.CollisionHandler
 import com.fluxtah.application.api.emitter.Emitter
 import com.fluxtah.application.api.emitter.EmitterBehavior
 import com.fluxtah.application.api.entity.CollisionResult2
@@ -22,6 +23,7 @@ private val scenes = mutableMapOf<String, SceneInfo>()
 data class SceneInfo(
     val scene: BaseScene,
     val onCollision: ((scene: Scene, result: CollisionResult2) -> Unit)? = null,
+    val collisionHandlers: List<CollisionHandler> = emptyList(),
     val onSceneCreated: ((Scene) -> Unit)? = null,
     val onSceneUpdate: OnSceneUpdate? = null,
     val onSceneBeforeUpdate: OnSceneBeforeUpdate? = null,

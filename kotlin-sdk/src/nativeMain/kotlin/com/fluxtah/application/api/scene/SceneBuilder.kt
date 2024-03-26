@@ -5,6 +5,7 @@ import com.fluxtah.application.api.LightBuilder
 import com.fluxtah.application.api.SoundPoolBuilder
 import com.fluxtah.application.api.camera.Camera
 import com.fluxtah.application.api.camera.CameraBuilder
+import com.fluxtah.application.api.collision.CollisionHandler
 import com.fluxtah.application.api.emitter.EmitterBuilder
 import com.fluxtah.application.api.emitter.EmitterPoolBuilder
 import com.fluxtah.application.api.entity.CollisionResult2
@@ -60,6 +61,8 @@ class SceneBuilder(val sceneId: String) {
     private var onSceneBeforeUpdate: OnSceneBeforeUpdate? = null
     private var onSceneAfterUpdate: OnSceneAfterUpdate? = null
     private var onCollision: ((scene: Scene, result: CollisionResult2) -> Unit)? = null
+
+    private val collisionHandlers = mutableListOf<CollisionHandler>()
 
     private var gravityX: Float = 0.0f
     private var gravityY: Float = -9.81f
@@ -193,6 +196,10 @@ class SceneBuilder(val sceneId: String) {
         onCollision = block
     }
 
+    fun collisionHandler(handler: CollisionHandler) {
+        collisionHandlers.add(handler)
+    }
+
     @OptIn(ExperimentalForeignApi::class)
     fun build(): SceneInfo {
         //
@@ -270,6 +277,7 @@ class SceneBuilder(val sceneId: String) {
         return SceneInfo(
             scene,
             onCollision,
+            collisionHandlers,
             onSceneCreated,
             onSceneUpdate,
             onSceneBeforeUpdate,
