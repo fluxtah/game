@@ -52,6 +52,21 @@ data class Quaternion(var w: Float, var x: Float, var y: Float, var z: Float) {
         return v + uv * (2.0f * w) + uuv * 2.0f
     }
 
+    fun lerp(target: Quaternion, alpha: Float): Quaternion {
+        // Ensure alpha is between 0 and 1
+        val clampedAlpha = alpha.coerceIn(0f, 1f)
+        // Linearly interpolate each component
+        val interpolatedW = (1 - clampedAlpha) * this.w + clampedAlpha * target.w
+        val interpolatedX = (1 - clampedAlpha) * this.x + clampedAlpha * target.x
+        val interpolatedY = (1 - clampedAlpha) * this.y + clampedAlpha * target.y
+        val interpolatedZ = (1 - clampedAlpha) * this.z + clampedAlpha * target.z
+        val result = Quaternion(interpolatedW, interpolatedX, interpolatedY, interpolatedZ)
+        // Normalize the result to ensure it's a valid quaternion
+        result.normalize()
+        return result
+    }
+
+
     fun getLocalForwardAxis(): Vector3 {
         val globalForward = Vector3(0f, 0f, 1f) // Standard forward vector in global coordinates
         return rotateVector(globalForward)
