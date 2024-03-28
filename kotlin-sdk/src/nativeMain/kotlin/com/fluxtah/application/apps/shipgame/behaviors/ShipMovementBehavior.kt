@@ -19,14 +19,19 @@ class ShipMovementBehavior(
     private val maxReverseSpeed: Float = -60.0f,
     private val lateralAcceleration: Float = 40.0f,
     private val maxLateralSpeed: Float = 100.0f,
-    private val maxLeanAngle: Float = (10.0f).toRadians()
+    private val maxLeanAngle: Float = (7.0f).toRadians(),
+    private val yawAcceleration: Float = 256.0f,// Increased for faster rotation
+    private val yawMaxVelocity: Float = 100.0f,
+    private val yawDampingFactor: Float = 0.96f, // Adjust this value to control the deceleration rate
+    private var yaw: Float = 0.0f,
+    private var yawVelocity: Float = 0.0f,
+    private val dampingFactor: Float = 0.99f // Adjust this value to control the deceleration rate
 ) : EntityBehavior() {
     val data: ShipData by lazy { entity.data() }
 
     private lateinit var engineSound: Sound
     private lateinit var movementSound: Sound
 
-    private val dampingFactor = 0.98f // Adjust this value to control the deceleration rate
 
     override fun initialize() {
         engineSound = scene.soundFromPool(Id.SOUND_ENGINE)
@@ -63,11 +68,32 @@ class ShipMovementBehavior(
 
         entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
         entity.setVelocity(x = velocityX, z = velocityZ)
-        // Apply lean effect based on lateral velocity
-       // applyLeanEffect()
 
         engineSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
         movementSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
+
+        if (data.input.isYawingLeft) {
+            yawVelocity += fixedTimeStep * yawAcceleration
+        } else if (data.input.isYawingRight) {
+            yawVelocity -= fixedTimeStep * yawAcceleration
+        } else {
+            // Apply stronger damping when not yawing left or right
+            yawVelocity *= yawDampingFactor
+        }
+
+        // Ensure yawVelocity stays within its bounds
+        yawVelocity = yawVelocity.coerceIn(-yawMaxVelocity, yawMaxVelocity)
+
+        // Update yaw based on the current velocity
+        yaw += yawVelocity * fixedTimeStep
+
+        // Calculate and set the new orientation
+        val orientation = Quaternion.identity()
+        orientation.rotateAroundAxis(Vector3.up, yaw)
+        entity.setOrientation(orientation)
+
+        // Apply lean effect based on lateral velocity
+        applyLeanEffect()
     }
 
     private fun calculateVelocityX() = when {
@@ -129,8 +155,7 @@ class ShipMovementBehavior(
     }
 
     private fun applyLeanEffect() {
-        // Convert lean angle to radians
-        val leanAngle = ((entity.velocityX / maxLateralSpeed * maxLeanAngle).toDouble())
+        val leanAngle = -((entity.velocityX / maxLateralSpeed * maxLeanAngle).toDouble())
 
         // Get the entity's current orientation to preserve it
         val currentOrientation = entity.getOrientation()
@@ -147,11 +172,7 @@ class ShipMovementBehavior(
         // Assuming that Quaternion multiplication (*) is defined to combine rotations
         val combinedOrientation = currentOrientation * leanQuaternion
 
-        // LERP for smooth transition (if your framework does not support quaternion multiplication, you may need to implement this)
-        val t = 0.1f // Interpolation factor, adjust as necessary
-        val interpolatedOrientation = currentOrientation.lerp(combinedOrientation, t)
-
-        entity.setOrientation(interpolatedOrientation)
+        entity.setOrientation(combinedOrientation)
     }
 }
 

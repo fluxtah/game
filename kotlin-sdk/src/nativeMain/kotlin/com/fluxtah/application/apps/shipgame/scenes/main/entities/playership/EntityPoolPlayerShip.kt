@@ -27,7 +27,7 @@ fun SceneBuilder.entityPoolPlayerShip() {
         behaviour { AiPlayerShipBehavior() }
         behaviour { FirePlasmaCannonBehaviour() }
         behaviour { ThrustBehavior() }
-        behaviour { YawBehavior() }
+      //  behaviour { YawBehavior() }
         behaviour { ShipMovementBehavior() }
         behaviour { ShipDieBehavior() }
         behaviour { ShipCollisionResponseBehavior() }

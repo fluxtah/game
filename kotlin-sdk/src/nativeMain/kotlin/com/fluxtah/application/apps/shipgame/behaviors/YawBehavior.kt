@@ -12,7 +12,7 @@ class YawBehavior : EntityBehavior() {
 
     private val yawAcceleration = 256.0f // Increased for faster rotation
     private val yawMaxVelocity = 128.0f
-    private val dampingFactor = 0.95f // Adjust this value to control the deceleration rate
+    private val yawDampingFactor = 0.95f // Adjust this value to control the deceleration rate
 
     private var yaw = 0.0f
     private var yawVelocity = 0.0f
@@ -24,7 +24,7 @@ class YawBehavior : EntityBehavior() {
             yawVelocity -= fixedTimeStep * yawAcceleration
         } else {
             // Apply stronger damping when not yawing left or right
-            yawVelocity *= dampingFactor
+            yawVelocity *= yawDampingFactor
         }
 
         // Ensure yawVelocity stays within its bounds

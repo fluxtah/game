@@ -8,7 +8,7 @@ import com.fluxtah.application.apps.shipgame.Id
 import kotlin.random.Random
 
 class PlasmaBoltBehaviour(
-    private val boltSpeed: Float = 256.0f,
+    private val boltSpeed: Float = 400.0f,
     private val maxDistance: Float = 256f
 ) : EntityBehavior() {
 
