@@ -10,16 +10,14 @@ import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
 import kotlin.math.absoluteValue
 
 class ShipCollisionResponseBehavior : EntityBehavior() {
-    fun handleResponse(
-        otherEntity: Entity, contactPoints: List<CollisionContactPoint>
-    ) {
+    fun handleResponse(otherEntity: Entity, contactPoints: List<CollisionContactPoint>) {
         if (contactPoints.isNotEmpty()) {
             // Assuming we're dealing with the spaceship and a plateau
             val maxPenetration = contactPoints.maxOf { it.distance } // Find the maximum penetration depth
             val normal = contactPoints[0].normal
 
-            println("Collision depth: $maxPenetration")
-            println("Collision normal: $normal")
+            // println("Collision depth: $maxPenetration")
+            // println("Collision normal: $normal")
 
             // Calculate the adjustment needed to move the spaceship out of collision
             // You may add a small buffer (e.g., 0.01) to ensure they don't immediately collide again

@@ -3,6 +3,7 @@ package com.fluxtah.application.apps.shipgame.behaviors
 import com.fluxtah.application.api.Sound
 import com.fluxtah.application.api.entity.EntityBehavior
 import com.fluxtah.application.api.fixedTimeStep
+import com.fluxtah.application.api.math.Quaternion
 import com.fluxtah.application.api.math.Vector3
 import com.fluxtah.application.api.math.toRadians
 import com.fluxtah.application.apps.shipgame.Id
@@ -12,10 +13,10 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class ShipMovementBehavior(
-    val forwardAcceleration: Float = 40.0f,
+    private val forwardAcceleration: Float = 40.0f,
     private val reversingFactor: Float = 2.0f,
-    val maxForwardSpeed: Float = 100.0f,
-    val maxReverseSpeed: Float = -60.0f,
+    private val maxForwardSpeed: Float = 100.0f,
+    private val maxReverseSpeed: Float = -60.0f,
     private val lateralAcceleration: Float = 40.0f,
     private val maxLateralSpeed: Float = 100.0f,
     private val maxLeanAngle: Float = (10.0f).toRadians()
@@ -24,6 +25,8 @@ class ShipMovementBehavior(
 
     private lateinit var engineSound: Sound
     private lateinit var movementSound: Sound
+
+    private val dampingFactor = 0.98f // Adjust this value to control the deceleration rate
 
     override fun initialize() {
         engineSound = scene.soundFromPool(Id.SOUND_ENGINE)
@@ -49,6 +52,7 @@ class ShipMovementBehavior(
 
         val velocityX = calculateVelocityX()
         val velocityZ = calculateVelocityZ()
+
         val forward = entity.getOrientation().getLocalForwardAxis()
         val right = entity.getOrientation().getLocalRightAxis()
 
@@ -60,7 +64,7 @@ class ShipMovementBehavior(
         entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
         entity.setVelocity(x = velocityX, z = velocityZ)
         // Apply lean effect based on lateral velocity
-        applyLeanEffect()
+       // applyLeanEffect()
 
         engineSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
         movementSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
@@ -69,20 +73,20 @@ class ShipMovementBehavior(
     private fun calculateVelocityX() = when {
         data.input.isMovingRight -> {
             movementSound.playIfNotPlaying()
-            (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtMost(maxLateralSpeed)
+            (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(-maxLateralSpeed)
         }
 
         data.input.isMovingLeft -> {
             movementSound.playIfNotPlaying()
-            (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtLeast(-maxLateralSpeed)
+            (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(maxLateralSpeed)
         }
 
         else -> {
             movementSound.stopIfPlaying()
             if (entity.velocityX > 0) {
-                (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(0.0f)
+                (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(0.0f) * dampingFactor
             } else {
-                (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(0.0f)
+                (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(0.0f) * dampingFactor
             }
         }
     }
@@ -101,9 +105,9 @@ class ShipMovementBehavior(
         else -> {
             // Slow down to a halt if not moving forward or reversing
             if (entity.velocityZ > 0) {
-                (entity.velocityZ - forwardAcceleration * fixedTimeStep).coerceAtLeast(0.0f)
+                (entity.velocityZ - forwardAcceleration * fixedTimeStep).coerceAtLeast(0.0f) * dampingFactor
             } else {
-                (entity.velocityZ + forwardAcceleration * fixedTimeStep).coerceAtMost(0.0f)
+                (entity.velocityZ + forwardAcceleration * fixedTimeStep).coerceAtMost(0.0f) * dampingFactor
             }
         }
     }
@@ -124,35 +128,30 @@ class ShipMovementBehavior(
         engineSound.stopIfPlaying()
     }
 
-    private fun calculateLateralMovement(yaw: Float, distance: Float): Vector3 {
-        val yawRadians = yaw.toRadians()
-        val forwardDirection = Vector3(sin(yawRadians), 0f, cos(yawRadians))
-        val leftDirection = Vector3(cos(yawRadians), 0f, -sin(yawRadians))
-        val rightDirection = Vector3(-cos(yawRadians), 0f, sin(yawRadians))
-        val lateralDirection = if (entity.velocityX > 0) rightDirection else -leftDirection
-        return lateralDirection * distance
-    }
-
     private fun applyLeanEffect() {
-        // Calculate lean angle based on lateral velocity, ensuring it does not exceed maxLeanAngle
-        val leanAngle = (entity.velocityX / maxLateralSpeed) * maxLeanAngle
-        // Apply lean angle to entity's Z-axis rotation
-        // UNDONE: Bullet physics
-        //entity.setRotation(z = leanAngle)
-    }
+        // Convert lean angle to radians
+        val leanAngle = ((entity.velocityX / maxLateralSpeed * maxLeanAngle).toDouble())
 
-    fun calculateForwardMovement(yaw: Float, distance: Float): Vector3 {
-        // Convert yaw to radians
-        val yawRadians = yaw.toRadians()
-        val sinYaw = sin(yawRadians)
-        val cosYaw = cos(yawRadians)
+        // Get the entity's current orientation to preserve it
+        val currentOrientation = entity.getOrientation()
 
-        // Calculate forward movement based on yaw
-        return Vector3(
-            distance * sinYaw,
-            0f, // Assuming no vertical movement in forward thrust
-            distance * cosYaw
-        )
+        // Calculate the quaternion for the desired lean angle around the Z axis
+        val halfAngle = leanAngle / 2
+        val sinHalfAngle = sin(halfAngle).toFloat()
+        val cosHalfAngle = cos(halfAngle).toFloat()
+
+        // Quaternion representing rotation around the Z-axis by the lean angle
+        val leanQuaternion = Quaternion(cosHalfAngle, 0f, 0f, sinHalfAngle)
+
+        // Combine the current orientation with the lean quaternion
+        // Assuming that Quaternion multiplication (*) is defined to combine rotations
+        val combinedOrientation = currentOrientation * leanQuaternion
+
+        // LERP for smooth transition (if your framework does not support quaternion multiplication, you may need to implement this)
+        val t = 0.1f // Interpolation factor, adjust as necessary
+        val interpolatedOrientation = currentOrientation.lerp(combinedOrientation, t)
+
+        entity.setOrientation(interpolatedOrientation)
     }
 }
 

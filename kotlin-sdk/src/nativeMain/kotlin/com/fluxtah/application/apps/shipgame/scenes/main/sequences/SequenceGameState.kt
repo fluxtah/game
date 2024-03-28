@@ -42,7 +42,7 @@ fun SceneBuilder.sequenceGameState() {
             val teamPlayerDistanceFromCenter = (60 * 8) + 30f
 
             setupFriendlyPlayerEntities(sceneData, scene, teamPlayerDistanceFromCenter)
-            setupEnemyPlayerEntities(sceneData, scene, teamPlayerDistanceFromCenter)
+          //  setupEnemyPlayerEntities(sceneData, scene, teamPlayerDistanceFromCenter)
             setupLocalPlayerEntity(scene, camera)
 
             scene.resetEmitterPool(Id.EMITTER_EXPLOSION)

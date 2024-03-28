@@ -6,6 +6,11 @@ import kotlin.math.sqrt
 
 data class Quaternion(var w: Float, var x: Float, var y: Float, var z: Float) {
 
+    companion object {
+        fun identity(): Quaternion {
+            return Quaternion(1f, 0f, 0f, 0f)
+        }
+    }
     fun normalize() {
         val norm = sqrt((w * w + x * x + y * y + z * z).toDouble()).toFloat()
         w /= norm
@@ -80,5 +85,9 @@ data class Quaternion(var w: Float, var x: Float, var y: Float, var z: Float) {
     fun getLocalRightAxis(): Vector3 {
         val globalRight = Vector3(1f, 0f, 0f) // Standard right vector in global coordinates
         return rotateVector(globalRight)
+    }
+
+    operator fun times(quaternion: Quaternion): Quaternion {
+        return multiply(quaternion)
     }
 }
