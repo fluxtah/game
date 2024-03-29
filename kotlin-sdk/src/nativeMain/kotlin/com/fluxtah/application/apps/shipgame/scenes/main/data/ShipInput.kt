@@ -9,7 +9,10 @@ data class ShipInput(
     var isReversing: Boolean = false,
     var isMovingLeft: Boolean = false,
     var isMovingRight: Boolean = false,
-    var isPlacingPowerNode: Boolean = false
+    var isPlacingPowerNode: Boolean = false,
+
+    // Special maneuvers
+    var isBoosting: Boolean = false
 ) {
     fun stop() {
         isThrusting = false
@@ -21,5 +24,6 @@ data class ShipInput(
         isMovingLeft = false
         isMovingRight = false
         isPlacingPowerNode = false
+        isBoosting = false
     }
 }

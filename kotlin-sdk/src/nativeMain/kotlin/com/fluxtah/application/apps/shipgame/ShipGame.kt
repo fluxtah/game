@@ -38,7 +38,7 @@ when they're chasing you
 class ShipGame : Application {
 
     companion object {
-        const val PLAYERS_PER_TEAM = 1
+        const val PLAYERS_PER_TEAM = 6
         const val TEAM_WIN_POWER_LEVEL = 1000
     }
 

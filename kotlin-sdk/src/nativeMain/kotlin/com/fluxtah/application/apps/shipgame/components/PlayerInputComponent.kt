@@ -30,6 +30,8 @@ class PlayerInputComponent : SceneComponent() {
         playerShipData.input.isMovingLeft = isKeyPressed(Key.A)
         playerShipData.input.isMovingRight = isKeyPressed(Key.D)
         playerShipData.input.isPlacingPowerNode = isKeyPressed(Key.P)
+
+        playerShipData.input.isBoosting = isKeyPressed(Key.B)
     }
 }
 

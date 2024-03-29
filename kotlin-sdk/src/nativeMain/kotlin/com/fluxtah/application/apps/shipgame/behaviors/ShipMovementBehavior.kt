@@ -29,15 +29,21 @@ class ShipMovementBehavior(
 ) : EntityBehavior() {
     val data: ShipData by lazy { entity.data() }
 
+    private var specialManeuver: SpecialManeuver = SpecialManeuver.None
+
     private lateinit var engineSound: Sound
     private lateinit var movementSound: Sound
 
+    private val boostFactor = 4.0f
+    private var boostTimer = 0f
+    private val boostDuration = 1.5f // Seconds
 
     override fun initialize() {
         engineSound = scene.soundFromPool(Id.SOUND_ENGINE)
         engineSound.playIfNotPlaying()
 
         movementSound = scene.soundFromPool(Id.SOUND_LATERAL_THRUST)
+        specialManeuver = SpecialManeuver.None
     }
 
     override fun reset() {
@@ -49,12 +55,57 @@ class ShipMovementBehavior(
         movementSound.stopIfPlaying()
         entity.setVelocity(x = 0.0f)
 
-        // UNDONE: Bullet physics
-        //entity.setRotation(z = 0.0f) // Reset lean angle when resetting behavior
+        specialManeuver = SpecialManeuver.None
+        yaw = 0.0f
     }
 
     override fun update(time: Float) {
+        if (data.input.isBoosting && specialManeuver != SpecialManeuver.Boost) {
+            if (data.energy > 10) {
+                data.depleteEnergy(10f)
+                specialManeuver = SpecialManeuver.Boost
+            }
+        }
 
+        when (specialManeuver) {
+            SpecialManeuver.None -> stepMovement()
+            SpecialManeuver.BarrelRoll -> stepMovement()
+            SpecialManeuver.Boost -> boost()
+        }
+    }
+
+    private fun boost() {
+
+        // Only boost for a limited duration
+        if (boostTimer < boostDuration) {
+            boostTimer += fixedTimeStep
+        } else {
+            specialManeuver = SpecialManeuver.None
+            boostTimer = 0f
+            return
+        }
+
+        // Increase forward velocity
+        val velocityZ =
+            (entity.velocityZ + (forwardAcceleration * boostFactor) * fixedTimeStep).coerceAtMost(maxForwardSpeed * boostFactor)
+
+        // Smooth down lateral velocity
+        if (entity.velocityX > 0) {
+            (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(0.0f) * dampingFactor
+        } else {
+            (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(0.0f) * dampingFactor
+        }
+
+        val forward = entity.getOrientation().getLocalForwardAxis()
+        val velocity = forward * velocityZ
+
+        val newPosition = Vector3(entity.positionX, entity.positionY, entity.positionZ) + velocity * fixedTimeStep
+
+        entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
+        entity.setVelocity(z = velocityZ)
+    }
+
+    private fun stepMovement() {
         val velocityX = calculateVelocityX()
         val velocityZ = calculateVelocityZ()
 
@@ -174,6 +225,12 @@ class ShipMovementBehavior(
 
         entity.setOrientation(combinedOrientation)
     }
+}
+
+enum class SpecialManeuver {
+    None,
+    BarrelRoll,
+    Boost
 }
 
 

@@ -5,14 +5,13 @@ import com.fluxtah.application.apps.shipgame.CollisionGroups
 import com.fluxtah.application.apps.shipgame.Id
 import com.fluxtah.application.apps.shipgame.ShipGame
 import com.fluxtah.application.apps.shipgame.behaviors.FirePlasmaCannonBehaviour
-import com.fluxtah.application.apps.shipgame.behaviors.ShipMovementBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.PlacePowerNodeBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.ShipCollisionResponseBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.ShipDieBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.ShipEnergyBehaviour
+import com.fluxtah.application.apps.shipgame.behaviors.ShipMovementBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.ShipShieldBehaviour
 import com.fluxtah.application.apps.shipgame.behaviors.ThrustBehavior
-import com.fluxtah.application.apps.shipgame.behaviors.YawBehavior
 import com.fluxtah.application.apps.shipgame.behaviors.aiplayer.AiPlayerShipBehavior
 import com.fluxtah.application.apps.shipgame.scenes.main.data.ShipData
 
@@ -27,7 +26,6 @@ fun SceneBuilder.entityPoolPlayerShip() {
         behaviour { AiPlayerShipBehavior() }
         behaviour { FirePlasmaCannonBehaviour() }
         behaviour { ThrustBehavior() }
-      //  behaviour { YawBehavior() }
         behaviour { ShipMovementBehavior() }
         behaviour { ShipDieBehavior() }
         behaviour { ShipCollisionResponseBehavior() }
