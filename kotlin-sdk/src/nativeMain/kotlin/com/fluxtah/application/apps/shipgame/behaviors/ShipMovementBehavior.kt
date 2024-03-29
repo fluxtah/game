@@ -94,19 +94,29 @@ class ShipMovementBehavior(
             (entity.velocityZ + (forwardAcceleration * boostFactor) * fixedTimeStep).coerceAtMost(maxForwardSpeed * boostFactor)
 
         // Smooth down lateral velocity
-        if (entity.velocityX > 0) {
+        val velocityX = if (entity.velocityX > 0) {
             (entity.velocityX - lateralAcceleration * fixedTimeStep).coerceAtLeast(0.0f) * dampingFactor
         } else {
             (entity.velocityX + lateralAcceleration * fixedTimeStep).coerceAtMost(0.0f) * dampingFactor
         }
 
         val forward = entity.getOrientation().getLocalForwardAxis()
-        val velocity = forward * velocityZ
+        val right = entity.getOrientation().getLocalRightAxis()
+
+        val velocity = forward * velocityZ + right * velocityX
 
         val newPosition = Vector3(entity.positionX, entity.positionY, entity.positionZ) + velocity * fixedTimeStep
 
         entity.setPosition(newPosition.x, newPosition.y, newPosition.z)
-        entity.setVelocity(z = velocityZ)
+        entity.setVelocity(x = velocityX, z = velocityZ)
+
+        // Calculate and set the new orientation
+        val orientation = Quaternion.identity()
+        orientation.rotateAroundAxis(Vector3.up, yaw)
+        entity.setOrientation(orientation)
+
+        // Apply lean effect based on lateral velocity
+        applyLeanEffect()
     }
 
     private fun stepMovement() {
@@ -127,17 +137,7 @@ class ShipMovementBehavior(
         engineSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
         movementSound.setSoundPosition(newPosition.x, newPosition.y, newPosition.z)
 
-        if (data.input.isYawingLeft) {
-            yawVelocity += fixedTimeStep * yawAcceleration
-        } else if (data.input.isYawingRight) {
-            yawVelocity -= fixedTimeStep * yawAcceleration
-        } else {
-            // Apply stronger damping when not yawing left or right
-            yawVelocity *= yawDampingFactor
-        }
-
-        // Ensure yawVelocity stays within its bounds
-        yawVelocity = yawVelocity.coerceIn(-yawMaxVelocity, yawMaxVelocity)
+        yawVelocity = calculateYawVelocity()
 
         // Update yaw based on the current velocity
         yaw += yawVelocity * fixedTimeStep
@@ -149,6 +149,20 @@ class ShipMovementBehavior(
 
         // Apply lean effect based on lateral velocity
         applyLeanEffect()
+    }
+
+    private fun calculateYawVelocity(): Float {
+        val newYawVelocity = if (data.input.isYawingLeft) {
+            yawVelocity + fixedTimeStep * yawAcceleration
+        } else if (data.input.isYawingRight) {
+            yawVelocity - fixedTimeStep * yawAcceleration
+        } else {
+            // Apply stronger damping when not yawing left or right
+            yawVelocity * yawDampingFactor
+        }
+
+        // Ensure yawVelocity stays within its bounds
+        return newYawVelocity.coerceIn(-yawMaxVelocity, yawMaxVelocity)
     }
 
     private fun calculateVelocityX() = when {
