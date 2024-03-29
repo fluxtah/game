@@ -86,17 +86,7 @@ class AttackEnemySchedule : AiSchedule() {
             shipActions.isFiring = false
         }
 
-        val entityForward = entity.getOrientation().getLocalForwardAxis()
-        val toTarget =
-            (Vector3(closestEnemy.positionX, closestEnemy.positionY, closestEnemy.positionZ) - Vector3(
-                entity.positionX,
-                entity.positionY,
-                entity.positionZ
-            )).normalized()
-
-        val crossProduct = entityForward.cross(toTarget)
-        shipActions.isYawingLeft = crossProduct.y > 0
-        shipActions.isYawingRight = crossProduct.y < 0
+        yawToTarget(entity, closestEnemy, shipActions)
 
         checkConditionTimer.update(deltaTime) {
             if (shipData.energy < 20f) {

@@ -90,17 +90,7 @@ class AttackPowerNodeSchedule : AiSchedule() {
             shipActions.isFiring = false
         }
 
-        val entityForward = entity.getOrientation().getLocalForwardAxis()
-        val toTarget =
-            (Vector3(closestPowerNode.positionX, closestPowerNode.positionY, closestPowerNode.positionZ) - Vector3(
-                entity.positionX,
-                entity.positionY,
-                entity.positionZ
-            )).normalized()
-
-        val crossProduct = entityForward.cross(toTarget)
-        shipActions.isYawingLeft = crossProduct.y > 0
-        shipActions.isYawingRight = crossProduct.y < 0
+        yawToTarget(entity, closestPowerNode, shipActions)
 
         checkConditionTimer.update(deltaTime) {
             machine.changeState(AiPlayerShipState.AttackEnemy)

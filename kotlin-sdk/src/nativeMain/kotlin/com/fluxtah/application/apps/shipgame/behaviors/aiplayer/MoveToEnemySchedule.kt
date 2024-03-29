@@ -56,17 +56,7 @@ class MoveToEnemySchedule : AiSchedule() {
             closestEnemy.positionZ
         )
 
-        val entityForward = entity.getOrientation().getLocalForwardAxis()
-        val toTarget =
-            (Vector3(closestEnemy.positionX, closestEnemy.positionY, closestEnemy.positionZ) - Vector3(
-                entity.positionX,
-                entity.positionY,
-                entity.positionZ
-            )).normalized()
-        
-        val crossProduct = entityForward.cross(toTarget)
-        shipActions.isYawingLeft = crossProduct.y > 0
-        shipActions.isYawingRight = crossProduct.y < 0
+        yawToTarget(entity, closestEnemy, shipActions)
 
         val combatRange = sceneData.aiShipsCombatRange * 0.75f
 
@@ -88,7 +78,7 @@ class MoveToEnemySchedule : AiSchedule() {
             ) {
                 machine.changeState(AiPlayerShipState.PlacePowerNode)
             } else {
-                if(Random.nextBoolean()) {
+                if (Random.nextBoolean()) {
                     machine.changeState(AiPlayerShipState.AttackPowerNode)
                 } else {
                     machine.changeState(AiPlayerShipState.AttackEnemy)

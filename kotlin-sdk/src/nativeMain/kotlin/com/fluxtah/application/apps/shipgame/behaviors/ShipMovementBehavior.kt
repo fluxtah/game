@@ -37,6 +37,7 @@ class ShipMovementBehavior(
     private val boostFactor = 4.0f
     private var boostTimer = 0f
     private val boostDuration = 1.5f // Seconds
+    private var postBoostVelocity = 0.0f
 
     override fun initialize() {
         engineSound = scene.soundFromPool(Id.SOUND_ENGINE)
@@ -57,6 +58,8 @@ class ShipMovementBehavior(
 
         specialManeuver = SpecialManeuver.None
         yaw = 0.0f
+        boostTimer = 0f
+        postBoostVelocity = 0.0f
     }
 
     override fun update(time: Float) {
@@ -82,6 +85,7 @@ class ShipMovementBehavior(
         } else {
             specialManeuver = SpecialManeuver.None
             boostTimer = 0f
+            postBoostVelocity = (maxForwardSpeed * boostFactor) - entity.velocityZ
             return
         }
 
@@ -168,23 +172,28 @@ class ShipMovementBehavior(
         }
     }
 
-    private fun calculateVelocityZ() = when {
-        data.input.isMovingForward -> {
-            // Increase forward velocity
-            (entity.velocityZ + forwardAcceleration * fixedTimeStep).coerceAtMost(maxForwardSpeed)
-        }
+    private fun calculateVelocityZ(): Float {
+        postBoostVelocity *= dampingFactor
+        return when {
+            data.input.isMovingForward -> {
+                // Increase forward velocity
+                (entity.velocityZ + forwardAcceleration * fixedTimeStep).coerceAtMost(maxForwardSpeed + postBoostVelocity)
+            }
 
-        data.input.isReversing -> {
-            // Decrease forward velocity for reverse movement
-            (entity.velocityZ - (forwardAcceleration * reversingFactor) * fixedTimeStep).coerceAtLeast(maxReverseSpeed)
-        }
+            data.input.isReversing -> {
+                // Decrease forward velocity for reverse movement
+                (entity.velocityZ - (forwardAcceleration * reversingFactor) * fixedTimeStep).coerceAtLeast(
+                    maxReverseSpeed
+                )
+            }
 
-        else -> {
-            // Slow down to a halt if not moving forward or reversing
-            if (entity.velocityZ > 0) {
-                (entity.velocityZ - forwardAcceleration * fixedTimeStep).coerceAtLeast(0.0f) * dampingFactor
-            } else {
-                (entity.velocityZ + forwardAcceleration * fixedTimeStep).coerceAtMost(0.0f) * dampingFactor
+            else -> {
+                // Slow down to a halt if not moving forward or reversing
+                if (entity.velocityZ > 0) {
+                    (entity.velocityZ - forwardAcceleration * fixedTimeStep).coerceAtLeast(0.0f) * dampingFactor
+                } else {
+                    (entity.velocityZ + forwardAcceleration * fixedTimeStep).coerceAtMost(0.0f) * dampingFactor
+                }
             }
         }
     }
