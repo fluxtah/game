@@ -5,49 +5,49 @@
 #include <stdbool.h>
 
 typedef struct Extent2D {
-    uint32_t    width;
-    uint32_t    height;
+    uint32_t width;
+    uint32_t height;
 } Extent2D;
 
 typedef struct Extent3D {
-    uint32_t    width;
-    uint32_t    height;
-    uint32_t    depth;
+    uint32_t width;
+    uint32_t height;
+    uint32_t depth;
 } Extent3D;
 
 typedef struct Offset2D {
-    int32_t    x;
-    int32_t    y;
+    int32_t x;
+    int32_t y;
 } Offset2D;
 
 typedef struct Offset3D {
-    int32_t    x;
-    int32_t    y;
-    int32_t    z;
+    int32_t x;
+    int32_t y;
+    int32_t z;
 } Offset3D;
 
 typedef struct Rect2D {
-    Offset2D    offset;
-    Extent2D    extent;
+    Offset2D offset;
+    Extent2D extent;
 } Rect2D;
 
 typedef struct Viewport {
-    float    x;
-    float    y;
-    float    width;
-    float    height;
-    float    minDepth;
-    float    maxDepth;
+    float x;
+    float y;
+    float width;
+    float height;
+    float minDepth;
+    float maxDepth;
 } Viewport;
 
 typedef struct CreateCameraInfo {
     float positionX;
     float positionY;
     float positionZ;
-    float    fov;
-    float    aspect;
-    float    near;
-    float    far;
+    float fov;
+    float aspect;
+    float near;
+    float far;
 } CreateCameraInfo;
 
 typedef struct CreateLightInfo {
@@ -89,12 +89,12 @@ typedef struct CreateEntityInfo {
 } CreateEntityInfo;
 
 typedef struct LightArray {
-    void** lights; // Pointer to the first light
+    void **lights; // Pointer to the first light
     int size;     // Size of the array
 } LightArray;
 
 typedef struct EntityArray {
-    void** entities; // Pointer to the first entity
+    void **entities; // Pointer to the first entity
     int size;     // Size of the array
 } EntityArray;
 
@@ -146,7 +146,7 @@ typedef struct CreateEmitterInfo {
 } CreateEmitterInfo;
 
 typedef struct EmitterArray {
-    void** emitters; // Pointer to the first entity
+    void **emitters; // Pointer to the first entity
     int size;     // Size of the array
 } EmitterArray;
 
@@ -180,7 +180,7 @@ typedef struct CreateTextElementInfo {
 } CreateTextElementInfo;
 
 typedef struct TextBatchArray {
-    void** batches; // Pointer to the text batches
+    void **batches; // Pointer to the text batches
     int size;     // Size of the array
 } TextBatchArray;
 
@@ -199,7 +199,7 @@ typedef struct CreateSpriteElementInfo {
 } CreateSpriteElementInfo;
 
 typedef struct SpriteBatchArray {
-    void** batches; // Pointer to the sprite batches
+    void **batches; // Pointer to the sprite batches
     int size;     // Size of the array
 } SpriteBatchArray;
 
@@ -238,5 +238,15 @@ typedef struct CPhysicsBodyUpdate {
     float rotationY;
     float rotationZ;
 } CPhysicsBodyUpdate;
+
+typedef struct CJoyAxes {
+    const float *axes;
+    int count;
+} CJoyAxes;
+
+typedef struct CJoyButtons {
+    const unsigned char *buttons;
+    int count;
+} CJoyButtons;
 
 #endif // MODEL_H
