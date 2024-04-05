@@ -173,13 +173,15 @@ int main() {
 
         glfwPollEvents();
 
-        double updateStartTime = glfwGetTime();
-
         setListenerPosition(context->activeCamera->position[0],
                             context->activeCamera->position[1],
                             context->activeCamera->position[2]);
 
+        double updateStartTime = glfwGetTime();
+
         ktUpdateApplication((float) frameStartTime, (float) deltaTime);
+
+        updateAccumulatedTime += glfwGetTime() - updateStartTime;
 
         //
         // Get the list of entities & emitters we want to render
@@ -316,8 +318,6 @@ int main() {
 
             endCommandBufferRecording(spriteRenderPassConfig->commandBuffers[i]);
         }
-
-        updateAccumulatedTime += glfwGetTime() - updateStartTime;
 
         double renderStartTime = glfwGetTime();
 

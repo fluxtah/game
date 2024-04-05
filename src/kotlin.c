@@ -23,6 +23,7 @@ int isKeyPressed(int key) {
 }
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
+    printf("Action: %d\n", action);
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) {
             keys[key] = true;

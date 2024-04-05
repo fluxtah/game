@@ -35,7 +35,7 @@ DebugTextOverlay *createDebugTextOverlay(ApplicationContext *context) {
     TextElement *updateTimeElement = createTextElement(
             overlay->sheet,
             &(CreateTextElementInfo) {
-                    .textTemplate = "Update: %s",
+                    .textTemplate = "KUpdate: %s",
                     .replacements = replacements,
                     .numReplacements = 1,
                     .positionX = 10.0f,
