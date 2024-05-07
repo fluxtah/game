@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include <printf.h>
 #include "joystick.h"
 
 CJoyAxes getJoyAxes(int joy) {
@@ -6,6 +7,7 @@ CJoyAxes getJoyAxes(int joy) {
     int axesCount;
     joyAxes.axes = glfwGetJoystickAxes(joy, &axesCount);
     joyAxes.count = axesCount;
+
     return joyAxes;
 }
 

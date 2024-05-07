@@ -20,10 +20,10 @@ var c_createCamera: CreateCameraFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateCameraFunc")
-fun ktSetCreateCameraFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateCameraFunc>>) {
+fun ktSetCreateCameraFunc(fn: CPointer<CFunction<CreateCameraFunc>>) {
     c_createCamera = { info ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateCameraFunc>>()(info)
+            fn.reinterpret<CFunction<CreateCameraFunc>>()(info)
         }
     }
 }
@@ -36,10 +36,10 @@ var c_destroyCamera: DestroyCameraFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroyCameraFunc")
-fun ktSetDestroyCameraFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<DestroyCameraFunc>>) {
+fun ktSetDestroyCameraFunc(fn: CPointer<CFunction<DestroyCameraFunc>>) {
     c_destroyCamera = { camera ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<DestroyCameraFunc>>()(camera)
+            fn.reinterpret<CFunction<DestroyCameraFunc>>()(camera)
         }
     }
 }
@@ -52,12 +52,10 @@ var c_moveCameraForward: MoveCameraForwardFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMoveCameraForwardFunc")
-fun ktSetMoveCameraForwardFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MoveCameraForwardFunc>>) {
+fun ktSetMoveCameraForwardFunc(fn: CPointer<CFunction<MoveCameraForwardFunc>>) {
     c_moveCameraForward = { camera, amount ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MoveCameraForwardFunc>>()(
-                camera, amount
-            )
+            fn.reinterpret<CFunction<MoveCameraForwardFunc>>()(camera, amount)
         }
     }
 }
@@ -70,12 +68,10 @@ var c_moveCameraBackward: MoveCameraBackwardFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMoveCameraBackwardFunc")
-fun ktSetMoveCameraBackwardFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MoveCameraBackwardFunc>>) {
+fun ktSetMoveCameraBackwardFunc(fn: CPointer<CFunction<MoveCameraBackwardFunc>>) {
     c_moveCameraBackward = { camera, amount ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MoveCameraBackwardFunc>>()(
-                camera, amount
-            )
+            fn.reinterpret<CFunction<MoveCameraBackwardFunc>>()(camera, amount)
         }
     }
 }
@@ -88,12 +84,10 @@ var c_moveCameraLeft: MoveCameraLeftFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMoveCameraLeftFunc")
-fun ktSetMoveCameraLeftFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MoveCameraLeftFunc>>) {
+fun ktSetMoveCameraLeftFunc(fn: CPointer<CFunction<MoveCameraLeftFunc>>) {
     c_moveCameraLeft = { camera, amount ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MoveCameraLeftFunc>>()(
-                camera, amount
-            )
+            fn.reinterpret<CFunction<MoveCameraLeftFunc>>()(camera, amount)
         }
     }
 }
@@ -106,12 +100,10 @@ var c_moveCameraRight: MoveCameraRightFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMoveCameraRightFunc")
-fun ktSetMoveCameraRightFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MoveCameraRightFunc>>) {
+fun ktSetMoveCameraRightFunc(fn: CPointer<CFunction<MoveCameraRightFunc>>) {
     c_moveCameraRight = { camera, amount ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MoveCameraRightFunc>>()(
-                camera, amount
-            )
+            fn.reinterpret<CFunction<MoveCameraRightFunc>>()(camera, amount)
         }
     }
 }
@@ -124,12 +116,10 @@ var c_pitchCamera: PitchCameraFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetPitchCameraFunc")
-fun ktSetPitchCameraFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<PitchCameraFunc>>) {
+fun ktSetPitchCameraFunc(fn: CPointer<CFunction<PitchCameraFunc>>) {
     c_pitchCamera = { camera, amount ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<PitchCameraFunc>>()(
-                camera, amount
-            )
+            fn.reinterpret<CFunction<PitchCameraFunc>>()(camera, amount)
         }
     }
 }
@@ -142,12 +132,10 @@ var c_yawCamera: YawCameraFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetYawCameraFunc")
-fun ktSetYawCameraFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<YawCameraFunc>>) {
+fun ktSetYawCameraFunc(fn: CPointer<CFunction<YawCameraFunc>>) {
     c_yawCamera = { camera, amount ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<YawCameraFunc>>()(
-                camera, amount
-            )
+            fn.reinterpret<CFunction<YawCameraFunc>>()(camera, amount)
         }
     }
 }
@@ -160,12 +148,10 @@ var c_setCameraLookAt: SetCameraLookAtFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCameraLookAtFunc")
-fun ktSetCameraLookAtFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<SetCameraLookAtFunc>>) {
+fun ktSetCameraLookAtFunc(fn: CPointer<CFunction<SetCameraLookAtFunc>>) {
     c_setCameraLookAt = { camera, x, y, z ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<SetCameraLookAtFunc>>()(
-                camera, x, y, z
-            )
+            fn.reinterpret<CFunction<SetCameraLookAtFunc>>()(camera, x, y, z)
         }
     }
 }
@@ -178,12 +164,10 @@ var c_positionCamera: PositionCameraFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetPositionCameraFunc")
-fun ktSetPositionCameraFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<PositionCameraFunc>>) {
+fun ktSetPositionCameraFunc(fn: CPointer<CFunction<PositionCameraFunc>>) {
     c_positionCamera = { camera, x, y, z ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<PositionCameraFunc>>()(
-                camera, x, y, z
-            )
+            fn.reinterpret<CFunction<PositionCameraFunc>>()(camera, x, y, z)
         }
     }
 }
@@ -196,10 +180,10 @@ var c_applyCameraChanges: ApplyCameraChangesFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetApplyCameraChangesFunc")
-fun ktSetApplyCameraChangesFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<ApplyCameraChangesFunc>>) {
+fun ktSetApplyCameraChangesFunc(fn: CPointer<CFunction<ApplyCameraChangesFunc>>) {
     c_applyCameraChanges = { camera ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<ApplyCameraChangesFunc>>()(camera)
+            fn.reinterpret<CFunction<ApplyCameraChangesFunc>>()(camera)
         }
     }
 }
@@ -222,12 +206,10 @@ var c_worldToScreenPoint: WorldToScreenPointFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetWorldToScreenPointFunc")
-fun ktSetWorldToScreenPointFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<WorldToScreenPointFunc>>) {
+fun ktSetWorldToScreenPointFunc(fn: CPointer<CFunction<WorldToScreenPointFunc>>) {
     c_worldToScreenPoint = { context, x, y, z, outX, outY ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<WorldToScreenPointFunc>>()(
-                context, x, y, z, outX, outY
-            )
+            fn.reinterpret<CFunction<WorldToScreenPointFunc>>()(context, x, y, z, outX, outY)
         }
     }
 }

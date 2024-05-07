@@ -9,10 +9,10 @@ var helloFuncCallback: HelloFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("helloCallback")
-fun helloCallback(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CPointer<ByteVar>) -> Unit>>) {
+fun helloCallback(fn: CPointer<CFunction<(CPointer<ByteVar>) -> Unit>>) {
     helloFuncCallback = { message ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CPointer<ByteVar>) -> Unit>>()(message.cstr.ptr)
+            fn.reinterpret<CFunction<(CPointer<ByteVar>) -> Unit>>()(message.cstr.ptr)
         }
     }
 }

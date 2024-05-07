@@ -11,6 +11,8 @@ import com.fluxtah.application.api.interop.c_destroySound
 import com.fluxtah.application.api.interop.c_destroySpriteBatch
 import com.fluxtah.application.api.interop.c_destroySpriteSheet
 import com.fluxtah.application.api.interop.c_destroyTextBatch
+import com.fluxtah.application.api.interop.c_getJoystickAxes
+import com.fluxtah.application.api.interop.c_getJoystickButtons
 import com.fluxtah.application.api.interop.c_isKeyPressed
 import com.fluxtah.application.api.interop.c_removeEntityPhysics
 import com.fluxtah.application.api.interop.c_setEnableDebugBoundingVolumes
@@ -21,7 +23,15 @@ import com.fluxtah.application.api.scene.SceneImpl
 import com.fluxtah.application.api.scene.activeSceneInfo
 import com.fluxtah.application.apps.shipgame.ShipGame
 import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.get
+import kotlinx.cinterop.plus
+import kotlinx.cinterop.pointed
+import kotlinx.cinterop.rawValue
+import kotlinx.cinterop.readValue
+import kotlinx.cinterop.useContents
+import kotlinx.cinterop.value
 import kotlin.experimental.ExperimentalNativeApi
+import kotlin.math.absoluteValue
 
 interface Application {
     fun initialize()
@@ -32,6 +42,41 @@ interface Application {
 
 fun isKeyPressed(key: Key): Boolean {
     return c_isKeyPressed?.invoke(key.value) == 1
+}
+
+data class JoystickAxes(val axes: FloatArray, val count: Int)
+data class JoystickButtons(val buttons: BooleanArray, val count: Int)
+
+@OptIn(ExperimentalForeignApi::class)
+fun getJoystickAxes(joystickId: Int): JoystickAxes? {
+    c_getJoystickAxes!!.invoke(joystickId).useContents {
+        if (axes == null) {
+            return null
+        }
+
+        val resultAxes = FloatArray(count)
+        for (i in 0 until count) {
+            val pointerToFloatVar = axes!! + i // Advance the pointer by i
+            resultAxes[i] = pointerToFloatVar!!.pointed.value
+        }
+        return JoystickAxes(resultAxes, count)
+    }
+}
+
+@OptIn(ExperimentalForeignApi::class)
+fun getJoystickButtons(joystickId: Int): JoystickButtons? {
+    c_getJoystickButtons!!.invoke(joystickId).useContents {
+        if (buttons == null) {
+            return null
+        }
+
+        val resultAxes = BooleanArray(count)
+        for (i in 0 until count) {
+            val pointerToFloatVar = buttons!! + i // Advance the pointer by i
+            resultAxes[i] = pointerToFloatVar!!.pointed.value.toInt() == 1
+        }
+        return JoystickButtons(resultAxes, count)
+    }
 }
 
 @OptIn(ExperimentalForeignApi::class)
@@ -93,7 +138,7 @@ fun ktStepPhysics() {
         return
     }
     val scene = activeSceneInfo.scene
-    if(scene is SceneImpl) {
+    if (scene is SceneImpl) {
         c_stepPhysicsSimulation?.invoke(scene.physicsHandle, fixedTimeStep)
     }
 }
@@ -284,7 +329,7 @@ fun ktGetCurrentPhysicsHandle(): CPhysics? {
         return null
     }
     val scene = activeSceneInfo.scene
-    if(scene is SceneImpl) {
+    if (scene is SceneImpl) {
         return scene.physicsHandle
     }
 

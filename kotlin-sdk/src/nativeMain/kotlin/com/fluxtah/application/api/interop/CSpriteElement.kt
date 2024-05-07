@@ -18,10 +18,10 @@ var c_createSpriteElement: CreateSpriteElementFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateSpriteElementFunc")
-fun ktSetCreateSpriteElementFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateSpriteElementFunc>>) {
+fun ktSetCreateSpriteElementFunc(fn: CPointer<CFunction<CreateSpriteElementFunc>>) {
     c_createSpriteElement = { spriteSheet, info ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateSpriteElementFunc>>()(
+            fn.reinterpret<CFunction<CreateSpriteElementFunc>>()(
                 spriteSheet, info
             )
         }

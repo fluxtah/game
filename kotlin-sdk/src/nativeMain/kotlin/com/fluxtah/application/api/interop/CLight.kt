@@ -21,12 +21,10 @@ var c_createLight: CreateLightFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateLightFunc")
-fun ktSetCreateLightFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CCreateLightInfo) -> CLight>>) {
+fun ktSetCreateLightFunc(fn: CPointer<CFunction<(CCreateLightInfo) -> CLight>>) {
     c_createLight = { info ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CCreateLightInfo) -> CLight>>()(
-                info
-            )
+            fn.reinterpret<CFunction<(CCreateLightInfo) -> CLight>>()(info)
         }
     }
 }
@@ -39,10 +37,10 @@ var c_destroyLight: DestroyLightFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroyLightFunc")
-fun ktSetDestroyLightFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CLight) -> Unit>>) {
+fun ktSetDestroyLightFunc(fn: CPointer<CFunction<(CLight) -> Unit>>) {
     c_destroyLight = { light ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CLight) -> Unit>>()(light)
+            fn.reinterpret<CFunction<(CLight) -> Unit>>()(light)
         }
     }
 }

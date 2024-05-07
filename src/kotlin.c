@@ -2,6 +2,7 @@
 #include "include/vulkan/setup.h"
 #include "include/emitter.h"
 #include "modules/physics/include/physics.h"
+#include "joystick.h"
 
 void setActiveCamera(ApplicationContext *context, Camera *camera) {
     context->activeCamera = camera;
@@ -23,7 +24,6 @@ int isKeyPressed(int key) {
 }
 
 void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-    printf("Action: %d\n", action);
     if (key >= 0 && key < 1024) {
         if (action == GLFW_PRESS) {
             keys[key] = true;
@@ -141,6 +141,10 @@ void bindKotlinApi() {
     ktSetOnRigidBodyUpdatedFunc(setOnRigidBodyUpdatedFunction);
     ktSetCollisionCallbackFunc(setCollisionCallbackFunction);
     ktSetUpdateEntityPhysicsTransformFunc(updateEntityPhysicsTransform);
+
+    // Joysticks
+    ktSetGetJoystickAxesFunc(getJoyAxes);
+    ktSetGetJoystickButtonsFunc(getJoyButtons);
 }
 
 
@@ -268,4 +272,8 @@ void bindKotlinApiHeadless() {
     ktSetOnRigidBodyUpdatedFunc(setOnRigidBodyUpdatedFunction);
     ktSetCollisionCallbackFunc(setCollisionCallbackFunction);
     ktSetUpdateEntityPhysicsTransformFunc(updateEntityPhysicsTransform);
+
+    // Joysticks
+    ktSetGetJoystickAxesFunc(getJoyAxes);
+    ktSetGetJoystickButtonsFunc(getJoyButtons);
 }

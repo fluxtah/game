@@ -25,10 +25,10 @@ var c_loadSound: LoadSoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetLoadSoundFunc")
-fun ktSetLoadSoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<LoadSoundFunc>>) {
+fun ktSetLoadSoundFunc(fn: CPointer<CFunction<LoadSoundFunc>>) {
     c_loadSound = { name, info ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<LoadSoundFunc>>()(name, info)
+            fn.reinterpret<CFunction<LoadSoundFunc>>()(name, info)
         }
     }
 }
@@ -41,10 +41,10 @@ var c_destroySound: DestroySoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroySoundFunc")
-fun ktSetDestroySoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<DestroySoundFunc>>) {
+fun ktSetDestroySoundFunc(fn: CPointer<CFunction<DestroySoundFunc>>) {
     c_destroySound = { sound ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<DestroySoundFunc>>()(sound)
+            fn.reinterpret<CFunction<DestroySoundFunc>>()(sound)
         }
     }
 }
@@ -57,10 +57,10 @@ var c_playSound: PlaySoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetPlaySoundFunc")
-fun ktSetPlaySoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<PlaySoundFunc>>) {
+fun ktSetPlaySoundFunc(fn: CPointer<CFunction<PlaySoundFunc>>) {
     c_playSound = { sound ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<PlaySoundFunc>>()(sound)
+            fn.reinterpret<CFunction<PlaySoundFunc>>()(sound)
         }
     }
 }
@@ -73,10 +73,10 @@ var c_isSoundPlaying: IsSoundPlayingFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetIsSoundPlayingFunc")
-fun ktSetIsSoundPlayingFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<IsSoundPlayingFunc>>) {
+fun ktSetIsSoundPlayingFunc(fn: CPointer<CFunction<IsSoundPlayingFunc>>) {
     c_isSoundPlaying = { sound ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<IsSoundPlayingFunc>>()(sound)
+            fn.reinterpret<CFunction<IsSoundPlayingFunc>>()(sound)
         }
     }
 }
@@ -89,10 +89,10 @@ var c_stopSound: StopSoundFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetStopSoundFunc")
-fun ktSetStopSoundFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<StopSoundFunc>>) {
+fun ktSetStopSoundFunc(fn: CPointer<CFunction<StopSoundFunc>>) {
     c_stopSound = { sound ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<StopSoundFunc>>()(sound)
+            fn.reinterpret<CFunction<StopSoundFunc>>()(sound)
         }
     }
 }
@@ -105,10 +105,10 @@ var c_setSoundPitch: SetSoundPitchFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetSoundPitchFunc")
-fun ktSetSoundPitchFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<SetSoundPitchFunc>>) {
+fun ktSetSoundPitchFunc(fn: CPointer<CFunction<SetSoundPitchFunc>>) {
     c_setSoundPitch = { sound, pitch ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<SetSoundPitchFunc>>()(sound, pitch)
+            fn.reinterpret<CFunction<SetSoundPitchFunc>>()(sound, pitch)
         }
     }
 }
@@ -121,10 +121,10 @@ var c_setSoundPosition: SetSoundPositionFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetSoundPositionFunc")
-fun ktSetSoundPositionFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<SetSoundPositionFunc>>) {
+fun ktSetSoundPositionFunc(fn: CPointer<CFunction<SetSoundPositionFunc>>) {
     c_setSoundPosition = { sound, x, y, z ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<SetSoundPositionFunc>>()(sound, x, y, z)
+            fn.reinterpret<CFunction<SetSoundPositionFunc>>()(sound, x, y, z)
         }
     }
 }

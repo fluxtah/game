@@ -28,9 +28,9 @@ var c_createPhysics: CreatePhysicsFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreatePhysicsFunc")
-fun ktSetCreatePhysicsFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreatePhysicsFunc>>) {
+fun ktSetCreatePhysicsFunc(fn: CPointer<CFunction<CreatePhysicsFunc>>) {
     c_createPhysics = { info ->
-        rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreatePhysicsFunc>>()(info)
+        fn.reinterpret<CFunction<CreatePhysicsFunc>>()(info)
     }
 }
 
@@ -42,9 +42,9 @@ var c_destroyPhysics: DestroyPhysicsFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroyPhysicsFunc")
-fun ktSetDestroyPhysicsFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<DestroyPhysicsFunc>>) {
+fun ktSetDestroyPhysicsFunc(fn: CPointer<CFunction<DestroyPhysicsFunc>>) {
     c_destroyPhysics = { physics ->
-        rigidBodyTransformUpdatedCallback.reinterpret<CFunction<DestroyPhysicsFunc>>()(physics)
+        fn.reinterpret<CFunction<DestroyPhysicsFunc>>()(physics)
     }
 }
 
@@ -56,9 +56,9 @@ var c_stepPhysicsSimulation: StepPhysicsSimulationFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetStepPhysicsSimulationFunc")
-fun ktSetStepPhysicsSimulationFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<StepPhysicsSimulationFunc>>) {
+fun ktSetStepPhysicsSimulationFunc(fn: CPointer<CFunction<StepPhysicsSimulationFunc>>) {
     c_stepPhysicsSimulation = { physics, deltaTime ->
-        rigidBodyTransformUpdatedCallback.reinterpret<CFunction<StepPhysicsSimulationFunc>>()(physics, deltaTime)
+        fn.reinterpret<CFunction<StepPhysicsSimulationFunc>>()(physics, deltaTime)
     }
 }
 
@@ -75,9 +75,9 @@ var c_setOnRigidBodyUpdated: SetOnRigidBodyUpdatedFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetOnRigidBodyUpdatedFunc")
-fun ktSetOnRigidBodyUpdatedFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<SetOnRigidBodyUpdatedFunc>>) {
+fun ktSetOnRigidBodyUpdatedFunc(fn: CPointer<CFunction<SetOnRigidBodyUpdatedFunc>>) {
     c_setOnRigidBodyUpdated = { physics, func ->
-        rigidBodyTransformUpdatedCallback.reinterpret<CFunction<SetOnRigidBodyUpdatedFunc>>()(physics, func)
+        fn.reinterpret<CFunction<SetOnRigidBodyUpdatedFunc>>()(physics, func)
     }
 }
 
@@ -97,13 +97,3 @@ fun ktSetCollisionCallbackFunc(collisionCallback: CPointer<CFunction<SetCollisio
         collisionCallback.reinterpret<CFunction<SetCollisionCallbackFunc>>()(context, func)
     }
 }
-
-//@OptIn(ExperimentalForeignApi::class)
-//external fun setOnRigidBodyUpdatedFunction(
-//    context: CPhysics,
-//    rigidBodyTransformUpdatedCallback: CPointer<CFunction<(
-//        entity: CEntity,
-//        x: Float, y: Float, z: Float,
-//        rotX: Float, rotY: Float, rotZ: Float
-//    ) -> Unit>>
-//)

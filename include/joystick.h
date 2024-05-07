@@ -4,7 +4,7 @@
 
 #include "model.h"
 
-JoyAxes getJoyAxes(int joy);
-JoyButtons getJoyButtons(int joy);
+CJoyAxes getJoyAxes(int joy);
+CJoyButtons getJoyButtons(int joy);
 
 #endif //GAME_JOYSTICK_H

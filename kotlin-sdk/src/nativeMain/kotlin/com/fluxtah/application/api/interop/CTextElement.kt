@@ -18,10 +18,10 @@ var c_createTextElement: CreateTextElementFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateTextElementFunc")
-fun ktSetCreateTextElementFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateTextElementFunc>>) {
+fun ktSetCreateTextElementFunc(fn: CPointer<CFunction<CreateTextElementFunc>>) {
     c_createTextElement = { spriteSheet, info ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateTextElementFunc>>()(
+            fn.reinterpret<CFunction<CreateTextElementFunc>>()(
                 spriteSheet, info
             )
         }
@@ -36,10 +36,10 @@ var c_measureTextElementWidth: MeasureTextElementWidthFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMeasureTextElementWidthFunc")
-fun ktSetMeasureTextElementWidthFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MeasureTextElementWidthFunc>>) {
+fun ktSetMeasureTextElementWidthFunc(fn: CPointer<CFunction<MeasureTextElementWidthFunc>>) {
     c_measureTextElementWidth = { element ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MeasureTextElementWidthFunc>>()(element)
+            fn.reinterpret<CFunction<MeasureTextElementWidthFunc>>()(element)
         }
     }
 }
@@ -52,10 +52,10 @@ var c_measureTextElementHeight: MeasureTextElementHeightFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetMeasureTextElementHeightFunc")
-fun ktSetMeasureTextElementHeightFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<MeasureTextElementHeightFunc>>) {
+fun ktSetMeasureTextElementHeightFunc(fn: CPointer<CFunction<MeasureTextElementHeightFunc>>) {
     c_measureTextElementHeight = { element ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<MeasureTextElementHeightFunc>>()(element)
+            fn.reinterpret<CFunction<MeasureTextElementHeightFunc>>()(element)
         }
     }
 }

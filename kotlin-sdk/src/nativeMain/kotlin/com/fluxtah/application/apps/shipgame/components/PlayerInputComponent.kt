@@ -1,5 +1,7 @@
 package com.fluxtah.application.apps.shipgame.components
 
+import com.fluxtah.application.api.getJoystickAxes
+import com.fluxtah.application.api.getJoystickButtons
 import com.fluxtah.application.api.input.Key
 import com.fluxtah.application.api.isKeyPressed
 import com.fluxtah.application.api.scene.SceneBuilder
@@ -32,6 +34,44 @@ class PlayerInputComponent : SceneComponent() {
         playerShipData.input.isPlacingPowerNode = isKeyPressed(Key.P)
 
         playerShipData.input.isBoosting = isKeyPressed(Key.B)
+
+        val axes = getJoystickAxes(0)
+        val buttons = getJoystickButtons(0)
+
+        if(axes != null) {
+            if (axes.axes[0] > 0.5) {
+                playerShipData.input.isMovingRight = true
+            } else if (axes.axes[0] < -0.5) {
+                playerShipData.input.isMovingLeft = true
+            } else {
+                playerShipData.input.isMovingRight = false
+                playerShipData.input.isMovingLeft = false
+            }
+
+            if(axes.axes[1] > 0.5) {
+                playerShipData.input.isReversing = true
+            } else if(axes.axes[1] < -0.5) {
+                playerShipData.input.isMovingForward = true
+            } else {
+                playerShipData.input.isMovingForward = false
+                playerShipData.input.isReversing = false
+            }
+
+            if(axes.axes[2] > 0.5) {
+                playerShipData.input.isYawingRight = true
+            } else if(axes.axes[2] < -0.5) {
+                playerShipData.input.isYawingLeft = true
+            } else {
+                playerShipData.input.isYawingRight = false
+                playerShipData.input.isYawingLeft = false
+            }
+        }
+
+        if(buttons != null) {
+            playerShipData.input.isFiring = buttons.buttons[3]
+            playerShipData.input.isPlacingPowerNode = buttons.buttons[1]
+            playerShipData.input.isBoosting = buttons.buttons[2]
+        }
     }
 }
 

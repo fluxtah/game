@@ -22,13 +22,10 @@ var c_createEmitter: CreateEmitterFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetCreateEmitterFunc")
-fun ktSetCreateEmitterFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<CreateEmitterFunc>>) {
+fun ktSetCreateEmitterFunc(fn: CPointer<CFunction<CreateEmitterFunc>>) {
     c_createEmitter = { context, info ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<CreateEmitterFunc>>()(
-                context,
-                info
-            )
+            fn.reinterpret<CFunction<CreateEmitterFunc>>()(context, info)
         }
     }
 }
@@ -41,10 +38,10 @@ var c_destroyEmitter: DestroyEmitterFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetDestroyEmitterFunc")
-fun ktSetDestroyEmitterFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CApplicationContext, CEmitter) -> Unit>>) {
+fun ktSetDestroyEmitterFunc(fn: CPointer<CFunction<(CApplicationContext, CEmitter) -> Unit>>) {
     c_destroyEmitter = { device, emitter ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CApplicationContext, CEmitter) -> Unit>>()(device, emitter)
+            fn.reinterpret<CFunction<(CApplicationContext, CEmitter) -> Unit>>()(device, emitter)
         }
     }
 }
@@ -79,12 +76,10 @@ var c_setEmitterPosition: EmitterPositionFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetPositionEmitterFunc")
-fun ktSetPositionEmitterFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(CEmitter, Float, Float, Float) -> Unit>>) {
+fun ktSetPositionEmitterFunc(fn: CPointer<CFunction<(CEmitter, Float, Float, Float) -> Unit>>) {
     c_setEmitterPosition = { emitter, x, y, z ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(CEmitter, Float, Float, Float) -> Unit>>()(
-                emitter, x, y, z
-            )
+            fn.reinterpret<CFunction<(CEmitter, Float, Float, Float) -> Unit>>()(emitter, x, y, z)
         }
     }
 }
@@ -97,12 +92,10 @@ var c_setEmitterRotation: EmitterRotationFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetEmitterRotationFunc")
-fun ktSetEmitterRotationFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<EmitterRotationFunc>>) {
+fun ktSetEmitterRotationFunc(fn: CPointer<CFunction<EmitterRotationFunc>>) {
     c_setEmitterRotation = { emitter, x, y, z ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EmitterRotationFunc>>()(
-                emitter, x, y, z
-            )
+            fn.reinterpret<CFunction<EmitterRotationFunc>>()(emitter, x, y, z)
         }
     }
 }
@@ -115,12 +108,10 @@ var c_setEmitterScale: EmitterScaleFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetEmitterScaleFunc")
-fun ktSetEmitterScaleFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<EmitterScaleFunc>>) {
+fun ktSetEmitterScaleFunc(fn: CPointer<CFunction<EmitterScaleFunc>>) {
     c_setEmitterScale = { emitter, x, y, z ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EmitterScaleFunc>>()(
-                emitter, x, y, z
-            )
+            fn.reinterpret<CFunction<EmitterScaleFunc>>()(emitter, x, y, z)
         }
     }
 }
@@ -133,10 +124,10 @@ var c_resetEmitter: EmitterResetFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetEmitterResetFunc")
-fun ktSetEmitterResetFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<EmitterResetFunc>>) {
+fun ktSetEmitterResetFunc(fn: CPointer<CFunction<EmitterResetFunc>>) {
     c_resetEmitter = { emitter ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EmitterResetFunc>>()(emitter)
+            fn.reinterpret<CFunction<EmitterResetFunc>>()(emitter)
         }
     }
 }
@@ -149,12 +140,10 @@ var c_setEmitterSpawnRate: EmitterSpawnRateFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetEmitterSpawnRateFunc")
-fun ktSetEmitterSpawnRateFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<EmitterSpawnRateFunc>>) {
+fun ktSetEmitterSpawnRateFunc(fn: CPointer<CFunction<EmitterSpawnRateFunc>>) {
     c_setEmitterSpawnRate = { emitter, rate ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EmitterSpawnRateFunc>>()(
-                emitter, rate
-            )
+            fn.reinterpret<CFunction<EmitterSpawnRateFunc>>()(emitter, rate)
         }
     }
 }
@@ -167,12 +156,10 @@ var c_setEmitterLifetime: EmitterLifetimeFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetEmitterLifetimeFunc")
-fun ktSetEmitterLifetimeFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<EmitterLifetimeFunc>>) {
+fun ktSetEmitterLifetimeFunc(fn: CPointer<CFunction<EmitterLifetimeFunc>>) {
     c_setEmitterLifetime = { emitter, lifetime ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<EmitterLifetimeFunc>>()(
-                emitter, lifetime
-            )
+            fn.reinterpret<CFunction<EmitterLifetimeFunc>>()(emitter, lifetime)
         }
     }
 }

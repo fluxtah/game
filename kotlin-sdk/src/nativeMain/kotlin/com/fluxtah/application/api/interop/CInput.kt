@@ -11,12 +11,10 @@ var c_isKeyPressed: IsKeyPressedFunc? = null
 
 @OptIn(ExperimentalForeignApi::class, ExperimentalNativeApi::class)
 @CName("ktSetIsKeyPressedFunc")
-fun ktSetIsKeyPressedFunc(rigidBodyTransformUpdatedCallback: CPointer<CFunction<(Int) -> Int>>) {
+fun ktSetIsKeyPressedFunc(fn: CPointer<CFunction<(Int) -> Int>>) {
     c_isKeyPressed = { key ->
         memScoped {
-            rigidBodyTransformUpdatedCallback.reinterpret<CFunction<(Int) -> Int>>()(
-                key
-            )
+            fn.reinterpret<CFunction<(Int) -> Int>>()(key)
         }
     }
 }
